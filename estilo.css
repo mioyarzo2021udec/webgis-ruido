@@ -199,7 +199,7 @@ body {
         height: calc(100vh - 140px) !important;
     }
 
-    /* PANEL INFO: ocupa toda la pantalla en celular */
+    /* PANEL INFO: ocupa pantalla completa */
     #info-panel {
         width: 100% !important;
         max-width: none !important;
@@ -214,7 +214,7 @@ body {
         height: calc(100vh - 48px);
     }
 
-    /* Leyenda más grande y con scroll si es necesario */
+    /* Leyenda mejor adaptada */
     .legend {
         max-width: 90% !important;
         font-size: 15px !important;
@@ -231,4 +231,3 @@ body {
         height: 14px;
     }
 }
-
