@@ -172,3 +172,63 @@ body {
     margin-left: 12px !important;
 }
 
+/* -------------------------------------------------- */
+/* ESTILOS ESPECÍFICOS PARA CELULARES */
+/* -------------------------------------------------- */
+@media (max-width: 600px) {
+
+    /* Texto general más grande */
+    body, select, button, .legend, #info-content {
+        font-size: 16px !important;
+    }
+
+    /* Barra superior más alta y legible */
+    .top-bar h2 {
+        font-size: 16px !important;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    /* Mapa ocupa toda la pantalla */
+    #map {
+        height: calc(100vh - 140px) !important;
+    }
+
+    /* PANEL INFO: ocupa toda la pantalla en celular */
+    #info-panel {
+        width: 100% !important;
+        max-width: none !important;
+        height: calc(100vh - 48px);
+        font-size: 16px !important;
+    }
+
+    /* PANEL FORM: también ocupa la pantalla completa */
+    #form-panel {
+        width: 100% !important;
+        max-width: none !important;
+        height: calc(100vh - 48px);
+    }
+
+    /* Leyenda más grande y con scroll si es necesario */
+    .legend {
+        max-width: 90% !important;
+        font-size: 15px !important;
+        overflow-y: auto;
+        max-height: 40vh;
+    }
+
+    .legend-row {
+        margin-bottom: 8px;
+    }
+
+    .legend-color {
+        width: 28px;
+        height: 14px;
+    }
+}
+
