@@ -1,0 +1,100 @@
+[
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.344463, -37.460724, 156.50001525878906]}, "properties": {"start": "2025-12-06T20:13:07.898-03:00", "end": "2025-12-06T20:15:46.389-03:00", "fecha_hora": "2025-12-06T20:13:07.896-03:00", "fuente_ruido": "tr_nsito_vehicular", "titulo": "test 01", "descripcion": "test 01", "nivel_molestia": "2", "avg_db": "44.9", "foto": "17650628907264864064635383639407-20_15_0.jpg", "audio": "audio-20251206_231535.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624052338, "_uuid": "f4dabb10-02af-4650-b901-c36f3ba657b3", "_submission_time": "2025-12-06T23:15:48", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 1}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.34355, -37.46057, 156.60000610351562]}, "properties": {"start": "2025-12-06T20:15:46.441-03:00", "end": "2025-12-06T20:18:27.594-03:00", "fecha_hora": "2025-12-06T20:15:46.440-03:00", "fuente_ruido": "tr_nsito_vehicular", "titulo": "test 02", "descripcion": "test 02", "nivel_molestia": "3", "avg_db": "51.1", "foto": "17650630085922313047427109522167-20_16_59.jpg", "audio": "audio-20251206_231755.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624052601, "_uuid": "c269bcce-79e9-4035-a423-7b2ea5e2533e", "_submission_time": "2025-12-06T23:18:29", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 2}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.341052, -37.459944, 156.90000915527344]}, "properties": {"start": "2025-12-06T20:18:27.622-03:00", "end": "2025-12-06T20:22:21.771-03:00", "fecha_hora": "2025-12-06T20:18:27.622-03:00", "fuente_ruido": "tr_nsito_vehicular", "titulo": "test 03", "descripcion": "test 03", "nivel_molestia": "3", "avg_db": "52.9", "foto": "176506329510135018761832892539-20_21_45.jpg", "audio": "audio-20251206_232211.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624053149, "_uuid": "6fbc7930-6c5d-46cd-a0c6-972915b01d51", "_submission_time": "2025-12-06T23:22:23", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 3}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.340591, -37.461406, 157.8000030517578]}, "properties": {"start": "2025-12-06T20:22:21.798-03:00", "end": "2025-12-06T20:26:00.264-03:00", "fecha_hora": "2025-12-06T20:22:21.798-03:00", "fuente_ruido": "tr_nsito_vehicular otro", "titulo": "test 04", "descripcion": "test 04", "nivel_molestia": "5", "avg_db": "60.4", "foto": "17650635161892370674501794203168-20_25_21.jpg", "audio": "audio-20251206_232514.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624053817, "_uuid": "04e150b3-625a-4ca3-95dd-3807b976b185", "_submission_time": "2025-12-06T23:26:02", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 4}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.340072, -37.462872, 155.8000030517578]}, "properties": {"start": "2025-12-06T20:28:06.468-03:00", "end": "2025-12-06T20:29:04.381-03:00", "fecha_hora": "2025-12-06T20:28:06.465-03:00", "fuente_ruido": "tr_nsito_vehicular", "titulo": "test 05", "descripcion": "test 05", "nivel_molestia": "5", "avg_db": "49.9", "foto": "17650637071108663732171892637216-20_28_38.jpg", "audio": "audio-20251206_232824.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624054413, "_uuid": "379b258e-a706-400f-8b8a-7e1878807643", "_submission_time": "2025-12-06T23:29:06", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 5}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.337753, -37.462007, 155.70001220703125]}, "properties": {"start": "2025-12-06T20:30:35.994-03:00", "end": "2025-12-07T15:29:21.436-03:00", "fecha_hora": "2025-12-06T20:30:35.991-03:00", "fuente_ruido": "tr_nsito_vehicular", "titulo": "test 06", "descripcion": "test 06", "nivel_molestia": "4", "avg_db": "47.9", "foto": "17650638574033849706333573401021-20_31_2.jpg", "audio": "audio-20251206_233055.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624055023, "_uuid": "5ca87697-2d82-4e8e-b90d-0521f7213c3f", "_submission_time": "2025-12-06T23:31:34", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 6}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.335181, -37.461186, 156.10000610351562]}, "properties": {"start": "2025-12-06T20:31:32.412-03:00", "end": "2025-12-06T20:34:29.510-03:00", "fecha_hora": "2025-12-06T20:31:32.411-03:00", "fuente_ruido": "personas otro", "titulo": "test 07", "descripcion": "test 07", "nivel_molestia": "3", "avg_db": "38.6", "foto": "17650640198987255187935140137090-20_33_45.jpg", "audio": "audio-20251206_233329.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624055792, "_uuid": "df253f8b-218c-435d-a828-c4e1d87428ba", "_submission_time": "2025-12-06T23:34:31", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 7}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.334107, -37.460963, 157.20001220703125]}, "properties": {"start": "2025-12-06T20:37:46.014-03:00", "end": "2025-12-07T15:30:07.861-03:00", "fecha_hora": "2025-12-06T20:37:46.010-03:00", "fuente_ruido": "tr_nsito_vehicular personas otro", "titulo": "test 08", "descripcion": "test 08", "nivel_molestia": "2", "avg_db": "38.5", "foto": "17650642938724682014312796262950-20_38_18.jpg", "audio": "audio-20251206_233810.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624056191, "_uuid": "97d00704-a92b-48fb-a964-553c5073f3b2", "_submission_time": "2025-12-06T23:38:46", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 8}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.334363, -37.461064, 157.50001525878906]}, "properties": {"start": "2025-12-06T21:01:34.746-03:00", "end": "2025-12-07T15:31:37.871-03:00", "fecha_hora": "2025-12-06T21:01:34.742-03:00", "fuente_ruido": "tr_nsito_vehicular personas otro", "titulo": "test 09", "descripcion": "test 09", "nivel_molestia": "2", "avg_db": "37.1", "foto": "17650658851898485255945974341878-21_4_54.jpg", "audio": "audio-20251207_000430.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624060470, "_uuid": "c4b38ef6-2444-425c-8ef3-a5b58f6fcaaf", "_submission_time": "2025-12-07T00:05:15", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 9}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.337836, -37.462049, 156.70001220703125]}, "properties": {"start": "2025-12-06T21:05:13.181-03:00", "end": "2025-12-07T15:32:04.029-03:00", "fecha_hora": "2025-12-06T21:05:13.180-03:00", "fuente_ruido": "personas otro", "titulo": "test 10", "descripcion": "test 10", "nivel_molestia": "2", "avg_db": "33.1", "foto": "17650661674479179165639147619867-21_9_37.jpg", "audio": "audio-20251207_000950.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624061460, "_uuid": "8898e50e-9c9a-4d28-bc86-60d518ef258b", "_submission_time": "2025-12-07T00:10:09", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 10}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.340157, -37.462893, 155.8000030517578]}, "properties": {"start": "2025-12-06T21:14:46.566-03:00", "end": "2025-12-07T15:34:22.605-03:00", "fecha_hora": "2025-12-06T21:14:46.565-03:00", "fuente_ruido": "tr_nsito_vehicular", "titulo": "test 11", "descripcion": "test 11", "nivel_molestia": "3", "avg_db": "48.4", "foto": "1765066507077957616772800106734-21_15_16.jpg", "audio": "audio-20251207_001504.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624062443, "_uuid": "397fed85-f9ec-404e-97d2-9f7551d5ec9e", "_submission_time": "2025-12-07T00:15:38", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 11}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.341189, -37.460092, 157.90000915527344]}, "properties": {"start": "2025-12-06T21:24:36.755-03:00", "end": "2025-12-07T15:34:56.055-03:00", "fecha_hora": "2025-12-06T21:24:36.752-03:00", "fuente_ruido": "tr_nsito_vehicular", "titulo": "test 12", "descripcion": "test 12", "nivel_molestia": "3", "avg_db": "45.6", "foto": "17650671103127687714057525870666-21_25_25.jpg", "audio": "audio-20251207_002545.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624064349, "_uuid": "c71e1329-f18b-4a78-84cd-7131f1e36ed9", "_submission_time": "2025-12-07T00:26:07", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 12}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.340994, -37.462012, 157.3000030517578]}, "properties": {"start": "2025-12-06T21:30:03.201-03:00", "end": "2025-12-07T15:35:36.230-03:00", "fecha_hora": "2025-12-06T21:30:03.197-03:00", "fuente_ruido": "tr_nsito_vehicular personas", "titulo": "test 13", "descripcion": "test 13", "nivel_molestia": "3", "avg_db": "41.9", "foto": "1765067415996324624564009824596-21_30_26.jpg", "audio": "audio-20251207_003049.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624065413, "_uuid": "5b1e777e-fad3-4e90-8bc3-bab14f07f121", "_submission_time": "2025-12-07T00:31:04", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 13}}
+]
+},
+{
+"type": "FeatureCollection",
+"name": "Registro Contaminación Acústica",
+"features": [
+{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-72.344504, -37.460665, 154.4624819095257]}, "properties": {"start": "2025-12-06T21:48:07.841-03:00", "end": "2025-12-07T15:36:11.472-03:00", "fecha_hora": "2025-12-06T21:48:07.837-03:00", "fuente_ruido": "tr_nsito_vehicular personas otro", "titulo": "test 14", "descripcion": "test 14", "nivel_molestia": "2", "avg_db": "36.6", "foto": "17650685835857014848091243432474-21_49_58.jpg", "audio": "audio-20251207_005000.webm", "correo": "migueloyarzohhz@gmail.com", "_id": 624068458, "_uuid": "169185cf-fcab-4672-befc-6df11eff0ddf", "_submission_time": "2025-12-07T00:50:25", "_status": "submitted_via_web", "__version__": "vVaowGU7gdG8ig5SZ6QAHo", "_index": 14}}
+]
+}
+]
