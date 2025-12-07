@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGIS Ruido Urbano</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+
+    <!-- Estilos propios -->
+    <link rel="stylesheet" href="estilo.css">
+</head>
+
+<body>
+
+<header class="top-bar">
+    <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
+
+    <!-- Selector de visualización temática -->
+    <div class="control-group">
+        <label for="colorMode">Visualización temática por:</label>
+        <select id="colorMode">
+            <option value="avg">AVG dB</option>
+            <option value="molestia">Molestia</option>
+        </select>
+    </div>
+
+    <!-- Selector de mapa base -->
+    <div class="control-group">
+        <label for="basemapSelect">Mapa base:</label>
+        <select id="basemapSelect">
+            <option value="osm">OSM (Clásico)</option>
+            <option value="carto">CartoDB Claro</option>
+            <option value="voyager">CartoDB Voyager</option>
+            <option value="sat">Satélite ESRI</option>
+        </select>
+    </div>
+
+    <!-- Botón para abrir formulario -->
+    <button id="open-form-btn">Reportar evento de ruido</button>
+</header>
+
+<!-- Mapa -->
+<div id="map"></div>
+
+<!-- Panel Kobo -->
+<div id="form-panel">
+    <div class="form-panel-header">
+        <h3>Registro de evento de ruido</h3>
+        <button id="close-form-btn">✕</button>
+    </div>
+    <iframe id="kobo-frame"></iframe>
+</div>
+
+<!-- Panel Información de punto -->
+<div id="info-panel">
+    <div class="info-header">
+        <h3 id="info-title">Información del registro</h3>
+        <button id="info-close">✕</button>
+    </div>
+    <div id="info-content"></div>
+</div>
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+<!-- Script propio -->
+<script src="script.js"></script>
+
+</body>
+</html>
+
