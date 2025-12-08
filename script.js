@@ -43,8 +43,8 @@ let drawControl = new L.Control.Draw({
         polyline: false,
         circle: false,
         circlemarker: false,
-        rectangle: true,   // permitir rectángulo
-        polygon: true      // permitir polígono
+        rectangle: true,
+        polygon: true
     },
     edit: {
         featureGroup: drawnItems
@@ -62,10 +62,10 @@ map.on(L.Draw.Event.CREATED, function (event) {
     // guardar geometría en formato GeoJSON
     drawnPolygon = layer.toGeoJSON();
 
-    console.log("Polígono capturado:", drawnPolygon);
+    console.log("Área dibujada:", drawnPolygon);
 });
 
-// Función para limpiar área dibujada
+// Función para limpiar el área seleccionada
 function limpiarArea() {
     drawnItems.clearLayers();
     drawnPolygon = null;
@@ -753,10 +753,12 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
 // PANEL DE DESCARGA
 // ---------------------------------------------------
 
+// abrir panel
 document.getElementById("open-download-btn").addEventListener("click", () => {
     document.getElementById("download-panel").classList.add("open");
 });
 
+// cerrar panel
 document.getElementById("download-close").addEventListener("click", () => {
     document.getElementById("download-panel").classList.remove("open");
 });
@@ -770,4 +772,3 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
-
