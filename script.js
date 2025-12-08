@@ -29,46 +29,28 @@ var map = L.map('map', {
 });
 
 // ---------------------------------------------------
-// Ajustar dinámicamente altura del header
+// ALTURA DEL HEADER
 // ---------------------------------------------------
 function updatePanelTop() {
     const header = document.querySelector('.top-bar');
-    if (!header) return;
-
     const headerHeight = header.offsetHeight;
     document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
 }
-
-// ejecutar ahora
 updatePanelTop();
-
-// ejecutar cuando cambie el tamaño de pantalla
 window.addEventListener('resize', updatePanelTop);
 
 // ---------------------------------------------------
-// DETECTAR MÓVIL Y CONTROLAR SCROLL
-// ---------------------------------------------------
 var isMobile = /Mobi|Android/i.test(navigator.userAgent);
+if (isMobile) map.dragging.disable();
 
-if (isMobile) {
-    // impedir que un dedo arrastre el mapa
-    map.dragging.disable();
-    // pinch-zoom funciona igual
-}
-
-// ---------------------------------------------------
-// COLOR GRADIENTE
 // ---------------------------------------------------
 function interpolateColor(value, min, max) {
     value = Math.max(min, Math.min(max, value));
     const ratio = (value - min) / (max - min);
 
-    const r1 = 255, g1 = 255, b1 = 255;
-    const r2 = 204, g2 = 16, b2 = 16;
-
-    const r = Math.round(r1 + (r2 - r1) * ratio);
-    const g = Math.round(g1 + (g2 - g1) * ratio);
-    const b = Math.round(b1 + (b2 - b1) * ratio);
+    const r = Math.round(255 + (204 - 255) * ratio);
+    const g = Math.round(255 + (16 - 255) * ratio);
+    const b = Math.round(255 + (16 - 255) * ratio);
 
     return `rgb(${r}, ${g}, ${b})`;
 }
@@ -80,6 +62,7 @@ let currentMode = "avg";
 let selectedUUID = null;
 let selectedLayer = null;
 
+// OBJETO FILTROS
 let filtros = {
     horaInicio: null,
     horaFin: null,
@@ -91,15 +74,12 @@ let filtros = {
     dbMax: null
 };
 
-
 // ---------------------------------------------------
-// PANEL DE INFORMACIÓN
+// PANEL INFO
 // ---------------------------------------------------
 function showInfoPanel(p) {
-    const fecha = p.fecha_hora ? p.fecha_hora.split("T")[0] : "";
-    const hora = p.fecha_hora ? p.fecha_hora.split("T")[1].split(".")[0] : "";
-
-    document.getElementById("info-title").textContent = "Información del registro";
+    const fecha = p.fecha_hora?.split("T")[0] || "";
+    const hora = p.fecha_hora?.split("T")[1]?.split(".")[0] || "";
 
     document.getElementById("info-content").innerHTML = `
         <b>Título:</b> ${p.titulo || "(sin título)"}<br><br>
@@ -116,7 +96,7 @@ function showInfoPanel(p) {
                 .replace(/m_sica/g, "música")
                 .replace(/tr_nsito_vehicular/g, "tránsito vehicular")
                 .split(" ")
-                .filter(f => f.trim() !== "")
+                .filter(f => f)
                 .map(f => `<li>${f}</li>`).join("")}
         </ul>
 
@@ -128,39 +108,18 @@ function showInfoPanel(p) {
 }
 
 // ---------------------------------------------------
-// ESTILO ORIGINAL
-// ---------------------------------------------------
-function restoreOriginalStyle(layer) {
-    if (!layer || !layer.defaultOptions) return;
-
-    layer.setStyle({
-        radius: layer.defaultOptions.radius,
-        color: layer.defaultOptions.color,
-        weight: layer.defaultOptions.weight,
-        fillColor: layer.defaultOptions.fillColor,
-        fillOpacity: layer.defaultOptions.fillOpacity
-    });
+function restoreOriginalStyle(l) {
+    if (!l?.defaultOptions) return;
+    l.setStyle(l.defaultOptions);
 }
 
 // ---------------------------------------------------
-// RESALTAR SELECCIÓN
-// ---------------------------------------------------
 function highlightSelected(uuid) {
-    if (!capaRegistros) return;
-
     capaRegistros.eachLayer(l => {
         if (l.feature.properties._uuid === uuid) {
-
             if (!l.defaultOptions) {
-                l.defaultOptions = {
-                    radius: l.options.radius,
-                    color: l.options.color,
-                    weight: l.options.weight,
-                    fillColor: l.options.fillColor,
-                    fillOpacity: l.options.fillOpacity
-                };
+                l.defaultOptions = { ...l.options };
             }
-
             l.setStyle({
                 radius: 10,
                 color: "#ad8c00",
@@ -168,23 +127,18 @@ function highlightSelected(uuid) {
                 fillColor: "#ffe040",
                 fillOpacity: 1
             });
-
             selectedLayer = l;
         }
     });
 }
 
 // ---------------------------------------------------
-// RESET SELECCIÓN
-// ---------------------------------------------------
 function resetHighlight() {
     if (selectedLayer) restoreOriginalStyle(selectedLayer);
-    selectedUUID = null;
     selectedLayer = null;
+    selectedUUID = null;
 }
 
-// ---------------------------------------------------
-// CAPA GEOJSON
 // ---------------------------------------------------
 function dibujarRegistros(modoColor) {
     if (!registrosGeoJSON) return;
@@ -192,14 +146,14 @@ function dibujarRegistros(modoColor) {
     if (capaRegistros) map.removeLayer(capaRegistros);
 
     capaRegistros = L.geoJSON(registrosGeoJSON, {
-
-        pointToLayer: function (feature, latlng) {
+        pointToLayer: (feature, latlng) => {
             const p = feature.properties;
-            const color = (modoColor === "avg")
-                ? interpolateColor(Number(p.avg_db), 20, 120)
-                : interpolateColor(Number(p.nivel_molestia), 0, 10);
 
-            const marker = L.circleMarker(latlng, {
+            const color = (modoColor === "avg")
+                ? interpolateColor(+p.avg_db, 20, 120)
+                : interpolateColor(+p.nivel_molestia, 0, 10);
+
+            const m = L.circleMarker(latlng, {
                 radius: 7,
                 color: "#333",
                 weight: 1.4,
@@ -207,27 +161,16 @@ function dibujarRegistros(modoColor) {
                 fillOpacity: 1
             });
 
-            marker.defaultOptions = {
-                radius: 7,
-                color: "#333",
-                weight: 1.4,
-                fillColor: color,
-                fillOpacity: 1
-            };
-
-            return marker;
+            m.defaultOptions = { ...m.options };
+            return m;
         },
 
         onEachFeature: function (feature, layer) {
             const p = feature.properties;
-
             layer.on("click", () => {
                 if (selectedLayer) restoreOriginalStyle(selectedLayer);
-
                 selectedUUID = p._uuid;
-
                 showInfoPanel(p);
-
                 highlightSelected(selectedUUID);
             });
         }
@@ -238,59 +181,39 @@ function dibujarRegistros(modoColor) {
 }
 
 // ---------------------------------------------------
-// CERRAR PANEL
-// ---------------------------------------------------
 document.getElementById("info-close").addEventListener("click", () => {
     resetHighlight();
     document.getElementById("info-panel").classList.remove("open");
 });
 
 // ---------------------------------------------------
-// CARGAR GEOJSON
-// ---------------------------------------------------
 fetch("data/registros.geojson")
     .then(r => r.json())
     .then(data => {
         registrosGeoJSON = Array.isArray(data)
-            ? { type: "FeatureCollection", features: data.flatMap(fc => fc.features) }
+            ? { type: "FeatureCollection", features: data.flat() }
             : data;
 
         dibujarRegistros(currentMode);
         actualizarLeyenda(currentMode);
+
+        actualizarResumen(registrosGeoJSON.features);
     });
 
 // ---------------------------------------------------
-// SELECTOR DE COLOR
-// ---------------------------------------------------
-document.getElementById("colorMode").addEventListener("change", function () {
-    currentMode = this.value;
-
+document.getElementById("colorMode").addEventListener("change", () => {
+    currentMode = colorMode.value;
     dibujarRegistros(currentMode);
     actualizarLeyenda(currentMode);
-
-    if (selectedUUID) highlightSelected(selectedUUID);
 });
 
 // ---------------------------------------------------
-// SELECTOR DE MAPA BASE
-// ---------------------------------------------------
-document.getElementById("basemapSelect").addEventListener("change", function () {
-    const v = this.value;
-
+document.getElementById("basemapSelect").addEventListener("change", () => {
+    const v = basemapSelect.value;
     [osm, carto, voyager, sat].forEach(l => map.removeLayer(l));
-
-    if (v === "osm") osm.addTo(map);
-    if (v === "carto") carto.addTo(map);
-    if (v === "voyager") voyager.addTo(map);
-    if (v === "sat") sat.addTo(map);
-
-    if (capaRegistros) capaRegistros.addTo(map);
-
-    if (selectedUUID) highlightSelected(selectedUUID);
+    ({ osm, carto, voyager, sat })[v].addTo(map);
 });
 
-// ---------------------------------------------------
-// LEYENDA (panel propio)
 // ---------------------------------------------------
 function generarLeyendaHTML(modo) {
     let html = '<div class="legend">';
@@ -310,21 +233,15 @@ function generarLeyendaHTML(modo) {
         rangos.forEach(r => {
             const c = interpolateColor(r.v, 20, 120);
             html += `
-                <div class="legend-row">
-                    <span class="legend-color" style="background:${c}"></span>
-                    ${r.l}
-                </div>
+                <div class="legend-row"><span class="legend-color" style="background:${c}"></span>${r.l}</div>
                 <div class="legend-example"><em>${r.e}</em></div>
             `;
         });
 
-        html += `
-            <small class="legend-footnote">
-                Ejemplos orientativos basados en recomendaciones de la OMS.
-            </small>
-        `;
+        html += `<small class="legend-footnote">Ejemplos orientativos basados en la OMS.</small>`;
+    }
 
-    } else {
+    else {
         html += "<h4>Molestia percibida</h4>";
 
         const rangos = [
@@ -338,108 +255,117 @@ function generarLeyendaHTML(modo) {
         rangos.forEach(r => {
             const c = interpolateColor(r.v, 0, 10);
             html += `
-                <div class="legend-row">
-                    <span class="legend-color" style="background:${c}"></span>
-                    ${r.l}
-                </div>
+                <div class="legend-row"><span class="legend-color" style="background:${c}"></span>${r.l}</div>
             `;
         });
 
-        html += `
-            <small class="legend-footnote">
-                Escala subjetiva reportada por usuarios.
-            </small>
-        `;
+        html += `<small class="legend-footnote">Escala subjetiva reportada por usuarios.</small>`;
     }
 
-    html += '</div>';
-    return html;
+    return html + "</div>";
 }
 
 function actualizarLeyenda(modo) {
-    const container = document.getElementById("legend-content");
-    if (!container) return;
-    container.innerHTML = generarLeyendaHTML(modo);
+    document.getElementById("legend-content").innerHTML = generarLeyendaHTML(modo);
 }
 
 // ---------------------------------------------------
 // FORMULARIO KOBO
 // ---------------------------------------------------
-document.getElementById("open-form-btn").addEventListener("click", () => {
-    document.getElementById("form-panel").classList.add("open");
-    document.getElementById("kobo-frame").src = "https://ee.kobotoolbox.org/x/arEl9iyW";
+open-form-btn.addEventListener("click", () => {
+    form-panel.classList.add("open");
+    kobo-frame.src = "https://ee.kobotoolbox.org/x/arEl9iyW";
 });
 
-document.getElementById("close-form-btn").addEventListener("click", () => {
-    document.getElementById("form-panel").classList.remove("open");
+close-form-btn.addEventListener("click", () => {
+    form-panel.classList.remove("open");
 });
 
+// ---------------------------------------------------
+// LÓGICA DE FILTROS
+// ---------------------------------------------------
 function pasaFiltros(p) {
 
-    // Hora
     if (filtros.horaInicio || filtros.horaFin) {
         if (p.fecha_hora) {
-            const hora = p.fecha_hora.split("T")[1].substring(0,5);
-
+            const hora = p.fecha_hora.split("T")[1].substring(0, 5);
             if (filtros.horaInicio && hora < filtros.horaInicio) return false;
             if (filtros.horaFin && hora > filtros.horaFin) return false;
         }
     }
 
-    // Fecha
     if (filtros.fechaInicio || filtros.fechaFin) {
-        if (p.fecha_hora) {
-            const fecha = p.fecha_hora.split("T")[0];
-
-            if (filtros.fechaInicio && fecha < filtros.fechaInicio) return false;
-            if (filtros.fechaFin && fecha > filtros.fechaFin) return false;
-        }
+        const fecha = p.fecha_hora?.split("T")[0];
+        if (filtros.fechaInicio && fecha < filtros.fechaInicio) return false;
+        if (filtros.fechaFin && fecha > filtros.fechaFin) return false;
     }
 
-    // Molestia
-    if (filtros.molestiaMin !== null && Number(p.nivel_molestia) < filtros.molestiaMin) return false;
-    if (filtros.molestiaMax !== null && Number(p.nivel_molestia) > filtros.molestiaMax) return false;
+    if (filtros.molestiaMin !== null && +p.nivel_molestia < filtros.molestiaMin) return false;
+    if (filtros.molestiaMax !== null && +p.nivel_molestia > filtros.molestiaMax) return false;
 
-    // dB
-    if (filtros.dbMin !== null && Number(p.avg_db) < filtros.dbMin) return false;
-    if (filtros.dbMax !== null && Number(p.avg_db) > filtros.dbMax) return false;
+    if (filtros.dbMin !== null && +p.avg_db < filtros.dbMin) return false;
+    if (filtros.dbMax !== null && +p.avg_db > filtros.dbMax) return false;
 
     return true;
 }
 
-function aplicarFiltros() {
+// ---------------------------------------------------
+function actualizarResumen(filtrados) {
+    const ul = document.getElementById("summary-list");
+    ul.innerHTML = "";
 
-    const filtrados = registrosGeoJSON.features.filter(feat =>
-        pasaFiltros(feat.properties)
+    ul.innerHTML += `<li><b>Registros encontrados:</b> ${filtrados.length}</li>`;
+
+    if (filtros.horaInicio || filtros.horaFin)
+        ul.innerHTML += `<li><b>Franja horaria:</b> ${filtros.horaInicio || "—"} a ${filtros.horaFin || "—"}</li>`;
+
+    if (filtros.fechaInicio || filtros.fechaFin)
+        ul.innerHTML += `<li><b>Periodo:</b> ${filtros.fechaInicio || "—"} a ${filtros.fechaFin || "—"}</li>`;
+
+    if (filtros.molestiaMin !== null || filtros.molestiaMax !== null)
+        ul.innerHTML += `<li><b>Molestia:</b> ${filtros.molestiaMin ?? "—"} a ${filtros.molestiaMax ?? "—"}</li>`;
+
+    if (filtros.dbMin !== null || filtros.dbMax !== null)
+        ul.innerHTML += `<li><b>Nivel dB:</b> ${filtros.dbMin ?? "—"} a ${filtros.dbMax ?? "—"}</li>`;
+
+    if (ul.innerHTML.trim() === "")
+        ul.innerHTML = "<li>No hay filtros aplicados.</li>";
+}
+
+// ---------------------------------------------------
+function aplicarFiltros() {
+    const filtrados = registrosGeoJSON.features.filter(f =>
+        pasaFiltros(f.properties)
     );
 
     capaRegistros.clearLayers();
     capaRegistros.addData(filtrados);
 
-    // Si tenías un punto seleccionado, lo quitamos
     resetHighlight();
+    actualizarResumen(filtrados);
 }
 
+// ---------------------------------------------------
 document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
 
-    filtros.horaInicio = document.getElementById("horaInicio").value || null;
-    filtros.horaFin    = document.getElementById("horaFin").value || null;
+    filtros.horaInicio = horaInicio.value || null;
+    filtros.horaFin = horaFin.value || null;
 
-    filtros.fechaInicio = document.getElementById("fechaInicio").value || null;
-    filtros.fechaFin    = document.getElementById("fechaFin").value || null;
+    filtros.fechaInicio = fechaInicio.value || null;
+    filtros.fechaFin = fechaFin.value || null;
 
-    filtros.molestiaMin = document.getElementById("molestiaMin").value ? Number(document.getElementById("molestiaMin").value) : null;
-    filtros.molestiaMax = document.getElementById("molestiaMax").value ? Number(document.getElementById("molestiaMax").value) : null;
+    filtros.molestiaMin = molestiaMin.value ? +molestiaMin.value : null;
+    filtros.molestiaMax = molestiaMax.value ? +molestiaMax.value : null;
 
-    filtros.dbMin = document.getElementById("dbMin").value ? Number(document.getElementById("dbMin").value) : null;
-    filtros.dbMax = document.getElementById("dbMax").value ? Number(document.getElementById("dbMax").value) : null;
+    filtros.dbMin = dbMin.value ? +dbMin.value : null;
+    filtros.dbMax = dbMax.value ? +dbMax.value : null;
 
     aplicarFiltros();
 });
 
+// ---------------------------------------------------
 document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
 
-    // Reset objeto
     filtros = {
         horaInicio: null,
         horaFin: null,
@@ -451,11 +377,8 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
         dbMax: null
     };
 
-    // Reset inputs
     document.querySelectorAll("#filters-panel input").forEach(i => i.value = "");
 
-    // Dibujar todos los registros nuevamente
     dibujarRegistros(currentMode);
+    actualizarResumen(registrosGeoJSON.features);
 });
-
-
