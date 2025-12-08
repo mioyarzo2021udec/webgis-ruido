@@ -40,9 +40,13 @@ updatePanelTop();
 window.addEventListener('resize', updatePanelTop);
 
 // ---------------------------------------------------
+// MODO MÓVIL
+// ---------------------------------------------------
 var isMobile = /Mobi|Android/i.test(navigator.userAgent);
 if (isMobile) map.dragging.disable();
 
+// ---------------------------------------------------
+// DEGRADADO
 // ---------------------------------------------------
 function interpolateColor(value, min, max) {
     value = Math.max(min, Math.min(max, value));
@@ -83,10 +87,7 @@ function showInfoPanel(p) {
 
     document.getElementById("info-content").innerHTML = `
         <b>Título:</b> ${p.titulo || "(sin título)"}<br><br>
-
-        <b>Descripción del evento:</b><br>
-        ${p.descripcion || "(sin descripción)"}<br><br>
-
+        <b>Descripción del evento:</b><br>${p.descripcion || "(sin descripción)"}<br><br>
         <b>Fecha del registro:</b> ${fecha}<br>
         <b>Hora del registro:</b> ${hora}<br><br>
 
@@ -117,9 +118,7 @@ function restoreOriginalStyle(l) {
 function highlightSelected(uuid) {
     capaRegistros.eachLayer(l => {
         if (l.feature.properties._uuid === uuid) {
-            if (!l.defaultOptions) {
-                l.defaultOptions = { ...l.options };
-            }
+            if (!l.defaultOptions) l.defaultOptions = { ...l.options };
             l.setStyle({
                 radius: 10,
                 color: "#ad8c00",
@@ -148,7 +147,6 @@ function dibujarRegistros(modoColor) {
     capaRegistros = L.geoJSON(registrosGeoJSON, {
         pointToLayer: (feature, latlng) => {
             const p = feature.properties;
-
             const color = (modoColor === "avg")
                 ? interpolateColor(+p.avg_db, 20, 120)
                 : interpolateColor(+p.nivel_molestia, 0, 10);
@@ -165,19 +163,15 @@ function dibujarRegistros(modoColor) {
             return m;
         },
 
-        onEachFeature: function (feature, layer) {
-            const p = feature.properties;
+        onEachFeature: (feature, layer) => {
             layer.on("click", () => {
-                if (selectedLayer) restoreOriginalStyle(selectedLayer);
-                selectedUUID = p._uuid;
-                showInfoPanel(p);
+                resetHighlight();
+                selectedUUID = feature.properties._uuid;
+                showInfoPanel(feature.properties);
                 highlightSelected(selectedUUID);
             });
         }
-
     }).addTo(map);
-
-    if (selectedUUID) highlightSelected(selectedUUID);
 }
 
 // ---------------------------------------------------
@@ -187,33 +181,37 @@ document.getElementById("info-close").addEventListener("click", () => {
 });
 
 // ---------------------------------------------------
+// CARGAR GEOJSON
+// ---------------------------------------------------
 fetch("data/registros.geojson")
     .then(r => r.json())
     .then(data => {
         registrosGeoJSON = Array.isArray(data)
-            ? { type: "FeatureCollection", features: data.flat() }
+            ? { type: "FeatureCollection", features: data.flatMap(fc => fc.features) }
             : data;
 
         dibujarRegistros(currentMode);
         actualizarLeyenda(currentMode);
-
         actualizarResumen(registrosGeoJSON.features);
     });
 
 // ---------------------------------------------------
+// SELECTORES
+// ---------------------------------------------------
 document.getElementById("colorMode").addEventListener("change", () => {
-    currentMode = colorMode.value;
+    currentMode = document.getElementById("colorMode").value;
     dibujarRegistros(currentMode);
     actualizarLeyenda(currentMode);
 });
 
-// ---------------------------------------------------
 document.getElementById("basemapSelect").addEventListener("change", () => {
-    const v = basemapSelect.value;
+    const v = document.getElementById("basemapSelect").value;
     [osm, carto, voyager, sat].forEach(l => map.removeLayer(l));
     ({ osm, carto, voyager, sat })[v].addTo(map);
 });
 
+// ---------------------------------------------------
+// LEYENDA
 // ---------------------------------------------------
 function generarLeyendaHTML(modo) {
     let html = '<div class="legend">';
@@ -272,13 +270,13 @@ function actualizarLeyenda(modo) {
 // ---------------------------------------------------
 // FORMULARIO KOBO
 // ---------------------------------------------------
-open-form-btn.addEventListener("click", () => {
-    form-panel.classList.add("open");
-    kobo-frame.src = "https://ee.kobotoolbox.org/x/arEl9iyW";
+document.getElementById("open-form-btn").addEventListener("click", () => {
+    document.getElementById("form-panel").classList.add("open");
+    document.getElementById("kobo-frame").src = "https://ee.kobotoolbox.org/x/arEl9iyW";
 });
 
-close-form-btn.addEventListener("click", () => {
-    form-panel.classList.remove("open");
+document.getElementById("close-form-btn").addEventListener("click", () => {
+    document.getElementById("form-panel").classList.remove("open");
 });
 
 // ---------------------------------------------------
@@ -287,11 +285,9 @@ close-form-btn.addEventListener("click", () => {
 function pasaFiltros(p) {
 
     if (filtros.horaInicio || filtros.horaFin) {
-        if (p.fecha_hora) {
-            const hora = p.fecha_hora.split("T")[1].substring(0, 5);
-            if (filtros.horaInicio && hora < filtros.horaInicio) return false;
-            if (filtros.horaFin && hora > filtros.horaFin) return false;
-        }
+        const hora = p.fecha_hora?.split("T")[1]?.substring(0,5);
+        if (filtros.horaInicio && hora < filtros.horaInicio) return false;
+        if (filtros.horaFin && hora > filtros.horaFin) return false;
     }
 
     if (filtros.fechaInicio || filtros.fechaFin) {
@@ -333,34 +329,26 @@ function actualizarResumen(filtrados) {
 }
 
 // ---------------------------------------------------
-function aplicarFiltros() {
-    const filtrados = registrosGeoJSON.features.filter(f =>
-        pasaFiltros(f.properties)
-    );
+document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
 
+    filtros.horaInicio = document.getElementById("horaInicio").value || null;
+    filtros.horaFin    = document.getElementById("horaFin").value || null;
+
+    filtros.fechaInicio = document.getElementById("fechaInicio").value || null;
+    filtros.fechaFin    = document.getElementById("fechaFin").value || null;
+
+    filtros.molestiaMin = document.getElementById("molestiaMin").value ? +document.getElementById("molestiaMin").value : null;
+    filtros.molestiaMax = document.getElementById("molestiaMax").value ? +document.getElementById("molestiaMax").value : null;
+
+    filtros.dbMin = document.getElementById("dbMin").value ? +document.getElementById("dbMin").value : null;
+    filtros.dbMax = document.getElementById("dbMax").value ? +document.getElementById("dbMax").value : null;
+
+    const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
     capaRegistros.clearLayers();
     capaRegistros.addData(filtrados);
 
     resetHighlight();
     actualizarResumen(filtrados);
-}
-
-// ---------------------------------------------------
-document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
-
-    filtros.horaInicio = horaInicio.value || null;
-    filtros.horaFin = horaFin.value || null;
-
-    filtros.fechaInicio = fechaInicio.value || null;
-    filtros.fechaFin = fechaFin.value || null;
-
-    filtros.molestiaMin = molestiaMin.value ? +molestiaMin.value : null;
-    filtros.molestiaMax = molestiaMax.value ? +molestiaMax.value : null;
-
-    filtros.dbMin = dbMin.value ? +dbMin.value : null;
-    filtros.dbMax = dbMax.value ? +dbMax.value : null;
-
-    aplicarFiltros();
 });
 
 // ---------------------------------------------------
