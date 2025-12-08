@@ -478,12 +478,17 @@ function actualizarCapaDePuntos() {
         if (capaRegistros) map.removeLayer(capaRegistros);
         return;
     }
-
-    // 3. Hexbin apagado → mostrar puntos filtrados
+    
+    // 3. Asegurar SIEMPRE que la capa de puntos esté en el mapa
+    if (capaRegistros && !map.hasLayer(capaRegistros)) {
+        capaRegistros.addTo(map);
+    }
+    
+    // 4. Mostrar puntos filtrados
     capaRegistros.clearLayers();
     capaRegistros.addData(filtrados);
 
-    // 4. Si había un punto seleccionado, volver a resaltarlo
+    // 5. Si había un punto seleccionado, volver a resaltarlo
     if (selectedUUID) highlightSelected(selectedUUID);
 }
 
@@ -887,3 +892,4 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
+
