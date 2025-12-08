@@ -92,25 +92,31 @@ function crearHexbin(features) {
 
     capaHexbin.on("render", () => {
 
-        // Pintar hexágonos con tu degradado
+        // 1. Pintar los hexágonos con el color correcto
         capaHexbin._rootGroup
             .selectAll("path.hexbin")
             .attr("fill", d => {
                 const val = capaHexbin._value(d);
                 return interpolateColor(val, minVal, maxVal);
-            });
+            })
+            .attr("stroke", "#222")            // borde visible
+            .attr("stroke-width", 0.8)
+            .attr("fill-opacity", 0.85);       // opacidad normal
 
-        // NUEVAS etiquetas
+        // 2. Eliminar labels previos
         if (map._hexbinLabels) {
             map.removeLayer(map._hexbinLabels);
+            map._hexbinLabels = null;
         }
 
+        // 3. Crear nuevo layer de labels
         const labels = L.layerGroup();
         map._hexbinLabels = labels;
 
-        capaHexbin._bins.forEach(bin => {
-            const latlng = map.layerPointToLatLng([bin.x, bin.y]);
+        (capaHexbin._bins || []).forEach(bin => {
             const count = bin.length;
+            const latlng = map.layerPointToLatLng([bin.x, bin.y]);
+            
             L.marker(latlng, {
                 icon: L.divIcon({
                     className: "hexbin-label",
@@ -119,7 +125,8 @@ function crearHexbin(features) {
                 interactive: false
             }).addTo(labels);
         });
-
+    
+        // 4. Solo mostrar si hexbin está activo
         if (hexbinActivo) labels.addTo(map);
     });
 
@@ -682,5 +689,6 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
 
 
