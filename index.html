@@ -11,164 +11,189 @@
 
 <body>
 
-<header class="top-bar">
-    <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
+    <!-- ========================================================= -->
+    <!-- HEADER -->
+    <!-- ========================================================= -->
 
-    <div class="control-row">
-        <div class="control-group">
-            <label for="colorMode">Visualización temática por:</label>
-            <select id="colorMode">
-                <option value="avg">AVG dB</option>
-                <option value="molestia">Molestia</option>
-            </select>
+    <header class="top-bar">
+        <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
+
+        <div class="control-row">
+
+            <div class="control-group">
+                <label for="colorMode">Visualización temática por:</label>
+                <select id="colorMode">
+                    <option value="avg">AVG dB</option>
+                    <option value="molestia">Molestia</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="basemapSelect">Mapa base:</label>
+                <select id="basemapSelect">
+                    <option value="osm">OSM (Clásico)</option>
+                    <option value="carto">CartoDB Claro</option>
+                    <option value="voyager">CartoDB Voyager</option>
+                    <option value="sat">Satélite ESRI</option>
+                </select>
+            </div>
+
         </div>
 
-        <div class="control-group">
-            <label for="basemapSelect">Mapa base:</label>
-            <select id="basemapSelect">
-                <option value="osm">OSM (Clásico)</option>
-                <option value="carto">CartoDB Claro</option>
-                <option value="voyager">CartoDB Voyager</option>
-                <option value="sat">Satélite ESRI</option>
-            </select>
-        </div>
+        <button id="open-form-btn">Reportar evento de ruido</button>
+    </header>
 
-        <div class="control-group">
-            <label for="hexbinToggle">Ver hexbin:</label>
-            <input type="checkbox" id="hexbinToggle">
-        </div>
+    <!-- ========================================================= -->
+    <!-- LAYOUT PRINCIPAL -->
+    <!-- ========================================================= -->
+
+    <div id="content-row">
+
+        <!-- ========================================================= -->
+        <!-- PANEL LATERAL: LEYENDA + FILTROS + RESUMEN -->
+        <!-- ========================================================= -->
+
+        <aside id="legend-panel">
+
+            <!-- LEYENDA -->
+            <div class="legend">
+                <h3 class="legend-title">Leyenda</h3>
+                <div id="legend-content"></div>
+            </div>
+
+            <!-- ==================== FILTROS ==================== -->
+            <section id="filters-panel" class="panel-box">
+                <h3>Filtros</h3>
+
+                <!-- HORARIO -->
+                <div class="filter-section">
+                    <h4>Filtrar por hora</h4>
+
+                    <label for="horaInicio">Hora inicio:</label>
+                    <input type="time" id="horaInicio">
+
+                    <label for="horaFin">Hora fin:</label>
+                    <input type="time" id="horaFin">
+                </div>
+
+                <!-- FECHA -->
+                <div class="filter-section">
+                    <h4>Filtrar por fecha</h4>
+
+                    <label for="fechaInicio">Fecha inicio:</label>
+                    <input type="date" id="fechaInicio">
+
+                    <label for="fechaFin">Fecha fin:</label>
+                    <input type="date" id="fechaFin">
+                </div>
+
+                <!-- MOLESTIA -->
+                <div class="filter-section">
+                    <h4>Molestia percibida (0–10)</h4>
+
+                    <label for="molestiaMin">Mínimo:</label>
+                    <input type="number" id="molestiaMin" min="0" max="10">
+
+                    <label for="molestiaMax">Máximo:</label>
+                    <input type="number" id="molestiaMax" min="0" max="10">
+                </div>
+
+                <!-- dB -->
+                <div class="filter-section">
+                    <h4>Nivel de ruido (dB)</h4>
+
+                    <label for="dbMin">Mínimo:</label>
+                    <input type="number" id="dbMin">
+
+                    <label for="dbMax">Máximo:</label>
+                    <input type="number" id="dbMax">
+                </div>
+
+                <!-- FUENTES -->
+                <div class="filter-section">
+                    <h4>Fuentes de ruido (selección múltiple)</h4>
+
+                    <label>
+                        <input type="checkbox" name="fuenteFiltro" value="tr_nsito_vehicular">
+                        Tránsito vehicular
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="fuenteFiltro" value="m_sica">
+                        Música
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="fuenteFiltro" value="industria">
+                        Industria
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="fuenteFiltro" value="construcci_n">
+                        Construcción
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="fuenteFiltro" value="personas">
+                        Personas
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="fuenteFiltro" value="otro">
+                        Otro
+                    </label>
+                </div>
+
+                <button id="aplicarFiltrosBtn" class="filter-btn">Aplicar filtros</button>
+                <button id="limpiarFiltrosBtn" class="filter-btn reset">Limpiar filtros</button>
+
+            </section>
+
+            <!-- ============ PANEL DE RESUMEN ============ -->
+            <section id="summary-panel" class="panel-box">
+                <h3>Resumen de filtrados</h3>
+                <ul id="summary-list">
+                    <li>No hay filtros aplicados.</li>
+                </ul>
+            </section>
+
+        </aside>
+
+        <!-- MAPA -->
+        <div id="map"></div>
+
     </div>
 
-    <button id="open-form-btn">Reportar evento de ruido</button>
-</header>
+    <!-- ========================================================= -->
+    <!-- PANEL DE FORMULARIO (KOBO) -->
+    <!-- ========================================================= -->
 
-<div id="content-row">
-
-    <aside id="legend-panel">
-
-        <div class="legend">
-            <h3 class="legend-title">Leyenda</h3>
-            <div id="legend-content"></div>
+    <div id="form-panel">
+        <div class="form-panel-header">
+            <h3>Registro de evento de ruido</h3>
+            <button id="close-form-btn">✕</button>
         </div>
-
-        <!-- ==================== FILTROS ==================== -->
-        <section id="filters-panel" class="panel-box">
-            <h3>Filtros</h3>
-
-            <!-- HORARIO -->
-            <div class="filter-section">
-                <h4>Filtrar por hora</h4>
-                <label for="horaInicio">Hora inicio:</label>
-                <input type="time" id="horaInicio">
-
-                <label for="horaFin">Hora fin:</label>
-                <input type="time" id="horaFin">
-            </div>
-
-            <!-- FECHA -->
-            <div class="filter-section">
-                <h4>Filtrar por fecha</h4>
-                <label for="fechaInicio">Fecha inicio:</label>
-                <input type="date" id="fechaInicio">
-
-                <label for="fechaFin">Fecha fin:</label>
-                <input type="date" id="fechaFin">
-            </div>
-
-            <!-- MOLESTIA -->
-            <div class="filter-section">
-                <h4>Molestia percibida (0–10)</h4>
-                <label for="molestiaMin">Mínimo:</label>
-                <input type="number" id="molestiaMin" min="0" max="10">
-
-                <label for="molestiaMax">Máximo:</label>
-                <input type="number" id="molestiaMax" min="0" max="10">
-            </div>
-
-            <!-- dB -->
-            <div class="filter-section">
-                <h4>Nivel de ruido (dB)</h4>
-                <label for="dbMin">Mínimo:</label>
-                <input type="number" id="dbMin">
-
-                <label for="dbMax">Máximo:</label>
-                <input type="number" id="dbMax">
-            </div>
-
-            <!-- FUENTES -->
-            <div class="filter-section">
-                <h4>Fuentes de ruido (selección múltiple)</h4>
-
-                <label>
-                    <input type="checkbox" name="fuenteFiltro" value="tr_nsito_vehicular">
-                    Tránsito vehicular
-                </label>
-                <label>
-                    <input type="checkbox" name="fuenteFiltro" value="m_sica">
-                    Música
-                </label>
-                <label>
-                    <input type="checkbox" name="fuenteFiltro" value="industria">
-                    Industria
-                </label>
-                <label>
-                    <input type="checkbox" name="fuenteFiltro" value="construcci_n">
-                    Construcción
-                </label>
-                <label>
-                    <input type="checkbox" name="fuenteFiltro" value="personas">
-                    Personas
-                </label>
-                <label>
-                    <input type="checkbox" name="fuenteFiltro" value="otro">
-                    Otro
-                </label>
-            </div>
-
-            <button id="aplicarFiltrosBtn" class="filter-btn">Aplicar filtros</button>
-            <button id="limpiarFiltrosBtn" class="filter-btn reset">Limpiar filtros</button>
-        </section>
-
-        <!-- ============ PANEL DE RESUMEN ============ -->
-        <section id="summary-panel" class="panel-box">
-            <h3>Resumen de filtrados</h3>
-            <ul id="summary-list">
-                <li>No hay filtros aplicados.</li>
-            </ul>
-        </section>
-
-    </aside>
-
-    <div id="map"></div>
-</div>
-
-<div id="form-panel">
-    <div class="form-panel-header">
-        <h3>Registro de evento de ruido</h3>
-        <button id="close-form-btn">✕</button>
+        <iframe id="kobo-frame"></iframe>
     </div>
-    <iframe id="kobo-frame"></iframe>
-</div>
 
-<div id="info-panel">
-    <div class="info-header">
-        <h3 id="info-title">Información del registro</h3>
-        <button id="info-close">✕</button>
+    <!-- ========================================================= -->
+    <!-- PANEL DE INFORMACIÓN -->
+    <!-- ========================================================= -->
+
+    <div id="info-panel">
+        <div class="info-header">
+            <h3 id="info-title">Información del registro</h3>
+            <button id="info-close">✕</button>
+        </div>
+        <div id="info-content"></div>
     </div>
-    <div id="info-content"></div>
-</div>
 
-<!-- Leaflet -->
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <!-- ========================================================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================================================= -->
 
-<!-- D3.js -->
-<script src="https://d3js.org/d3.v7.min.js"></script>
-
-<!-- Leaflet Hexbin (plugin correcto) -->
-<script src="https://unpkg.com/leaflet-d3-hexbin/leaflet-d3-hexbin.min.js"></script>
-
-<!-- Tu script -->
-<script src="script.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
