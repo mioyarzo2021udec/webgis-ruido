@@ -29,6 +29,49 @@ var map = L.map('map', {
     layers: [osm]
 });
 
+// ---------------------------------------------------
+// SELECCIÓN ESPACIAL (Leaflet.draw)
+// ---------------------------------------------------
+
+let drawnItems = new L.FeatureGroup().addTo(map);
+let drawnPolygon = null;
+
+// Control con herramientas disponibles
+let drawControl = new L.Control.Draw({
+    draw: {
+        marker: false,
+        polyline: false,
+        circle: false,
+        circlemarker: false,
+        rectangle: true,   // permitir rectángulo
+        polygon: true      // permitir polígono
+    },
+    edit: {
+        featureGroup: drawnItems
+    }
+});
+
+// Capturar polígono creado por el usuario
+map.on(L.Draw.Event.CREATED, function (event) {
+    const layer = event.layer;
+
+    // limpiar selección previa
+    drawnItems.clearLayers();
+    drawnItems.addLayer(layer);
+
+    // guardar geometría en formato GeoJSON
+    drawnPolygon = layer.toGeoJSON();
+
+    console.log("Polígono capturado:", drawnPolygon);
+});
+
+// Función para limpiar área dibujada
+function limpiarArea() {
+    drawnItems.clearLayers();
+    drawnPolygon = null;
+}
+
+
 //-----------------------------------------------------
 // CONFIGURACIÓN DE HEXBIN
 //-----------------------------------------------------
@@ -717,3 +760,14 @@ document.getElementById("open-download-btn").addEventListener("click", () => {
 document.getElementById("download-close").addEventListener("click", () => {
     document.getElementById("download-panel").classList.remove("open");
 });
+
+// Activar herramientas de dibujo
+document.getElementById("draw-area-btn").addEventListener("click", () => {
+    map.addControl(drawControl);
+});
+
+// Limpiar área dibujada
+document.getElementById("clear-area-btn").addEventListener("click", () => {
+    limpiarArea();
+});
+
