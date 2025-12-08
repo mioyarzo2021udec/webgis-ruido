@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGIS Ruido Urbano</title>
 
+    <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+
+    <!-- Leaflet.draw (más adelante lo usarás para el panel de descarga) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
+
+    <!-- TU CSS -->
     <link rel="stylesheet" href="estilo.css">
+
+    <!-- D3 + Hexbin Plugin (REQUERIDO PARA QUE FUNCIONE) -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/leaflet-hexbin/leaflet.hexbin.js"></script>
 </head>
 
 <body>
@@ -19,7 +29,13 @@
         <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
 
         <div class="control-row">
-
+        
+            <!-- NUEVO CONTROL: Hexbin ON/OFF -->
+            <div class="control-group">
+                <label for="hexbinToggle">Hexbin:</label>
+                <input type="checkbox" id="hexbinToggle">
+            </div>
+            
             <div class="control-group">
                 <label for="colorMode">Visualización temática por:</label>
                 <select id="colorMode">
@@ -197,3 +213,4 @@
 
 </body>
 </html>
+
