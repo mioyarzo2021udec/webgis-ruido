@@ -162,13 +162,17 @@ body {
 /* ========================================================= */
 /* PANEL FIJO DE INFO Y KOBO                                  */
 /* ========================================================= */
-#form-panel,
+/* ========================================================= */
+/* PANELES LATERALES                                         */
+/* ========================================================= */
+
+/* PANEL DE INFORMACIÓN — versión angosta */
 #info-panel {
     position: fixed;
     top: var(--header-height);
     right: 0;
-    width: 22% !important;          /* más angosto */
-    max-width: 300px !important;    /* antes 340 */
+    width: 22% !important;
+    max-width: 300px !important;
     bottom: 0;
     background-color: #ffffff !important;
     border-left: 1px solid #ccc;
@@ -176,6 +180,22 @@ body {
     flex-direction: column;
     z-index: 1100;
 }
+
+/* PANEL DE FORMULARIO — ancho original, más amplio */
+#form-panel {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    width: 32% !important;
+    max-width: 380px !important;
+    bottom: 0;
+    background-color: #ffffff !important;
+    border-left: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    z-index: 1100;
+}
+
 
 #form-panel.open,
 #info-panel.open {
@@ -372,3 +392,4 @@ body {
         border-color: #444 !important;
     }
 }
+
