@@ -3,7 +3,7 @@
 /* ========================================================= */
 :root {
     --header-height: 72px; /* se sobreescribe dinámicamente por JS */
-    color-scheme: light;   /* fuerza esquema claro sin modo oscuro forzado raro */
+    color-scheme: light;   /* fuerza esquema claro */
 }
 
 /* ========================================================= */
@@ -97,38 +97,32 @@ body {
 }
 
 /* ========================================================= */
-/* CONTENEDORES EN RECUADRO (LEYENDA, FILTROS, RESUMEN)       */
+/* LEYENDA — ahora más compacta y proporcionada               */
 /* ========================================================= */
-.panel-box,
+
 .legend {
     background: #ffffff !important;
-    border: 1px solid #ccc;
-    border-radius: 6px;
     padding: 12px 14px;
-    margin-bottom: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    color: #333 !important;
+    font-size: 12px !important;
+    line-height: 1.25;
+    margin-bottom: 18px;
 }
 
-/* Título consistente */
-.panel-box h3,
-.legend-title {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-/* ========================================================= */
-/* LEYENDA                                                    */
-/* ========================================================= */
 .legend h4 {
     margin-top: 4px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    font-size: 13px !important;
 }
 
 .legend-row {
     display: flex;
     align-items: center;
+    margin-top: 0;
     margin-bottom: 3px;
+    font-size: 12px !important;
 }
 
 .legend-color {
@@ -141,8 +135,8 @@ body {
 .legend-example {
     margin-left: 28px;
     margin-top: 1px;
-    margin-bottom: 8px;
-    font-size: 12px;
+    margin-bottom: 6px;
+    font-size: 11px !important;
     font-style: italic;
     color: #555;
 }
@@ -150,18 +144,102 @@ body {
 .legend-footnote {
     text-align: center;
     margin-top: 14px;
-    font-size: 12px;
+    font-size: 11px !important;
     color: #555;
     font-style: italic;
 }
 
 /* ========================================================= */
-/* FILTROS                                                    */
+/* MAPA                                                       */
 /* ========================================================= */
-#filters-panel {
-    margin-top: 4px;
+#map {
+    flex: 1;
+    height: 100%;
+    min-width: 0;
+    z-index: 1;
+    background: #ddd;
 }
 
+/* ========================================================= */
+/* PANELES DE INFORMACIÓN Y KOBO                              */
+/* ========================================================= */
+
+#form-panel,
+#info-panel {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    width: 32%;
+    max-width: 380px;
+    bottom: 0;
+    background-color: #ffffff !important;
+    border-left: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    z-index: 1100;
+}
+
+#form-panel.open,
+#info-panel.open {
+    display: flex;
+}
+
+/* ——— PC: ajustar ancho del panel de información ——— */
+@media (min-width: 601px) {
+
+    #info-panel,
+    #form-panel {
+        width: 26% !important;
+        max-width: 340px !important;
+    }
+}
+
+.form-panel-header,
+.info-header {
+    padding: 8px;
+    background: #f0f0f0 !important;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#kobo-frame {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+#info-content {
+    padding: 12px;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+/* ========================================================= */
+/* RECUADROS DE FILTROS Y RESUMEN                             */
+/* ========================================================= */
+.panel-box {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: 18px;
+    background: #ffffff;
+}
+
+/* Títulos internos */
+#filters-panel h3,
+#summary-panel h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* ========================================================= */
+/* FILTROS                                                    */
+/* ========================================================= */
 .filter-section {
     margin-bottom: 14px;
     padding-bottom: 10px;
@@ -170,11 +248,11 @@ body {
 
 .filter-section:last-child {
     border-bottom: none;
-    margin-bottom: 8px;
+    padding-bottom: 0;
 }
 
 .filter-section h4 {
-    margin: 6px 0;
+    margin: 8px 0;
     font-size: 14px;
     font-weight: bold;
 }
@@ -200,6 +278,7 @@ body {
     transform: translateY(1px);
 }
 
+/* botones */
 .filter-btn {
     width: 100%;
     padding: 8px;
@@ -217,91 +296,34 @@ body {
 }
 
 /* ========================================================= */
-/* RESUMEN DE FILTRADOS                                      */
+/* RESUMEN DE FILTRADOS                                       */
 /* ========================================================= */
+
 #summary-list {
-    padding-left: 20px;
+    padding-left: 18px;
     margin: 0;
     font-size: 13px;
 }
 
 #summary-list li {
-    margin-bottom: 8px;      /* espaciado moderado */
-    line-height: 1.32;
+    margin-bottom: 8px;
+    line-height: 1.35;
 }
 
-/* separación mínima entre bloques */
-#summary-list li:nth-child(1n + 2)::before {
-    content: "";
-    display: block;
-    height: 3px;
-}
-
-/* ========================================================= */
-/* MAPA                                                       */
-/* ========================================================= */
-#map {
-    flex: 1;
-    height: 100%;
-    min-width: 0;
-    z-index: 1;
-    background: #ddd;
+/* separaciones suaves entre bloques */
+#summary-list li + li {
+    margin-top: 4px;
 }
 
 /* ========================================================= */
-/* PANELES KOBO E INFO                                        */
-/* ========================================================= */
-#form-panel,
-#info-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    width: 32%;
-    max-width: 380px;
-    bottom: 0;
-    background-color: #ffffff !important;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1100;
-}
-
-#form-panel.open,
-#info-panel.open {
-    display: flex;
-}
-
-.form-panel-header,
-.info-header {
-    padding: 8px;
-    background: #f0f0f0 !important;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#kobo-frame {
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-#info-content {
-    padding: 12px;
-    overflow-y: auto;
-    font-size: 14px;
-}
-
-/* ========================================================= */
-/* PC — corregir ancho excesivo de selectores                */
+/* PC — corregir ancho excesivo de los selectores             */
 /* ========================================================= */
 @media (min-width: 601px) {
     .control-group {
         width: 170px;
         flex: none;
     }
+
     .control-row {
         justify-content: center;
         gap: 16px;
@@ -309,19 +331,16 @@ body {
 }
 
 /* ========================================================= */
-/* CELULAR — layout vertical                                 */
+/* CELULAR — layout vertical                                  */
 /* ========================================================= */
 @media (max-width: 600px) {
 
     .top-bar {
         flex-direction: column;
         height: auto;
+        align-items: center;
         text-align: center;
         gap: 8px;
-    }
-
-    .top-bar h2 {
-        font-size: 17px;
     }
 
     .control-row {
@@ -348,6 +367,7 @@ body {
     }
 
     .legend {
+        font-size: 13px !important;
         max-height: 30vh;
         overflow-y: auto;
     }
@@ -362,7 +382,7 @@ body {
 }
 
 /* ========================================================= */
-/* PROTECCIÓN CONTRA MODO OSCURO FORZADO                      */
+/* FORZAR MODO CLARO                                           */
 /* ========================================================= */
 @media (prefers-color-scheme: dark) {
     body,
