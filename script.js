@@ -767,14 +767,23 @@ document.getElementById("download-close").addEventListener("click", () => {
         map.removeControl(drawControl);
     } catch(e) {}
 
-    // Limpiar botones activos
+    map.hasControl = false; //
+
+    // Limpiar selección dibujada
     limpiarArea();
 });
 
+
 // Activar herramientas de dibujo
+if (!map.hasControl) map.hasControl = false;
+
 document.getElementById("draw-area-btn").addEventListener("click", () => {
-    map.addControl(drawControl);
+    if (!map.hasControl) {
+        map.addControl(drawControl);
+        map.hasControl = true;
+    }
 });
+
 
 // Limpiar área dibujada
 document.getElementById("clear-area-btn").addEventListener("click", () => {
