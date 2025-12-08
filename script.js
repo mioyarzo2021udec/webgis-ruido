@@ -47,21 +47,27 @@ function colorHexbin(valor, modo) {
 
 // Crear capa hexbin a partir de features filtradas
 function crearHexbin(features) {
+
+    // Siempre eliminar capa anterior si existe
+    if (capaHexbin) {
+        map.removeLayer(capaHexbin);
+        capaHexbin = null;
+    }
+
+    // Si no hay features → salir sin dibujar nada
     if (!features || features.length === 0) return;
 
-    // Convertir registros a puntos para hexbin
+    // Convertir features a formato de puntos
     const puntos = features.map(f => ({
         lat: f.geometry.coordinates[1],
         lng: f.geometry.coordinates[0],
         properties: f.properties
     }));
 
-    // Eliminar capa anterior si existe
-    if (capaHexbin) map.removeLayer(capaHexbin);
-
+    // Crear capa hexbin
     capaHexbin = L.hexbinLayer({
         radius: 18,
-        opacity: 0.75,
+        opacity: 0.85,
         lng: d => d.lng,
         lat: d => d.lat,
 
@@ -85,24 +91,29 @@ function crearHexbin(features) {
         }
     });
 
-    // Generar escala suave de colores
+    //---------------------------
+    // ESCALA DE COLOR REAL
+    //---------------------------
     const escala = [];
-    for (let i = 0; i <= 10; i++) {
-        const v = i / 10;
 
+    for (let i = 0; i <= 20; i++) {
+        const frac = i / 20;
         if (currentMode === "avg") {
-            escala.push(interpolateColor(20 + v * 100, 20, 120));
+            escala.push(interpolateColor(20 + frac * 100, 20, 120));
         } else {
-            escala.push(interpolateColor(v * 10, 0, 10));
+            escala.push(interpolateColor(frac * 10, 0, 10));
         }
     }
 
     capaHexbin.colorScale().range(escala);
 
+    // Asignar datos
     capaHexbin.data(puntos);
 
+    // Si está activado → dibujar
     if (hexbinActivo) capaHexbin.addTo(map);
 }
+
 
 
 // Activar/desactivar hexbin desde checkbox
@@ -645,7 +656,11 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
 
     dibujarRegistros(currentMode);
     actualizarResumen(registrosGeoJSON.features);
+
+    actualizarHexbin();
+    
 });
+
 
 
 
