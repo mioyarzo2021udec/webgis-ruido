@@ -72,18 +72,18 @@ function crearHexbin(features) {
         radius: 22,
         opacity: 0.85,
         lng: d => d.lng,
-        lat: d => d.lat,
+        lat: d => d.lat
 
+        // ← necesario para que el plugin calcule _value() internamente
         value: d => {
-            const valores = d
-                .map(p => currentMode === "avg"
-                    ? Number(p.properties?.avg_db)
-                    : Number(p.properties?.nivel_molestia)
-                )
-                .filter(v => !isNaN(v));
-
+            const valores = d.map(p =>
+                currentMode === "avg"
+                    ? Number(p.data?.properties?.avg_db)
+                    : Number(p.data?.properties?.nivel_molestia)
+            ).filter(v => !isNaN(v));
+        
             if (valores.length === 0) return minVal;
-
+        
             return valores.reduce((a, b) => a + b, 0) / valores.length;
         }
     });
@@ -92,46 +92,57 @@ function crearHexbin(features) {
 
     capaHexbin.on("render", () => {
 
-        // 1. Pintar los hexágonos con el color correcto
+        const bins = capaHexbin._bins || [];
+
+        // Colorear hexágonos
         capaHexbin._rootGroup
             .selectAll("path.hexbin")
-            .attr("fill", d => {
-                const val = capaHexbin._value(d);
+            .attr("fill", bin => {
+
+                const valores = bin.map(p =>
+                    currentMode === "avg"
+                        ? Number(p.data.properties?.avg_db)
+                        : Number(p.data.properties?.nivel_molestia)
+                ).filter(v => !isNaN(v));
+
+                if (valores.length === 0) {
+                    return interpolateColor(minVal, minVal, maxVal);
+                }
+
+                const val = valores.reduce((a,b)=>a+b,0) / valores.length;
+
                 return interpolateColor(val, minVal, maxVal);
             })
-            .attr("stroke", "#222")            // borde visible
+            .attr("stroke", "#222")
             .attr("stroke-width", 0.8)
-            .attr("fill-opacity", 0.85);       // opacidad normal
+            .attr("fill-opacity", 0.85);
 
-        // 2. Eliminar labels previos
-        if (map._hexbinLabels) {
-            map.removeLayer(map._hexbinLabels);
-            map._hexbinLabels = null;
-        }
+        // Labels
+        if (map._hexbinLabels) map.removeLayer(map._hexbinLabels);
 
-        // 3. Crear nuevo layer de labels
         const labels = L.layerGroup();
         map._hexbinLabels = labels;
 
-        (capaHexbin._bins || []).forEach(bin => {
-            const count = bin.length;
+        bins.forEach(bin => {
+
             const latlng = map.layerPointToLatLng([bin.x, bin.y]);
-            
+
             L.marker(latlng, {
                 icon: L.divIcon({
                     className: "hexbin-label",
-                    html: `${count}`
+                    html: `${bin.length}`
                 }),
                 interactive: false
             }).addTo(labels);
+
         });
-    
-        // 4. Solo mostrar si hexbin está activo
+
         if (hexbinActivo) labels.addTo(map);
     });
 
     if (hexbinActivo) capaHexbin.addTo(map);
 }
+
     
 // Activar/desactivar hexbin desde checkbox
 document.getElementById("hexbinToggle").addEventListener("change", (e) => {
@@ -689,6 +700,7 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
 
 
 
