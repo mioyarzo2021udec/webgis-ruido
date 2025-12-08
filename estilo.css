@@ -418,5 +418,33 @@ body {
     margin-bottom: 5px;
 }
 
+/* ========================================================= */
+/* FORZAR ESTILO CLARO EN INPUTS, SELECTS Y CAMPOS NATIVOS   */
+/* ========================================================= */
+
+input,
+select,
+button,
+textarea {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #ccc !important;
+    appearance: none;
+}
+
+input::placeholder {
+    color: #666;
+}
+
+select {
+    background-image: none;
+}
+
+input[type="time"],
+input[type="date"],
+input[type="number"] {
+    color-scheme: light !important; /* fuerza UI clara */
+}
+
 
 
