@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGIS Ruido Urbano</title>
+    <title>WebGIS – Proyecto de Contaminación Acústica</title>
+
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+
+    <!-- Estilos -->
     <link rel="stylesheet" href="estilo.css">
 </head>
 
@@ -13,29 +17,33 @@
 <header class="top-bar">
     <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
 
-    <!-- Selector de visualización temática -->
-    <div class="control-group">
-        <label for="colorMode">Visualización temática por:</label>
-        <select id="colorMode">
-            <option value="avg">AVG dB</option>
-            <option value="molestia">Molestia</option>
-        </select>
+    <div class="control-row">
+        <div class="control-group">
+            <label for="colorMode">Visualización temática:</label>
+            <select id="colorMode">
+                <option value="avg">AVG dB</option>
+                <option value="molestia">Molestia</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="basemapSelect">Mapa base:</label>
+            <select id="basemapSelect">
+                <option value="osm">OSM</option>
+                <option value="carto">CartoDB Claro</option>
+                <option value="voyager">Voyager</option>
+                <option value="sat">Satélite</option>
+            </select>
+        </div>
     </div>
 
-    <!-- Selector de mapa base -->
-    <div class="control-group">
-        <label for="basemapSelect">Mapa base:</label>
-        <select id="basemapSelect">
-            <option value="osm">OSM (Clásico)</option>
-            <option value="carto">CartoDB Claro</option>
-            <option value="voyager">CartoDB Voyager</option>
-            <option value="sat">Satélite ESRI</option>
-        </select>
-    </div>
-
-    <!-- Botón para abrir formulario -->
     <button id="open-form-btn">Reportar evento de ruido</button>
 </header>
+
+<!-- Panel lateral PC -->
+<div id="side-panel">
+    <div id="legend-container"></div>
+</div>
 
 <!-- Mapa -->
 <div id="map"></div>
@@ -49,7 +57,7 @@
     <iframe id="kobo-frame"></iframe>
 </div>
 
-<!-- Panel Información de punto -->
+<!-- Panel Info -->
 <div id="info-panel">
     <div class="info-header">
         <h3 id="info-title">Información del registro</h3>
@@ -61,10 +69,8 @@
 <!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-<!-- Script propio -->
+<!-- JS -->
 <script src="script.js"></script>
 
 </body>
 </html>
-
-
