@@ -71,6 +71,30 @@ function limpiarArea() {
     drawnPolygon = null;
 }
 
+function filtrarPorPoligono(features, polygonGeoJSON) {
+
+    // Si no hay polígono → devolver features tal cual
+    if (!polygonGeoJSON) return features;
+
+    return features.filter(f => {
+        // Extraer punto
+        const punto = turf.point(f.geometry.coordinates);
+        // Revisar si está dentro del polígono
+        return turf.booleanPointInPolygon(punto, polygonGeoJSON);
+    });
+}
+
+function obtenerRegistrosParaDescarga() {
+
+    // 1. aplicar filtros temáticos normales
+    let filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
+
+    // 2. aplicar filtro espacial solo si hay polígono dibujado
+    filtrados = filtrarPorPoligono(filtrados, drawnPolygon);
+
+    return filtrados;
+}
+
 
 //-----------------------------------------------------
 // CONFIGURACIÓN DE HEXBIN
@@ -789,3 +813,4 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
+
