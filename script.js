@@ -705,3 +705,15 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
+// ---------------------------------------------------
+// PANEL DE DESCARGA
+// ---------------------------------------------------
+
+document.getElementById("open-download-btn").addEventListener("click", () => {
+    document.getElementById("download-panel").classList.add("open");
+});
+
+document.getElementById("download-close").addEventListener("click", () => {
+    document.getElementById("download-panel").classList.remove("open");
+});
