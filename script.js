@@ -95,6 +95,61 @@ function obtenerRegistrosParaDescarga() {
     return filtrados;
 }
 
+document.getElementById("export-csv-btn").addEventListener("click", () => {
+
+    const datos = obtenerRegistrosParaDescarga();
+
+    if (datos.length === 0) {
+        alert("No hay registros para descargar.");
+        return;
+    }
+
+    // Convertir a CSV
+    let csv = "lat,lng,avg_db,nivel_molestia,fuente,fecha_hora,titulo,descripcion\n";
+
+    datos.forEach(f => {
+        const p = f.properties;
+        const coords = f.geometry.coordinates;
+        csv += `${coords[1]},${coords[0]},${p.avg_db},${p.nivel_molestia},"${p.fuente_ruido}",${p.fecha_hora},"${p.titulo}","${p.descripcion}"\n`;
+    });
+
+    // Descargar
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "registros_filtrados.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+});
+
+document.getElementById("export-geojson-btn").addEventListener("click", () => {
+
+    const datos = obtenerRegistrosParaDescarga();
+
+    if (datos.length === 0) {
+        alert("No hay registros para descargar.");
+        return;
+    }
+
+    const geojson = {
+        type: "FeatureCollection",
+        features: datos
+    };
+
+    const blob = new Blob([JSON.stringify(geojson)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "registros_filtrados.geojson";
+    a.click();
+
+    URL.revokeObjectURL(url);
+});
+
 
 //-----------------------------------------------------
 // CONFIGURACIÓN DE HEXBIN
@@ -813,4 +868,5 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
+
 
