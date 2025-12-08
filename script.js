@@ -280,7 +280,8 @@ document.getElementById("hexbinToggle").addEventListener("change", (e) => {
             map.removeLayer(map._hexbinLabels);
             map._hexbinLabels = null;
         }
-        dibujarRegistros(currentMode);
+        
+        actualizarCapaDePuntos();
     }
 });
 
@@ -465,6 +466,25 @@ function dibujarRegistros(modoColor) {
     if (!hexbinActivo) {
         capaRegistros.addTo(map);
     }
+}
+
+function actualizarCapaDePuntos() {
+
+    // 1. Obtener los puntos filtrados
+    const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
+
+    // 2. Si hexbin está activo → no mostramos puntos
+    if (hexbinActivo) {
+        if (capaRegistros) map.removeLayer(capaRegistros);
+        return;
+    }
+
+    // 3. Hexbin apagado → mostrar puntos filtrados
+    capaRegistros.clearLayers();
+    capaRegistros.addData(filtrados);
+
+    // 4. Si había un punto seleccionado, volver a resaltarlo
+    if (selectedUUID) highlightSelected(selectedUUID);
 }
 
 
@@ -786,8 +806,7 @@ document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
 
     const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
 
-    capaRegistros.clearLayers();
-    capaRegistros.addData(filtrados);
+    actualizarCapaDePuntos();
 
     resetHighlight();
     actualizarResumen(filtrados);
@@ -868,5 +887,3 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
-
-
