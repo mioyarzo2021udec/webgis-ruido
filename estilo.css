@@ -301,8 +301,25 @@ body {
 }
 
 #summary-list li {
-    margin-bottom: 5px;
+    margin-bottom: 10px;        /* más separación general */
+    line-height: 1.35;
 }
+
+/* Espaciado extra antes de categorías claves */
+#summary-list li:nth-child(1n + 2)::before {
+    content: "";
+    display: block;
+    height: 4px;
+}
+
+/* Opcional: más aire antes de grandes bloques */
+#summary-list li:nth-child(2),
+#summary-list li:nth-child(4),
+#summary-list li:nth-child(6),
+#summary-list li:nth-child(8) {
+    margin-top: 6px;
+}
+
 
 /* ========================================================= */
 /* PC — corregir ancho excesivo de los selectores             */
@@ -398,3 +415,4 @@ body {
         border-color: #444 !important;
     }
 }
+
