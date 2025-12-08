@@ -286,16 +286,13 @@ function resetHighlight() {
 // ---------------------------------------------------
 
 function dibujarRegistros(modoColor) {
-
     if (!registrosGeoJSON) return;
 
     if (capaRegistros) map.removeLayer(capaRegistros);
 
     capaRegistros = L.geoJSON(registrosGeoJSON, {
         pointToLayer: (feature, latlng) => {
-
             const p = feature.properties;
-
             const color = (modoColor === "avg")
                 ? interpolateColor(+p.avg_db, 20, 120)
                 : interpolateColor(+p.nivel_molestia, 0, 10);
@@ -320,9 +317,14 @@ function dibujarRegistros(modoColor) {
                 highlightSelected(selectedUUID);
             });
         }
+    });
 
-    }).addTo(map);
+    // SOLO agregamos puntos si hexbin NO está activo
+    if (!hexbinActivo) {
+        capaRegistros.addTo(map);
+    }
 }
+
 
 // ---------------------------------------------------
 
@@ -675,6 +677,7 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
 
 
 
