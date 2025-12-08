@@ -96,14 +96,150 @@ body {
     overflow-y: auto;
 }
 
+/* ========================================================= */
+/* CONTENEDORES EN RECUADRO (LEYENDA, FILTROS, RESUMEN)       */
+/* ========================================================= */
+.panel-box,
+.legend {
+    background: #ffffff !important;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+}
+
+/* Título consistente */
+.panel-box h3,
 .legend-title {
     margin-top: 0;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     font-size: 15px;
     font-weight: bold;
 }
 
-/* Mapa */
+/* ========================================================= */
+/* LEYENDA                                                    */
+/* ========================================================= */
+.legend h4 {
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.legend-color {
+    width: 22px;
+    height: 12px;
+    border: 1px solid #aaa;
+    margin-right: 6px;
+}
+
+.legend-example {
+    margin-left: 28px;
+    margin-top: 1px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-style: italic;
+    color: #555;
+}
+
+.legend-footnote {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #555;
+    font-style: italic;
+}
+
+/* ========================================================= */
+/* FILTROS                                                    */
+/* ========================================================= */
+#filters-panel {
+    margin-top: 4px;
+}
+
+.filter-section {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+    margin-bottom: 8px;
+}
+
+.filter-section h4 {
+    margin: 6px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#filters-panel label {
+    display: block;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+#filters-panel input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 2px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#filters-panel input[type="checkbox"] {
+    width: auto;
+    margin-right: 6px;
+    transform: translateY(1px);
+}
+
+.filter-btn {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.filter-btn.reset {
+    background: #777;
+}
+
+/* ========================================================= */
+/* RESUMEN DE FILTRADOS                                      */
+/* ========================================================= */
+#summary-list {
+    padding-left: 20px;
+    margin: 0;
+    font-size: 13px;
+}
+
+#summary-list li {
+    margin-bottom: 8px;      /* espaciado moderado */
+    line-height: 1.32;
+}
+
+/* separación mínima entre bloques */
+#summary-list li:nth-child(1n + 2)::before {
+    content: "";
+    display: block;
+    height: 3px;
+}
+
+/* ========================================================= */
+/* MAPA                                                       */
+/* ========================================================= */
 #map {
     flex: 1;
     height: 100%;
@@ -113,14 +249,13 @@ body {
 }
 
 /* ========================================================= */
-/* PANELES DE INFORMACIÓN Y KOBO                              */
+/* PANELES KOBO E INFO                                        */
 /* ========================================================= */
 #form-panel,
 #info-panel {
     position: fixed;
     top: var(--header-height);
     right: 0;
-    left: auto;
     width: 32%;
     max-width: 380px;
     bottom: 0;
@@ -160,176 +295,13 @@ body {
 }
 
 /* ========================================================= */
-/* LEYENDA SIN SOMBRA, CON ESPACIADO MEJORADO                */
-/* ========================================================= */
-.legend {
-    background: #ffffff !important;
-    padding: 12px 14px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    color: #333 !important;
-    font-size: 13px;
-    margin-bottom: 20px;
-}
-
-/* Título dentro de la leyenda */
-.legend h4 {
-    margin-top: 4px;
-    margin-bottom: 8px;
-}
-
-/* Espaciado entre categorías (color + texto) */
-.legend-row {
-    display: flex;
-    align-items: center;
-    margin-top: 0;
-    margin-bottom: 3px;
-}
-
-/* Cuadradito de color */
-.legend-color {
-    width: 22px;
-    height: 12px;
-    border: 1px solid #aaa;
-    margin-right: 6px;
-}
-
-/* Ejemplo en cursiva debajo del valor */
-.legend-example {
-    margin-left: 28px;
-    margin-top: 1px;
-    margin-bottom: 8px;
-    font-size: 12px;
-    color: #555;
-    font-style: italic;
-}
-
-/* Espaciado antes de la nota final */
-.legend-footnote {
-    text-align: center;
-    margin-top: 18px;
-    font-size: 12px;
-    color: #555;
-    font-style: italic;
-}
-
-/* ========================================================= */
-/* FILTROS Y RESUMEN EN RECUADROS                            */
-/* ========================================================= */
-
-.panel-box {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 12px 14px;
-    margin-top: 22px;
-    background: #ffffff;
-}
-
-#filters-panel h3,
-#summary-panel h3 {
-    margin-top: 0;
-    margin-bottom: 8px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-/* Secciones dentro del panel de filtros */
-.filter-section {
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #ccc;
-}
-
-.filter-section:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 10px;
-}
-
-.filter-section h4 {
-    margin: 8px 0;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-#filters-panel label {
-    display: block;
-    font-size: 12px;
-    margin-top: 4px;
-}
-
-#filters-panel input {
-    width: 100%;
-    padding: 5px;
-    margin-top: 2px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* checkboxes de fuentes: que el input no estire toda la fila */
-#filters-panel input[type="checkbox"] {
-    width: auto;
-    margin-right: 6px;
-    transform: translateY(1px);
-}
-
-.filter-btn {
-    width: 100%;
-    padding: 8px;
-    margin-top: 6px;
-    background: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.filter-btn.reset {
-    background: #777;
-}
-
-/* =============================== */
-/* PANEL DE RESUMEN DE FILTROS     */
-/* =============================== */
-
-#summary-list {
-    padding-left: 20px;
-    margin: 0;
-    font-size: 13px;
-}
-
-#summary-list li {
-    margin-bottom: 10px;        /* más separación general */
-    line-height: 1.35;
-}
-
-/* Espaciado extra antes de categorías claves */
-#summary-list li:nth-child(1n + 2)::before {
-    content: "";
-    display: block;
-    height: 4px;
-}
-
-/* Opcional: más aire antes de grandes bloques */
-#summary-list li:nth-child(2),
-#summary-list li:nth-child(4),
-#summary-list li:nth-child(6),
-#summary-list li:nth-child(8) {
-    margin-top: 6px;
-}
-
-
-/* ========================================================= */
-/* PC — corregir ancho excesivo de los selectores             */
+/* PC — corregir ancho excesivo de selectores                */
 /* ========================================================= */
 @media (min-width: 601px) {
     .control-group {
         width: 170px;
         flex: none;
     }
-
     .control-row {
         justify-content: center;
         gap: 16px;
@@ -337,15 +309,13 @@ body {
 }
 
 /* ========================================================= */
-/* CELULAR — layout vertical                                  */
+/* CELULAR — layout vertical                                 */
 /* ========================================================= */
 @media (max-width: 600px) {
 
-    /* Header */
     .top-bar {
         flex-direction: column;
         height: auto;
-        align-items: center;
         text-align: center;
         gap: 8px;
     }
@@ -359,19 +329,16 @@ body {
         justify-content: space-between;
     }
 
-    /* Layout principal */
     #content-row {
         flex-direction: column;
     }
 
-    /* Mapa primero, más cuadrado */
     #map {
         order: 1;
         width: 100%;
         height: 55vh;
     }
 
-    /* Leyenda + filtros + resumen abajo del mapa */
     #legend-panel {
         order: 2;
         width: 100%;
@@ -381,12 +348,10 @@ body {
     }
 
     .legend {
-        font-size: 14px !important;
         max-height: 30vh;
         overflow-y: auto;
     }
 
-    /* Paneles a pantalla completa */
     #form-panel,
     #info-panel {
         left: 0;
@@ -415,4 +380,3 @@ body {
         border-color: #444 !important;
     }
 }
-
