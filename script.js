@@ -319,7 +319,7 @@ function actualizarResumen(filtrados) {
 
     ul.innerHTML += `<li><b>Registros encontrados:</b> ${filtrados.length}</li>`;
 
-    // Mostrar filtros aplicados
+    // Filtros aplicados
     if (filtros.horaInicio || filtros.horaFin)
         ul.innerHTML += `<li><b>Franja filtrada:</b> ${filtros.horaInicio || "—"} a ${filtros.horaFin || "—"}</li>`;
 
@@ -334,9 +334,11 @@ function actualizarResumen(filtrados) {
 
     ul.innerHTML += `<hr>`;
 
-    // Ahora calcular rangos observados reales
-    const horas = [];
+    // -------------------------------------------------------------
+    // EXTRAER RANGOS OBSERVADOS (SIEMPRE FUNCIONAL)
+    // -------------------------------------------------------------
     const fechas = [];
+    const horas = [];
     const molestias = [];
     const dBs = [];
 
@@ -344,22 +346,25 @@ function actualizarResumen(filtrados) {
         const p = f.properties;
 
         if (p.fecha_hora) {
-            const [fecha, hora] = p.fecha_hora.split("T");
-            fechas.push(fecha);
-            horas.push(hora.substring(0, 5));
+            const d = new Date(p.fecha_hora);
+
+            if (!isNaN(d.getTime())) {
+                fechas.push(d.toISOString().split("T")[0]);
+                horas.push(d.toTimeString().substring(0,5));
+            }
         }
 
-        molestias.push(+p.nivel_molestia);
-        dBs.push(+p.avg_db);
+        if (!isNaN(+p.nivel_molestia)) molestias.push(+p.nivel_molestia);
+        if (!isNaN(+p.avg_db)) dBs.push(+p.avg_db);
     });
 
-    const min = arr => Math.min(...arr);
-    const max = arr => Math.max(...arr);
+    const min = arr => arr.length > 0 ? arr.sort()[0] : "—";
+    const max = arr => arr.length > 0 ? arr.sort()[arr.length - 1] : "—";
 
     ul.innerHTML += `<li><b>Horario observado:</b> ${min(horas)} a ${max(horas)}</li>`;
     ul.innerHTML += `<li><b>Periodo observado:</b> ${min(fechas)} a ${max(fechas)}</li>`;
-    ul.innerHTML += `<li><b>Molestia observada:</b> ${min(molestias)} a ${max(molestias)}</li>`;
-    ul.innerHTML += `<li><b>Ruido observado (dB):</b> ${min(dBs)} a ${max(dBs)}</li>`;
+    ul.innerHTML += `<li><b>Molestia observada:</b> ${Math.min(...molestias)} a ${Math.max(...molestias)}</li>`;
+    ul.innerHTML += `<li><b>Ruido observado (dB):</b> ${Math.min(...dBs)} a ${Math.max(...dBs)}</li>`;
 }
 
 // ---------------------------------------------------
@@ -404,4 +409,5 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     dibujarRegistros(currentMode);
     actualizarResumen(registrosGeoJSON.features);
 });
+
 
