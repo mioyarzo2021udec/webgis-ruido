@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGIS – Proyecto de Contaminación Acústica</title>
+    <title>WebGIS Ruido Urbano</title>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
 
-    <!-- Estilos -->
+    <!-- Estilos propios -->
     <link rel="stylesheet" href="estilo.css">
 </head>
 
@@ -17,36 +17,51 @@
 <header class="top-bar">
     <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
 
+    <!-- Fila que agrupa ambos selectores -->
     <div class="control-row">
+        <!-- Selector de visualización temática -->
         <div class="control-group">
-            <label for="colorMode">Visualización temática:</label>
+            <label for="colorMode">Visualización temática por:</label>
             <select id="colorMode">
                 <option value="avg">AVG dB</option>
                 <option value="molestia">Molestia</option>
             </select>
         </div>
 
+        <!-- Selector de mapa base -->
         <div class="control-group">
             <label for="basemapSelect">Mapa base:</label>
             <select id="basemapSelect">
-                <option value="osm">OSM</option>
+                <option value="osm">OSM (Clásico)</option>
                 <option value="carto">CartoDB Claro</option>
-                <option value="voyager">Voyager</option>
-                <option value="sat">Satélite</option>
+                <option value="voyager">CartoDB Voyager</option>
+                <option value="sat">Satélite ESRI</option>
             </select>
         </div>
     </div>
 
+    <!-- Botón para abrir formulario -->
     <button id="open-form-btn">Reportar evento de ruido</button>
 </header>
 
-<!-- Panel lateral PC -->
-<div id="side-panel">
-    <div id="legend-container"></div>
-</div>
+<!-- Layout principal: leyenda + mapa -->
+<div id="content-row">
+    <!-- Panel de leyenda / filtros (lateral en PC, abajo en móvil) -->
+    <aside id="legend-panel">
+        <h3 class="legend-title">Leyenda</h3>
+        <div id="legend-content"></div>
 
-<!-- Mapa -->
-<div id="map"></div>
+        <section id="filters-panel">
+            <h3>Filtros</h3>
+            <p class="filters-hint">
+                Próximamente: filtros por fecha, hora, fuente de ruido, etc.
+            </p>
+        </section>
+    </aside>
+
+    <!-- Mapa -->
+    <div id="map"></div>
+</div>
 
 <!-- Panel Kobo -->
 <div id="form-panel">
@@ -57,7 +72,7 @@
     <iframe id="kobo-frame"></iframe>
 </div>
 
-<!-- Panel Info -->
+<!-- Panel Información de punto -->
 <div id="info-panel">
     <div class="info-header">
         <h3 id="info-title">Información del registro</h3>
@@ -69,8 +84,9 @@
 <!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-<!-- JS -->
+<!-- Script propio -->
 <script src="script.js"></script>
 
 </body>
 </html>
+
