@@ -52,6 +52,8 @@
 
         </div>
 
+        <button id="open-analysis-btn">Descarga de datos</button>
+
         <button id="open-form-btn">Reportar evento de ruido</button>
     </header>
 
@@ -201,6 +203,33 @@
     </div>
 
     <!-- ========================================================= -->
+    <!-- PANEL DE DESCARGA / EXPORTACIÓN -->
+    <!-- ========================================================= -->
+    
+    <div id="download-panel">
+        <div class="download-panel-header">
+            <h3>Descargar / exportar datos</h3>
+            <button id="download-close">✕</button>
+        </div>
+        
+        <div id="download-content">
+            <p>
+                Los datos que descargues se verán afectados por los filtros aplicados en el panel izquierdo.
+                También puedes seleccionar un área en el mapa usando las herramientas de dibujo.
+            </p>
+            
+            <button id="draw-area-btn" class="download-action">Dibujar área</button>
+            <button id="clear-area-btn" class="download-action">Limpiar área</button>
+            
+            <hr>
+            
+            <button id="export-csv-btn" class="download-action">Descargar CSV</button>
+            <button id="export-geojson-btn" class="download-action">Descargar GeoJSON</button>
+        </div>
+    </div>
+
+
+    <!-- ========================================================= -->
     <!-- SCRIPTS -->
     <!-- ========================================================= -->
     
@@ -221,5 +250,6 @@
 
 </body>
 </html>
+
 
 
