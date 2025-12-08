@@ -33,6 +33,7 @@ var map = L.map('map', {
 // ---------------------------------------------------
 function updatePanelTop() {
     const header = document.querySelector('.top-bar');
+    if (!header) return;
     const headerHeight = header.offsetHeight;
     document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
 }
@@ -75,15 +76,16 @@ let filtros = {
     molestiaMin: null,
     molestiaMax: null,
     dbMin: null,
-    dbMax: null
+    dbMax: null,
+    fuentes: []          // NUEVO: lista de códigos de fuente seleccionados
 };
 
 // ---------------------------------------------------
 // PANEL INFO
 // ---------------------------------------------------
 function showInfoPanel(p) {
-    const fecha = p.fecha_hora?.split("T")[0] || "";
-    const hora = p.fecha_hora?.split("T")[1]?.split(".")[0] || "";
+    const fecha = p.fecha_hora ? p.fecha_hora.split("T")[0] : "";
+    const hora = p.fecha_hora ? p.fecha_hora.split("T")[1].split(".")[0] : "";
 
     document.getElementById("info-content").innerHTML = `
         <b>Título:</b> ${p.titulo || "(sin título)"}<br><br>
@@ -96,6 +98,7 @@ function showInfoPanel(p) {
             ${(p.fuente_ruido || "")
                 .replace(/m_sica/g, "música")
                 .replace(/tr_nsito_vehicular/g, "tránsito vehicular")
+                .replace(/construcci_n/g, "construcción")
                 .split(" ")
                 .filter(f => f)
                 .map(f => `<li>${f}</li>`).join("")}
@@ -110,12 +113,14 @@ function showInfoPanel(p) {
 
 // ---------------------------------------------------
 function restoreOriginalStyle(l) {
-    if (!l?.defaultOptions) return;
+    if (!l || !l.defaultOptions) return;
     l.setStyle(l.defaultOptions);
 }
 
 // ---------------------------------------------------
 function highlightSelected(uuid) {
+    if (!capaRegistros) return;
+
     capaRegistros.eachLayer(l => {
         if (l.feature.properties._uuid === uuid) {
             if (!l.defaultOptions) l.defaultOptions = { ...l.options };
@@ -202,12 +207,17 @@ document.getElementById("colorMode").addEventListener("change", () => {
     currentMode = document.getElementById("colorMode").value;
     dibujarRegistros(currentMode);
     actualizarLeyenda(currentMode);
+
+    if (selectedUUID) highlightSelected(selectedUUID);
 });
 
 document.getElementById("basemapSelect").addEventListener("change", () => {
     const v = document.getElementById("basemapSelect").value;
     [osm, carto, voyager, sat].forEach(l => map.removeLayer(l));
     ({ osm, carto, voyager, sat })[v].addTo(map);
+
+    if (capaRegistros) capaRegistros.addTo(map);
+    if (selectedUUID) highlightSelected(selectedUUID);
 });
 
 // ---------------------------------------------------
@@ -231,15 +241,15 @@ function generarLeyendaHTML(modo) {
         rangos.forEach(r => {
             const c = interpolateColor(r.v, 20, 120);
             html += `
-                <div class="legend-row"><span class="legend-color" style="background:${c}"></span>${r.l}</div>
+                <div class="legend-row">
+                    <span class="legend-color" style="background:${c}"></span>${r.l}
+                </div>
                 <div class="legend-example"><em>${r.e}</em></div>
             `;
         });
 
         html += `<small class="legend-footnote">Ejemplos orientativos basados en la OMS.</small>`;
-    }
-
-    else {
+    } else {
         html += "<h4>Molestia percibida</h4>";
 
         const rangos = [
@@ -253,14 +263,17 @@ function generarLeyendaHTML(modo) {
         rangos.forEach(r => {
             const c = interpolateColor(r.v, 0, 10);
             html += `
-                <div class="legend-row"><span class="legend-color" style="background:${c}"></span>${r.l}</div>
+                <div class="legend-row">
+                    <span class="legend-color" style="background:${c}"></span>${r.l}
+                </div>
             `;
         });
 
         html += `<small class="legend-footnote">Escala subjetiva reportada por usuarios.</small>`;
     }
 
-    return html + "</div>";
+    html += "</div>";
+    return html;
 }
 
 function actualizarLeyenda(modo) {
@@ -280,93 +293,162 @@ document.getElementById("close-form-btn").addEventListener("click", () => {
 });
 
 // ---------------------------------------------------
-// LÓGICA DE FILTROS
+// LÓGICA DE FILTROS (incluye fuentes)
 // ---------------------------------------------------
 function pasaFiltros(p) {
 
+    // Hora
     if (filtros.horaInicio || filtros.horaFin) {
-        const hora = p.fecha_hora?.split("T")[1]?.substring(0,5);
-        if (filtros.horaInicio && hora < filtros.horaInicio) return false;
-        if (filtros.horaFin && hora > filtros.horaFin) return false;
+        const hora = p.fecha_hora ? p.fecha_hora.split("T")[1].substring(0, 5) : null;
+        if (filtros.horaInicio && hora && hora < filtros.horaInicio) return false;
+        if (filtros.horaFin && hora && hora > filtros.horaFin) return false;
     }
 
+    // Fecha
     if (filtros.fechaInicio || filtros.fechaFin) {
-        const fecha = p.fecha_hora?.split("T")[0];
-        if (filtros.fechaInicio && fecha < filtros.fechaInicio) return false;
-        if (filtros.fechaFin && fecha > filtros.fechaFin) return false;
+        const fecha = p.fecha_hora ? p.fecha_hora.split("T")[0] : null;
+        if (filtros.fechaInicio && fecha && fecha < filtros.fechaInicio) return false;
+        if (filtros.fechaFin && fecha && fecha > filtros.fechaFin) return false;
     }
 
+    // Molestia
     if (filtros.molestiaMin !== null && +p.nivel_molestia < filtros.molestiaMin) return false;
     if (filtros.molestiaMax !== null && +p.nivel_molestia > filtros.molestiaMax) return false;
 
+    // dB
     if (filtros.dbMin !== null && +p.avg_db < filtros.dbMin) return false;
     if (filtros.dbMax !== null && +p.avg_db > filtros.dbMax) return false;
+
+    // Fuentes (al menos una coincidencia si hay filtros de fuente)
+    if (filtros.fuentes && filtros.fuentes.length > 0) {
+        const fuentesReg = (p.fuente_ruido || "").split(" ").filter(Boolean);
+        const coincide = fuentesReg.some(f => filtros.fuentes.includes(f));
+        if (!coincide) return false;
+    }
 
     return true;
 }
 
 // ---------------------------------------------------
-// NUEVO RESUMEN AMPLIADO
+// RESUMEN DE FILTRADOS
 // ---------------------------------------------------
 function actualizarResumen(filtrados) {
     const ul = document.getElementById("summary-list");
     ul.innerHTML = "";
 
     if (!filtrados || filtrados.length === 0) {
-        ul.innerHTML = "<li>No se encontraron registros.</li>";
+        ul.innerHTML = "<li>No se encontraron registros para los filtros aplicados.</li>";
         return;
     }
 
     ul.innerHTML += `<li><b>Registros encontrados:</b> ${filtrados.length}</li>`;
 
-    // Filtros aplicados
-    if (filtros.horaInicio || filtros.horaFin)
-        ul.innerHTML += `<li><b>Franja filtrada:</b> ${filtros.horaInicio || "—"} a ${filtros.horaFin || "—"}</li>`;
-
-    if (filtros.fechaInicio || filtros.fechaFin)
-        ul.innerHTML += `<li><b>Periodo filtrado:</b> ${filtros.fechaInicio || "—"} a ${filtros.fechaFin || "—"}</li>`;
-
-    if (filtros.molestiaMin !== null || filtros.molestiaMax !== null)
-        ul.innerHTML += `<li><b>Molestia filtrada:</b> ${filtros.molestiaMin ?? "—"} a ${filtros.molestiaMax ?? "—"}</li>`;
-
-    if (filtros.dbMin !== null || filtros.dbMax !== null)
-        ul.innerHTML += `<li><b>Ruido filtrado (dB):</b> ${filtros.dbMin ?? "—"} a ${filtros.dbMax ?? "—"}</li>`;
-
-    ul.innerHTML += `<hr>`;
-
-    // -------------------------------------------------------------
-    // EXTRAER RANGOS OBSERVADOS (SIEMPRE FUNCIONAL)
-    // -------------------------------------------------------------
-    const fechas = [];
-    const horas = [];
-    const molestias = [];
-    const dBs = [];
+    // Variables observadas
+    let minFecha = null, maxFecha = null;
+    let minHora = null, maxHora = null;
+    let minMol = null, maxMol = null;
+    let minDb = null, maxDb = null;
+    const fuentesSet = new Set();
 
     filtrados.forEach(f => {
         const p = f.properties;
 
+        // Fecha y hora
         if (p.fecha_hora) {
-            const d = new Date(p.fecha_hora);
+            const [fechaRaw, horaRawFull] = p.fecha_hora.split("T");
+            const fecha = fechaRaw || null;
+            const hora = horaRawFull ? horaRawFull.substring(0, 5) : null;
 
-            if (!isNaN(d.getTime())) {
-                fechas.push(d.toISOString().split("T")[0]);
-                horas.push(d.toTimeString().substring(0,5));
+            if (fecha) {
+                if (!minFecha || fecha < minFecha) minFecha = fecha;
+                if (!maxFecha || fecha > maxFecha) maxFecha = fecha;
+            }
+            if (hora) {
+                if (!minHora || hora < minHora) minHora = hora;
+                if (!maxHora || hora > maxHora) maxHora = hora;
             }
         }
 
-        if (!isNaN(+p.nivel_molestia)) molestias.push(+p.nivel_molestia);
-        if (!isNaN(+p.avg_db)) dBs.push(+p.avg_db);
+        // Molestia
+        const mol = Number(p.nivel_molestia);
+        if (!Number.isNaN(mol)) {
+            if (minMol === null || mol < minMol) minMol = mol;
+            if (maxMol === null || mol > maxMol) maxMol = mol;
+        }
+
+        // dB
+        const db = Number(p.avg_db);
+        if (!Number.isNaN(db)) {
+            if (minDb === null || db < minDb) minDb = db;
+            if (maxDb === null || db > maxDb) maxDb = db;
+        }
+
+        // Fuentes
+        const fuentesRegistro = (p.fuente_ruido || "").split(" ").filter(Boolean);
+        fuentesRegistro.forEach(ft => fuentesSet.add(ft));
     });
 
-    const min = arr => arr.length > 0 ? arr.sort()[0] : "—";
-    const max = arr => arr.length > 0 ? arr.sort()[arr.length - 1] : "—";
+    // Periodo filtrado
+    if (filtros.fechaInicio || filtros.fechaFin) {
+        ul.innerHTML += `<li><b>Periodo filtrado:</b> ${filtros.fechaInicio || "—"} a ${filtros.fechaFin || "—"}</li>`;
+    }
 
-    ul.innerHTML += `<li><b>Horario observado:</b> ${min(horas)} a ${max(horas)}</li>`;
-    ul.innerHTML += `<li><b>Periodo observado:</b> ${min(fechas)} a ${max(fechas)}</li>`;
-    ul.innerHTML += `<li><b>Molestia observada:</b> ${Math.min(...molestias)} a ${Math.max(...molestias)}</li>`;
-    ul.innerHTML += `<li><b>Ruido observado (dB):</b> ${Math.min(...dBs)} a ${Math.max(...dBs)}</li>`;
+    // Periodo observado
+    if (minFecha && maxFecha) {
+        ul.innerHTML += `<li><b>Periodo observado:</b> ${minFecha} a ${maxFecha}</li>`;
+    }
+
+    // Horario filtrado
+    if (filtros.horaInicio || filtros.horaFin) {
+        ul.innerHTML += `<li><b>Franja horaria filtrada:</b> ${filtros.horaInicio || "—"} a ${filtros.horaFin || "—"}</li>`;
+    }
+
+    // Horario observado
+    if (minHora && maxHora) {
+        ul.innerHTML += `<li><b>Franja horaria observada:</b> ${minHora} a ${maxHora}</li>`;
+    }
+
+    // Molestia filtrada
+    if (filtros.molestiaMin !== null || filtros.molestiaMax !== null) {
+        ul.innerHTML += `<li><b>Molestia filtrada:</b> ${filtros.molestiaMin ?? "—"} a ${filtros.molestiaMax ?? "—"}</li>`;
+    }
+
+    // Molestia observada
+    if (minMol !== null && maxMol !== null) {
+        ul.innerHTML += `<li><b>Molestia observada:</b> ${minMol} a ${maxMol}</li>`;
+    }
+
+    // dB filtrado
+    if (filtros.dbMin !== null || filtros.dbMax !== null) {
+        ul.innerHTML += `<li><b>Nivel de ruido filtrado (dB):</b> ${filtros.dbMin ?? "—"} a ${filtros.dbMax ?? "—"}</li>`;
+    }
+
+    // dB observado
+    if (minDb !== null && maxDb !== null) {
+        ul.innerHTML += `<li><b>Nivel de ruido observado (dB):</b> ${minDb.toFixed(1)} a ${maxDb.toFixed(1)}</li>`;
+    }
+
+    // Fuentes observadas
+    if (fuentesSet.size > 0) {
+        const etiquetasFuentes = {
+            "tr_nsito_vehicular": "Tránsito vehicular",
+            "m_sica": "Música",
+            "industria": "Industria",
+            "construcci_n": "Construcción",
+            "personas": "Personas",
+            "otro": "Otro"
+        };
+
+        const listaFuentes = Array.from(fuentesSet)
+            .map(cod => etiquetasFuentes[cod] || cod)
+            .join(", ");
+
+        ul.innerHTML += `<li><b>Fuentes observadas en los resultados:</b> ${listaFuentes}</li>`;
+    }
 }
 
+// ---------------------------------------------------
+// APLICAR FILTROS
 // ---------------------------------------------------
 document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
 
@@ -376,13 +458,26 @@ document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
     filtros.fechaInicio = document.getElementById("fechaInicio").value || null;
     filtros.fechaFin    = document.getElementById("fechaFin").value || null;
 
-    filtros.molestiaMin = document.getElementById("molestiaMin").value ? +document.getElementById("molestiaMin").value : null;
-    filtros.molestiaMax = document.getElementById("molestiaMax").value ? +document.getElementById("molestiaMax").value : null;
+    filtros.molestiaMin = document.getElementById("molestiaMin").value
+        ? +document.getElementById("molestiaMin").value
+        : null;
+    filtros.molestiaMax = document.getElementById("molestiaMax").value
+        ? +document.getElementById("molestiaMax").value
+        : null;
 
-    filtros.dbMin = document.getElementById("dbMin").value ? +document.getElementById("dbMin").value : null;
-    filtros.dbMax = document.getElementById("dbMax").value ? +document.getElementById("dbMax").value : null;
+    filtros.dbMin = document.getElementById("dbMin").value
+        ? +document.getElementById("dbMin").value
+        : null;
+    filtros.dbMax = document.getElementById("dbMax").value
+        ? +document.getElementById("dbMax").value
+        : null;
+
+    // Fuentes
+    const checks = document.querySelectorAll('input[name="fuenteFiltro"]:checked');
+    filtros.fuentes = Array.from(checks).map(c => c.value);
 
     const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
+
     capaRegistros.clearLayers();
     capaRegistros.addData(filtrados);
 
@@ -390,6 +485,8 @@ document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
     actualizarResumen(filtrados);
 });
 
+// ---------------------------------------------------
+// LIMPIAR FILTROS
 // ---------------------------------------------------
 document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
 
@@ -401,13 +498,18 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
         molestiaMin: null,
         molestiaMax: null,
         dbMin: null,
-        dbMax: null
+        dbMax: null,
+        fuentes: []
     };
 
-    document.querySelectorAll("#filters-panel input").forEach(i => i.value = "");
+    document.querySelectorAll("#filters-panel input").forEach(i => {
+        if (i.type === "checkbox") {
+            i.checked = false;
+        } else {
+            i.value = "";
+        }
+    });
 
     dibujarRegistros(currentMode);
     actualizarResumen(registrosGeoJSON.features);
 });
-
-
