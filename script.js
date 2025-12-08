@@ -94,6 +94,10 @@ function crearHexbin(features) {
 
         const bins = capaHexbin._bins || [];
 
+        // recalcular dominio dinámico en cada render
+        let minVal = currentMode === "avg" ? 20 : 0;
+        let maxVal = currentMode === "avg" ? 120 : 10;
+
         // Pintar hexágonos según promedio real
         capaHexbin._rootGroup
             .selectAll("path.hexbin")
@@ -105,9 +109,7 @@ function crearHexbin(features) {
                         : Number(p.data.properties?.nivel_molestia)
                 ).filter(v => !isNaN(v));
 
-                if (valores.length === 0) {
-                    return interpolateColor(minVal, minVal, maxVal);
-                }
+                if (valores.length === 0) return interpolateColor(minVal, minVal, maxVal);
 
                 const val = valores.reduce((a,b)=>a+b,0) / valores.length;
 
@@ -117,14 +119,13 @@ function crearHexbin(features) {
             .attr("stroke-width", 0.8)
             .attr("fill-opacity", 0.85);
 
-        // Labels
+        // etiqueta numérica
         if (map._hexbinLabels) map.removeLayer(map._hexbinLabels);
 
         const labels = L.layerGroup();
         map._hexbinLabels = labels;
 
         bins.forEach(bin => {
-
             const latlng = map.layerPointToLatLng([bin.x, bin.y]);
 
             L.marker(latlng, {
@@ -134,7 +135,6 @@ function crearHexbin(features) {
                 }),
                 interactive: false
             }).addTo(labels);
-
         });
 
         if (hexbinActivo) labels.addTo(map);
@@ -379,8 +379,13 @@ fetch("data/registros.geojson")
 
 document.getElementById("colorMode").addEventListener("change", () => {
     currentMode = document.getElementById("colorMode").value;
+    
+    // redibujar puntos (pero solo se verán si hexbin está apagado)
     dibujarRegistros(currentMode);
     actualizarLeyenda(currentMode);
+
+    if (hexbinActivo) actualizarHexbin();   // PARA QUE EL HEXBIN CAMBIE DE COLOR
+    
     if (selectedUUID) highlightSelected(selectedUUID);
 });
 
@@ -700,8 +705,3 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
-
-
-
-
-
