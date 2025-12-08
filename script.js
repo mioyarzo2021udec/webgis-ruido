@@ -28,6 +28,16 @@ var map = L.map('map', {
     layers: [osm]
 });
 
+// Detectar si es dispositivo móvil
+var isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+// En móviles, evitar que el mapa "se lleve" el scroll con un dedo.
+// Permitimos zoom con pinch y botones, pero desactivamos el arrastre con un dedo.
+if (isMobile) {
+    map.dragging.disable();
+    // touchZoom ya viene activo por defecto, se mantiene para pinch-zoom
+}
+
 // ---------------------------------------------------
 // COLOR GRADIENTE
 // ---------------------------------------------------
@@ -217,6 +227,7 @@ fetch("data/registros.geojson")
             : data;
 
         dibujarRegistros(currentMode);
+        actualizarLeyenda(currentMode);
     });
 
 // ---------------------------------------------------
@@ -226,6 +237,7 @@ document.getElementById("colorMode").addEventListener("change", function () {
     currentMode = this.value;
 
     dibujarRegistros(currentMode);
+    actualizarLeyenda(currentMode);
 
     if (selectedUUID) highlightSelected(selectedUUID);
 });
@@ -243,20 +255,19 @@ document.getElementById("basemapSelect").addEventListener("change", function () 
     if (v === "voyager") voyager.addTo(map);
     if (v === "sat") sat.addTo(map);
 
-    capaRegistros.addTo(map);
+    if (capaRegistros) capaRegistros.addTo(map);
 
     if (selectedUUID) highlightSelected(selectedUUID);
 });
 
 // ---------------------------------------------------
-// LEYENDA
+// LEYENDA (fuera de Leaflet, en panel propio)
 // ---------------------------------------------------
-function actualizarLeyenda(modo) {
-    const div = L.DomUtil.create("div", "legend");
+function generarLeyendaHTML(modo) {
+    let html = '<div class="legend">';
 
     if (modo === "avg") {
-
-        div.innerHTML = "<h4>Niveles de ruido (dB)</h4>";
+        html += "<h4>Niveles de ruido (dB)</h4>";
 
         const rangos = [
             { l: "Muy bajo (<35 dB)", v: 30, e: "Biblioteca, dormitorio silencioso" },
@@ -269,7 +280,7 @@ function actualizarLeyenda(modo) {
 
         rangos.forEach(r => {
             const c = interpolateColor(r.v, 20, 120);
-            div.innerHTML += `
+            html += `
                 <div class="legend-row">
                     <span class="legend-color" style="background:${c}"></span>
                     ${r.l}
@@ -278,15 +289,14 @@ function actualizarLeyenda(modo) {
             `;
         });
 
-        div.innerHTML += `
+        html += `
             <small class="legend-footnote">
                 Ejemplos orientativos basados en recomendaciones de la OMS.
             </small>
         `;
 
     } else {
-
-        div.innerHTML = "<h4>Molestia percibida</h4>";
+        html += "<h4>Molestia percibida</h4>";
 
         const rangos = [
             { l: "Muy baja (0–2)", v: 1 },
@@ -298,7 +308,7 @@ function actualizarLeyenda(modo) {
 
         rangos.forEach(r => {
             const c = interpolateColor(r.v, 0, 10);
-            div.innerHTML += `
+            html += `
                 <div class="legend-row">
                     <span class="legend-color" style="background:${c}"></span>
                     ${r.l}
@@ -306,26 +316,22 @@ function actualizarLeyenda(modo) {
             `;
         });
 
-        div.innerHTML += `
+        html += `
             <small class="legend-footnote">
                 Escala subjetiva reportada por usuarios.
             </small>
         `;
     }
 
-    return div;
+    html += '</div>';
+    return html;
 }
 
-let legend = L.control({ position: "bottomleft" });
-legend.onAdd = () => actualizarLeyenda(currentMode);
-legend.addTo(map);
-
-document.getElementById("colorMode").addEventListener("change", () => {
-    legend.remove();
-    legend = L.control({ position: "bottomleft" });
-    legend.onAdd = () => actualizarLeyenda(currentMode);
-    legend.addTo(map);
-});
+function actualizarLeyenda(modo) {
+    const container = document.getElementById("legend-content");
+    if (!container) return;
+    container.innerHTML = generarLeyendaHTML(modo);
+}
 
 // ---------------------------------------------------
 // FORMULARIO KOBO
@@ -338,5 +344,3 @@ document.getElementById("open-form-btn").addEventListener("click", () => {
 document.getElementById("close-form-btn").addEventListener("click", () => {
     document.getElementById("form-panel").classList.remove("open");
 });
-
-
