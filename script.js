@@ -761,7 +761,27 @@ document.getElementById("open-download-btn").addEventListener("click", () => {
 // cerrar panel
 document.getElementById("download-close").addEventListener("click", () => {
     document.getElementById("download-panel").classList.remove("open");
+
+    // Ocultar control de dibujo
+    try {
+        map.removeControl(drawControl);
+    } catch(e) {}
+
+    // Limpiar botones activos
+    limpiarArea();
 });
+
+.download-info-box {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.35;
+}
+
 
 // Activar herramientas de dibujo
 document.getElementById("draw-area-btn").addEventListener("click", () => {
@@ -772,3 +792,4 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
+
