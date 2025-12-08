@@ -89,8 +89,7 @@ function crearHexbin(features) {
     let minVal = (currentMode === "avg") ? 20 : 0;
     let maxVal = (currentMode === "avg") ? 120 : 10;
 
-    // Resetear la escala ANTES de definirla (muy importante)
-    capaHexbin.colorScale(d3.scaleLinear());
+    capaHexbin.colorScale(d3.scaleLinear());  // Reset obligatorio
     
     capaHexbin.colorScale()
         .domain([minVal, maxVal])
@@ -102,21 +101,28 @@ function crearHexbin(features) {
     // Asignar datos
     capaHexbin.data(puntos);
 
-    // Labels siempre visibles
+    // Labels siempre visibles (cuando el hexbin se renderiza)
     capaHexbin.on("render", () => {
-        if (capaHexbin._labelLayer) map.removeLayer(capaHexbin._labelLayer);
+        
+        if (capaHexbin._labelLayer) {
+            map.removeLayer(capaHexbin._labelLayer);
+        }
+
         const labelLayer = L.layerGroup();
         capaHexbin._labelLayer = labelLayer;
 
+        if (!capaHexbin._bins) return;
+
         capaHexbin._bins.forEach(bin => {
-            const count = bin.data.length;
+            const count = bin.length;
 
+            // centro del hexágono
             const latlng = map.layerPointToLatLng([bin.x, bin.y]);
-
+        
             L.marker(latlng, {
                 icon: L.divIcon({
                     className: "hexbin-label",
-                    html: `<span>${count}</span>`
+                    html: count,
                 }),
                 interactive: false
             }).addTo(labelLayer);
@@ -124,11 +130,11 @@ function crearHexbin(features) {
 
         if (hexbinActivo) labelLayer.addTo(map);
     });
-    
-    // Si está activado → dibujar
+
+    // Dibujar hexbin
     if (hexbinActivo) capaHexbin.addTo(map);
 }
-
+    
 // Activar/desactivar hexbin desde checkbox
 document.getElementById("hexbinToggle").addEventListener("change", (e) => {
     hexbinActivo = e.target.checked;
@@ -371,7 +377,10 @@ document.getElementById("basemapSelect").addEventListener("change", () => {
     [osm, carto, voyager, sat].forEach(l => map.removeLayer(l));
     ({ osm, carto, voyager, sat })[v].addTo(map);
 
-    if (capaRegistros) capaRegistros.addTo(map);
+    if (!hexbinActivo && capaRegistros) {
+    capaRegistros.addTo(map);
+    }
+
     if (selectedUUID) highlightSelected(selectedUUID);
 });
 
@@ -677,6 +686,7 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
 
 
 
