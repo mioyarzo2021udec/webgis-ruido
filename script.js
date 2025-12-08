@@ -64,6 +64,80 @@ function interpolateColor(value, min, max) {
 let registrosGeoJSON = null;
 let capaRegistros = null;
 let currentMode = "avg";
+
+// ==========================================================
+// HEXBIN — Leaflet-D3
+// ==========================================================
+let capaHexbin = null;
+
+// Crear capa hexbin
+function crearHexbin(dataFiltrada) {
+
+    // Remover si ya existe
+    if (capaHexbin) {
+        map.removeLayer(capaHexbin);
+        capaHexbin = null;
+    }
+
+    // Solo generar si está activado
+    if (!document.getElementById("hexbinToggle").checked) return;
+
+    // Formato adecuado para hexbin
+    const puntos = dataFiltrada.map(f => {
+        const c = f.geometry.coordinates;
+        return {
+            lat: c[1],
+            lng: c[0],
+            avg: +f.properties.avg_db,
+            mol: +f.properties.nivel_molestia
+        };
+    });
+
+    capaHexbin = L.hexbinLayer({
+        radius: 22,
+        opacity: 0.85,
+        duration: 170
+    });
+
+    // Color dinámico según modo
+    capaHexbin.colorScaleExtent([1, undefined]);
+    capaHexbin.colorRange(["#fee8c8", "#e34a33"]);
+
+    capaHexbin.colorValue(d => {
+        return currentMode === "avg" ? d.avg : d.mol;
+    });
+
+    capaHexbin.radiusValue(d => 1); 
+
+    capaHexbin.data(puntos);
+    capaHexbin.addTo(map);
+}
+
+// Mostrar hexbin
+function mostrarHexbin() {
+    const filtrados = obtenerFiltradosActuales();
+    crearHexbin(filtrados);
+}
+
+// Ocultar hexbin
+function ocultarHexbin() {
+    if (capaHexbin) map.removeLayer(capaHexbin);
+    capaHexbin = null;
+}
+
+// Obtener registros filtrados
+function obtenerFiltradosActuales() {
+    return registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
+}
+
+// Toggle hexbin
+document.getElementById("hexbinToggle").addEventListener("change", () => {
+    if (document.getElementById("hexbinToggle").checked) mostrarHexbin();
+    else ocultarHexbin();
+});
+
+
+// ---------------------------------------------------
 let selectedUUID = null;
 let selectedLayer = null;
 
@@ -77,7 +151,7 @@ let filtros = {
     molestiaMax: null,
     dbMin: null,
     dbMax: null,
-    fuentes: []          // NUEVO: lista de códigos de fuente seleccionados
+    fuentes: []
 };
 
 // ---------------------------------------------------
@@ -107,7 +181,6 @@ function showInfoPanel(p) {
         <b>AVG dB:</b> ${p.avg_db}<br>
         <b>Molestia (0–10):</b> ${p.nivel_molestia}
     `;
-
     document.getElementById("info-panel").classList.add("open");
 }
 
@@ -152,7 +225,7 @@ function dibujarRegistros(modoColor) {
     capaRegistros = L.geoJSON(registrosGeoJSON, {
         pointToLayer: (feature, latlng) => {
             const p = feature.properties;
-            const color = (modoColor === "avg")
+            const color = modoColor === "avg"
                 ? interpolateColor(+p.avg_db, 20, 120)
                 : interpolateColor(+p.nivel_molestia, 0, 10);
 
@@ -198,17 +271,29 @@ fetch("data/registros.geojson")
         dibujarRegistros(currentMode);
         actualizarLeyenda(currentMode);
         actualizarResumen(registrosGeoJSON.features);
+
+        if (document.getElementById("hexbinToggle").checked) {
+            crearHexbin(registrosGeoJSON.features);
+        }
     });
+
+
 
 // ---------------------------------------------------
 // SELECTORES
 // ---------------------------------------------------
 document.getElementById("colorMode").addEventListener("change", () => {
     currentMode = document.getElementById("colorMode").value;
+
     dibujarRegistros(currentMode);
     actualizarLeyenda(currentMode);
 
     if (selectedUUID) highlightSelected(selectedUUID);
+
+    // Actualizar hexbin con nuevo modo
+    if (document.getElementById("hexbinToggle").checked) {
+        crearHexbin(obtenerFiltradosActuales());
+    }
 });
 
 document.getElementById("basemapSelect").addEventListener("change", () => {
@@ -218,6 +303,10 @@ document.getElementById("basemapSelect").addEventListener("change", () => {
 
     if (capaRegistros) capaRegistros.addTo(map);
     if (selectedUUID) highlightSelected(selectedUUID);
+
+    if (document.getElementById("hexbinToggle").checked) {
+        crearHexbin(obtenerFiltradosActuales());
+    }
 });
 
 // ---------------------------------------------------
@@ -293,7 +382,7 @@ document.getElementById("close-form-btn").addEventListener("click", () => {
 });
 
 // ---------------------------------------------------
-// LÓGICA DE FILTROS (incluye fuentes)
+// LÓGICA DE FILTROS
 // ---------------------------------------------------
 function pasaFiltros(p) {
 
@@ -319,7 +408,7 @@ function pasaFiltros(p) {
     if (filtros.dbMin !== null && +p.avg_db < filtros.dbMin) return false;
     if (filtros.dbMax !== null && +p.avg_db > filtros.dbMax) return false;
 
-    // Fuentes (al menos una coincidencia si hay filtros de fuente)
+    // Fuentes
     if (filtros.fuentes && filtros.fuentes.length > 0) {
         const fuentesReg = (p.fuente_ruido || "").split(" ").filter(Boolean);
         const coincide = fuentesReg.some(f => filtros.fuentes.includes(f));
@@ -343,7 +432,6 @@ function actualizarResumen(filtrados) {
 
     ul.innerHTML += `<li><b>Registros encontrados:</b> ${filtrados.length}</li>`;
 
-    // Variables observadas
     let minFecha = null, maxFecha = null;
     let minHora = null, maxHora = null;
     let minMol = null, maxMol = null;
@@ -353,7 +441,6 @@ function actualizarResumen(filtrados) {
     filtrados.forEach(f => {
         const p = f.properties;
 
-        // Fecha y hora
         if (p.fecha_hora) {
             const [fechaRaw, horaRawFull] = p.fecha_hora.split("T");
             const fecha = fechaRaw || null;
@@ -369,66 +456,54 @@ function actualizarResumen(filtrados) {
             }
         }
 
-        // Molestia
         const mol = Number(p.nivel_molestia);
         if (!Number.isNaN(mol)) {
             if (minMol === null || mol < minMol) minMol = mol;
             if (maxMol === null || mol > maxMol) maxMol = mol;
         }
 
-        // dB
         const db = Number(p.avg_db);
         if (!Number.isNaN(db)) {
             if (minDb === null || db < minDb) minDb = db;
             if (maxDb === null || db > maxDb) maxDb = db;
         }
 
-        // Fuentes
         const fuentesRegistro = (p.fuente_ruido || "").split(" ").filter(Boolean);
         fuentesRegistro.forEach(ft => fuentesSet.add(ft));
     });
 
-    // Periodo filtrado
     if (filtros.fechaInicio || filtros.fechaFin) {
         ul.innerHTML += `<li><b>Periodo filtrado:</b> ${filtros.fechaInicio || "—"} a ${filtros.fechaFin || "—"}</li>`;
     }
 
-    // Periodo observado
     if (minFecha && maxFecha) {
         ul.innerHTML += `<li><b>Periodo observado:</b> ${minFecha} a ${maxFecha}</li>`;
     }
 
-    // Horario filtrado
     if (filtros.horaInicio || filtros.horaFin) {
         ul.innerHTML += `<li><b>Franja horaria filtrada:</b> ${filtros.horaInicio || "—"} a ${filtros.horaFin || "—"}</li>`;
     }
 
-    // Horario observado
     if (minHora && maxHora) {
         ul.innerHTML += `<li><b>Franja horaria observada:</b> ${minHora} a ${maxHora}</li>`;
     }
 
-    // Molestia filtrada
     if (filtros.molestiaMin !== null || filtros.molestiaMax !== null) {
         ul.innerHTML += `<li><b>Molestia filtrada:</b> ${filtros.molestiaMin ?? "—"} a ${filtros.molestiaMax ?? "—"}</li>`;
     }
 
-    // Molestia observada
     if (minMol !== null && maxMol !== null) {
         ul.innerHTML += `<li><b>Molestia observada:</b> ${minMol} a ${maxMol}</li>`;
     }
 
-    // dB filtrado
     if (filtros.dbMin !== null || filtros.dbMax !== null) {
         ul.innerHTML += `<li><b>Nivel de ruido filtrado (dB):</b> ${filtros.dbMin ?? "—"} a ${filtros.dbMax ?? "—"}</li>`;
     }
 
-    // dB observado
     if (minDb !== null && maxDb !== null) {
         ul.innerHTML += `<li><b>Nivel de ruido observado (dB):</b> ${minDb.toFixed(1)} a ${maxDb.toFixed(1)}</li>`;
     }
 
-    // Fuentes observadas
     if (fuentesSet.size > 0) {
         const etiquetasFuentes = {
             "tr_nsito_vehicular": "Tránsito vehicular",
@@ -472,7 +547,6 @@ document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
         ? +document.getElementById("dbMax").value
         : null;
 
-    // Fuentes
     const checks = document.querySelectorAll('input[name="fuenteFiltro"]:checked');
     filtros.fuentes = Array.from(checks).map(c => c.value);
 
@@ -480,6 +554,10 @@ document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
 
     capaRegistros.clearLayers();
     capaRegistros.addData(filtrados);
+
+    if (document.getElementById("hexbinToggle").checked) {
+        crearHexbin(filtrados);
+    }
 
     resetHighlight();
     actualizarResumen(filtrados);
@@ -503,13 +581,14 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     };
 
     document.querySelectorAll("#filters-panel input").forEach(i => {
-        if (i.type === "checkbox") {
-            i.checked = false;
-        } else {
-            i.value = "";
-        }
+        if (i.type === "checkbox") i.checked = false;
+        else i.value = "";
     });
 
     dibujarRegistros(currentMode);
     actualizarResumen(registrosGeoJSON.features);
+
+    if (document.getElementById("hexbinToggle").checked) {
+        crearHexbin(registrosGeoJSON.features);
+    }
 });
