@@ -306,26 +306,60 @@ function pasaFiltros(p) {
 }
 
 // ---------------------------------------------------
+// NUEVO RESUMEN AMPLIADO
+// ---------------------------------------------------
 function actualizarResumen(filtrados) {
     const ul = document.getElementById("summary-list");
     ul.innerHTML = "";
 
+    if (!filtrados || filtrados.length === 0) {
+        ul.innerHTML = "<li>No se encontraron registros.</li>";
+        return;
+    }
+
     ul.innerHTML += `<li><b>Registros encontrados:</b> ${filtrados.length}</li>`;
 
+    // Mostrar filtros aplicados
     if (filtros.horaInicio || filtros.horaFin)
-        ul.innerHTML += `<li><b>Franja horaria:</b> ${filtros.horaInicio || "—"} a ${filtros.horaFin || "—"}</li>`;
+        ul.innerHTML += `<li><b>Franja filtrada:</b> ${filtros.horaInicio || "—"} a ${filtros.horaFin || "—"}</li>`;
 
     if (filtros.fechaInicio || filtros.fechaFin)
-        ul.innerHTML += `<li><b>Periodo:</b> ${filtros.fechaInicio || "—"} a ${filtros.fechaFin || "—"}</li>`;
+        ul.innerHTML += `<li><b>Periodo filtrado:</b> ${filtros.fechaInicio || "—"} a ${filtros.fechaFin || "—"}</li>`;
 
     if (filtros.molestiaMin !== null || filtros.molestiaMax !== null)
-        ul.innerHTML += `<li><b>Molestia:</b> ${filtros.molestiaMin ?? "—"} a ${filtros.molestiaMax ?? "—"}</li>`;
+        ul.innerHTML += `<li><b>Molestia filtrada:</b> ${filtros.molestiaMin ?? "—"} a ${filtros.molestiaMax ?? "—"}</li>`;
 
     if (filtros.dbMin !== null || filtros.dbMax !== null)
-        ul.innerHTML += `<li><b>Nivel dB:</b> ${filtros.dbMin ?? "—"} a ${filtros.dbMax ?? "—"}</li>`;
+        ul.innerHTML += `<li><b>Ruido filtrado (dB):</b> ${filtros.dbMin ?? "—"} a ${filtros.dbMax ?? "—"}</li>`;
 
-    if (ul.innerHTML.trim() === "")
-        ul.innerHTML = "<li>No hay filtros aplicados.</li>";
+    ul.innerHTML += `<hr>`;
+
+    // Ahora calcular rangos observados reales
+    const horas = [];
+    const fechas = [];
+    const molestias = [];
+    const dBs = [];
+
+    filtrados.forEach(f => {
+        const p = f.properties;
+
+        if (p.fecha_hora) {
+            const [fecha, hora] = p.fecha_hora.split("T");
+            fechas.push(fecha);
+            horas.push(hora.substring(0, 5));
+        }
+
+        molestias.push(+p.nivel_molestia);
+        dBs.push(+p.avg_db);
+    });
+
+    const min = arr => Math.min(...arr);
+    const max = arr => Math.max(...arr);
+
+    ul.innerHTML += `<li><b>Horario observado:</b> ${min(horas)} a ${max(horas)}</li>`;
+    ul.innerHTML += `<li><b>Periodo observado:</b> ${min(fechas)} a ${max(fechas)}</li>`;
+    ul.innerHTML += `<li><b>Molestia observada:</b> ${min(molestias)} a ${max(molestias)}</li>`;
+    ul.innerHTML += `<li><b>Ruido observado (dB):</b> ${min(dBs)} a ${max(dBs)}</li>`;
 }
 
 // ---------------------------------------------------
@@ -370,3 +404,4 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     dibujarRegistros(currentMode);
     actualizarResumen(registrosGeoJSON.features);
 });
+
