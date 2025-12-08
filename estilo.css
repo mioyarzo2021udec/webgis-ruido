@@ -334,3 +334,61 @@ body {
     margin-bottom: 3px;   /* antes 6px → más sutil */
 }
 
+/* =============================== */
+/* ESTILOS DEL PANEL DE FILTROS   */
+/* =============================== */
+
+#filters-panel {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 15px;
+}
+
+#filters-panel h3 {
+    margin-top: 0;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.filter-section {
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.filter-section h4 {
+    margin: 8px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#filters-panel label {
+    display: block;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+#filters-panel input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 2px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-btn {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filter-btn.reset {
+    background: #777;
+}
+
