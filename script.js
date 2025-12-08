@@ -65,23 +65,40 @@ function crearHexbin(features) {
         lng: d => d.lng,
         lat: d => d.lat,
 
-        // Valor que controla el color del hexágono
+        // Valor dinámico según modo seleccionado
         value: d => {
+            let valores;
+
             if (currentMode === "avg") {
-                const sum = d.reduce((a, p) => a + Number(p.properties.avg_db), 0);
-                return sum / d.length;
+                valores = d
+                    .map(p => Number(p.properties?.avg_db))
+                    .filter(v => !isNaN(v));
             } else {
-                const sum = d.reduce((a, p) => a + Number(p.properties.nivel_molestia), 0);
-                return sum / d.length;
+                valores = d
+                    .map(p => Number(p.properties?.nivel_molestia))
+                    .filter(v => !isNaN(v));
             }
+
+            if (valores.length === 0) return 0;
+
+            const sum = valores.reduce((a, b) => a + b, 0);
+            return sum / valores.length;
         }
     });
 
-    // Aplicar escala de colores usando tu misma función
-    capaHexbin.colorScale().range([
-        interpolateColor(20, 20, 120),
-        interpolateColor(120, 20, 120)
-    ]);
+    // Generar escala suave de colores
+    const escala = [];
+    for (let i = 0; i <= 10; i++) {
+        const v = i / 10;
+
+        if (currentMode === "avg") {
+            escala.push(interpolateColor(20 + v * 100, 20, 120));
+        } else {
+            escala.push(interpolateColor(v * 10, 0, 10));
+        }
+    }
+
+    capaHexbin.colorScale().range(escala);
 
     capaHexbin.data(puntos);
 
@@ -629,4 +646,5 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     dibujarRegistros(currentMode);
     actualizarResumen(registrosGeoJSON.features);
 });
+
 
