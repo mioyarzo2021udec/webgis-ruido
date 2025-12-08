@@ -313,3 +313,24 @@ body {
         border-color: #444 !important;
     }
 }
+
+/* Ajuste fino de espaciados en la leyenda */
+
+/* 1) Reducir espacio arriba del título dentro del cuadro */
+.legend h4 {
+    margin-top: 4px;    /* antes 12px → ahora menos aire arriba */
+    margin-bottom: 8px; /* antes 12px → menos espacio con el primer color */
+}
+
+/* 2) Reducir espacio entre categoría y ejemplo */
+.legend-example {
+    margin-top: 1px;     /* antes 2px */
+    margin-bottom: 8px;  /* antes 12px → ahora más compacto */
+}
+
+/* 3) Reducir espacio entre ejemplo y la siguiente categoría */
+.legend-row {
+    margin-top: 0px;      /* asegura que no se agregue espacio extra */
+    margin-bottom: 3px;   /* antes 6px → más sutil */
+}
+
