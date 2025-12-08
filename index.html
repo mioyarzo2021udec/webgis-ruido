@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGIS Ruido Urbano</title>
 
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
-
-    <!-- Estilos propios -->
     <link rel="stylesheet" href="estilo.css">
 </head>
 
@@ -17,9 +14,7 @@
 <header class="top-bar">
     <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
 
-    <!-- Fila que agrupa ambos selectores -->
     <div class="control-row">
-        <!-- Selector de visualización temática -->
         <div class="control-group">
             <label for="colorMode">Visualización temática por:</label>
             <select id="colorMode">
@@ -28,7 +23,6 @@
             </select>
         </div>
 
-        <!-- Selector de mapa base -->
         <div class="control-group">
             <label for="basemapSelect">Mapa base:</label>
             <select id="basemapSelect">
@@ -40,30 +34,70 @@
         </div>
     </div>
 
-    <!-- Botón para abrir formulario -->
     <button id="open-form-btn">Reportar evento de ruido</button>
 </header>
 
-<!-- Layout principal: leyenda + mapa -->
 <div id="content-row">
-    <!-- Panel de leyenda / filtros (lateral en PC, abajo en móvil) -->
+
     <aside id="legend-panel">
+
         <h3 class="legend-title">Leyenda</h3>
         <div id="legend-content"></div>
 
+        <!-- ==================== FILTROS ==================== -->
         <section id="filters-panel">
             <h3>Filtros</h3>
-            <p class="filters-hint">
-                Próximamente: filtros por fecha, hora, fuente de ruido, etc.
-            </p>
+
+            <!-- HORARIO -->
+            <div class="filter-section">
+                <h4>Filtrar por hora</h4>
+                <label>Hora inicio:</label>
+                <input type="time" id="horaInicio">
+
+                <label>Hora fin:</label>
+                <input type="time" id="horaFin">
+            </div>
+
+            <!-- FECHA -->
+            <div class="filter-section">
+                <h4>Filtrar por fecha</h4>
+                <label>Fecha inicio:</label>
+                <input type="date" id="fechaInicio">
+
+                <label>Fecha fin:</label>
+                <input type="date" id="fechaFin">
+            </div>
+
+            <!-- MOLESTIA -->
+            <div class="filter-section">
+                <h4>Molestia percibida (0–10)</h4>
+                <label>Mínimo:</label>
+                <input type="number" id="molestiaMin" min="0" max="10">
+
+                <label>Máximo:</label>
+                <input type="number" id="molestiaMax" min="0" max="10">
+            </div>
+
+            <!-- dB -->
+            <div class="filter-section">
+                <h4>Nivel de ruido (dB)</h4>
+                <label>Mínimo:</label>
+                <input type="number" id="dbMin">
+
+                <label>Máximo:</label>
+                <input type="number" id="dbMax">
+            </div>
+
+            <button id="aplicarFiltrosBtn" class="filter-btn">Aplicar filtros</button>
+            <button id="limpiarFiltrosBtn" class="filter-btn reset">Limpiar filtros</button>
+
         </section>
+
     </aside>
 
-    <!-- Mapa -->
     <div id="map"></div>
 </div>
 
-<!-- Panel Kobo -->
 <div id="form-panel">
     <div class="form-panel-header">
         <h3>Registro de evento de ruido</h3>
@@ -72,7 +106,6 @@
     <iframe id="kobo-frame"></iframe>
 </div>
 
-<!-- Panel Información de punto -->
 <div id="info-panel">
     <div class="info-header">
         <h3 id="info-title">Información del registro</h3>
@@ -81,12 +114,10 @@
     <div id="info-content"></div>
 </div>
 
-<!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-
-<!-- Script propio -->
 <script src="script.js"></script>
 
 </body>
 </html>
+
 
