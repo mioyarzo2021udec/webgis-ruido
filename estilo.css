@@ -200,6 +200,20 @@ body {
     z-index: 1100;
 }
 
+#download-panel {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    width: 28% !important;
+    max-width: 330px !important;
+    bottom: 0;
+    background-color: #ffffff !important;
+    border-left: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    z-index: 1100;
+}
+
 #form-panel.open,
 #info-panel.open {
     display: flex;
@@ -227,6 +241,12 @@ body {
     height: 100%;
     border: none;
 }
+
+/* Orden de aparición de paneles */
+#info-panel { z-index: 1300 !important; }
+#download-panel { z-index: 1200 !important; }
+#form-panel { z-index: 1100 !important; }
+
 
 /* ========================================================= */
 /* FILTROS Y RESUMEN */
@@ -409,19 +429,6 @@ body {
 }
 
 /* PANEL DE DESCARGA */
-#download-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    width: 28% !important;
-    max-width: 330px !important;
-    bottom: 0;
-    background-color: #ffffff !important;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1100;
-}
 
 #download-panel.open {
     display: flex;
