@@ -28,14 +28,32 @@ var map = L.map('map', {
     layers: [osm]
 });
 
-// Detectar si es dispositivo móvil
+// ---------------------------------------------------
+// Ajustar dinámicamente altura del header
+// ---------------------------------------------------
+function updatePanelTop() {
+    const header = document.querySelector('.top-bar');
+    if (!header) return;
+
+    const headerHeight = header.offsetHeight;
+    document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
+}
+
+// ejecutar ahora
+updatePanelTop();
+
+// ejecutar cuando cambie el tamaño de pantalla
+window.addEventListener('resize', updatePanelTop);
+
+// ---------------------------------------------------
+// DETECTAR MÓVIL Y CONTROLAR SCROLL
+// ---------------------------------------------------
 var isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-// En móviles, evitar que el mapa "se lleve" el scroll con un dedo.
-// Permitimos zoom con pinch y botones, pero desactivamos el arrastre con un dedo.
 if (isMobile) {
+    // impedir que un dedo arrastre el mapa
     map.dragging.disable();
-    // touchZoom ya viene activo por defecto, se mantiene para pinch-zoom
+    // pinch-zoom funciona igual
 }
 
 // ---------------------------------------------------
@@ -87,8 +105,7 @@ function showInfoPanel(p) {
                 .replace(/tr_nsito_vehicular/g, "tránsito vehicular")
                 .split(" ")
                 .filter(f => f.trim() !== "")
-                .map(f => `<li>${f}</li>`).join("")
-            }
+                .map(f => `<li>${f}</li>`).join("")}
         </ul>
 
         <b>AVG dB:</b> ${p.avg_db}<br>
@@ -99,7 +116,7 @@ function showInfoPanel(p) {
 }
 
 // ---------------------------------------------------
-// GUARDAR Y RESTAURAR ESTILO ORIGINAL
+// ESTILO ORIGINAL
 // ---------------------------------------------------
 function restoreOriginalStyle(layer) {
     if (!layer || !layer.defaultOptions) return;
@@ -114,7 +131,7 @@ function restoreOriginalStyle(layer) {
 }
 
 // ---------------------------------------------------
-// RESALTAR PUNTO SELECCIONADO
+// RESALTAR SELECCIÓN
 // ---------------------------------------------------
 function highlightSelected(uuid) {
     if (!capaRegistros) return;
@@ -155,7 +172,7 @@ function resetHighlight() {
 }
 
 // ---------------------------------------------------
-// CONSTRUIR CAPA DE REGISTROS
+// CAPA GEOJSON
 // ---------------------------------------------------
 function dibujarRegistros(modoColor) {
     if (!registrosGeoJSON) return;
@@ -231,7 +248,7 @@ fetch("data/registros.geojson")
     });
 
 // ---------------------------------------------------
-// SELECTOR DE VISUALIZACIÓN
+// SELECTOR DE COLOR
 // ---------------------------------------------------
 document.getElementById("colorMode").addEventListener("change", function () {
     currentMode = this.value;
@@ -243,7 +260,7 @@ document.getElementById("colorMode").addEventListener("change", function () {
 });
 
 // ---------------------------------------------------
-// SELECTOR MAPA BASE
+// SELECTOR DE MAPA BASE
 // ---------------------------------------------------
 document.getElementById("basemapSelect").addEventListener("change", function () {
     const v = this.value;
@@ -261,7 +278,7 @@ document.getElementById("basemapSelect").addEventListener("change", function () 
 });
 
 // ---------------------------------------------------
-// LEYENDA (fuera de Leaflet, en panel propio)
+// LEYENDA (panel propio)
 // ---------------------------------------------------
 function generarLeyendaHTML(modo) {
     let html = '<div class="legend">';
