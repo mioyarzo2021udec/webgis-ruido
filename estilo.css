@@ -3,7 +3,7 @@
 /* ========================================================= */
 :root {
     --header-height: 72px; /* valor se sobreescribe dinámicamente por JS */
-    color-scheme: light dark; /* evita forced-dark-mode */
+    color-scheme: light; /* evita forced-dark-mode */
 }
 
 /* ========================================================= */
@@ -417,5 +417,6 @@ body {
 #summary-list li {
     margin-bottom: 5px;
 }
+
 
 
