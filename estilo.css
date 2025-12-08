@@ -1,12 +1,22 @@
-/* ------------------------- */
-/* ESTILO GENERAL            */
-/* ------------------------- */
+/* ========================================================= */
+/* VARIABLES GLOBALES                                        */
+/* ========================================================= */
+:root {
+    --header-height: 72px; /* altura real aproximada del header */
+    color-scheme: only light; /* evitar que Android fuerce modo oscuro */
+}
+
+/* ========================================================= */
+/* ESTILO GENERAL                                             */
+/* ========================================================= */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     height: 100vh;
     display: flex;
     flex-direction: column;
+    background: #ffffff !important;
+    color: #111 !important;
 }
 
 /* Barra superior */
@@ -15,9 +25,12 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 8px 16px;
-    background-color: #f5f5f5;
+    background-color: #f5f5f5 !important;
     border-bottom: 1px solid #ddd;
     gap: 12px;
+    position: relative;
+    z-index: 1000;
+    height: var(--header-height);
 }
 
 .top-bar h2 {
@@ -26,19 +39,19 @@ body {
     flex-shrink: 0;
 }
 
-/* Contenedor de selectores (fila) */
+/* Fila de controles */
 .control-row {
     display: flex;
     gap: 12px;
     align-items: flex-end;
-    flex: 1;
     justify-content: center;
+    flex-grow: 1;
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
-    margin: 0;
+    flex: 1;
 }
 
 .control-group label {
@@ -61,30 +74,30 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    flex-shrink: 0;
 }
 
 .top-bar button:hover {
     background-color: #145ca5;
 }
 
-/* ------------------------- */
-/* LAYOUT PRINCIPAL          */
-/* ------------------------- */
+/* ========================================================= */
+/* LAYOUT PRINCIPAL                                           */
+/* ========================================================= */
+
 #content-row {
     flex: 1;
     display: flex;
-    min-height: 0; /* para que el flexbox permita scroll interno */
+    min-height: 0;
 }
 
-/* Panel de leyenda / filtros (lateral en PC) */
+/* Panel lateral (solo PC) */
 #legend-panel {
     width: 260px;
     border-right: 1px solid #ccc;
     padding: 10px 10px 10px 12px;
-    box-sizing: border-box;
-    background: #ffffff;
+    background: #ffffff !important;
     overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .legend-title {
@@ -94,69 +107,43 @@ body {
     font-weight: bold;
 }
 
-/* Mapa ocupa el resto del ancho */
+/* Mapa */
 #map {
     flex: 1;
     height: 100%;
     min-width: 0;
     z-index: 1;
+    background: #ddd;
 }
 
-/* Panel Kobo */
-#form-panel {
-    position: fixed;
-    top: 48px;
-    right: 0;
-    width: 35%;
-    max-width: 450px;
-    height: calc(100vh - 48px);
-    background: white;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1200;
-}
+/* ========================================================= */
+/* PANEL KOBO E INFO                                          */
+/* ========================================================= */
 
-#form-panel.open {
-    display: flex;
-}
-
-.form-panel-header {
-    padding: 8px;
-    background: #f0f0f0;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#kobo-frame {
-    flex: 1;
-    border: none;
-}
-
-/* Panel de información */
+#form-panel,
 #info-panel {
     position: fixed;
-    top: 48px;
+    top: var(--header-height);
     right: 0;
-    width: 28%;
-    max-width: 350px;
-    height: calc(100vh - 48px);
-    background: white;
+    width: 32%;
+    max-width: 380px;
+    height: calc(100vh - var(--header-height));
+    background: #ffffff !important;
     border-left: 1px solid #ccc;
     display: none;
     flex-direction: column;
     z-index: 1100;
 }
 
+#form-panel.open,
 #info-panel.open {
     display: flex;
 }
 
+.form-panel-header,
 .info-header {
     padding: 8px;
-    background: #eee;
+    background: #f0f0f0 !important;
     border-bottom: 1px solid #ccc;
     display: flex;
     justify-content: space-between;
@@ -169,28 +156,23 @@ body {
     font-size: 14px;
 }
 
-#info-close {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-}
+/* ========================================================= */
+/* LEYENDA SIN SOMBRA (PC + CELULAR)                          */
+/* ========================================================= */
 
-/* Leyenda */
 .legend {
-    background: white;
+    background: #ffffff !important;
     padding: 10px 12px;
     border-radius: 6px;
     line-height: 16px;
-    color: #333;
+    color: #333 !important;
     font-size: 13px;
-    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
     max-width: 100%;
     margin-bottom: 16px;
+    border: 1px solid #ccc; /* reemplaza sombra */
 }
 
-.legend-row,
-.legend-item {
+.legend-row {
     display: flex;
     align-items: center;
     margin-bottom: 4px;
@@ -220,7 +202,10 @@ body {
     color: #555;
 }
 
-/* Filtros (placeholder) */
+/* ========================================================= */
+/* FILTROS (placeholder)                                      */
+/* ========================================================= */
+
 #filters-panel h3 {
     margin-top: 10px;
     margin-bottom: 4px;
@@ -230,23 +215,20 @@ body {
 .filters-hint {
     font-size: 12px;
     color: #666;
-    margin-top: 0;
 }
 
-/* ------------------------- */
-/* RESPONSIVE – CELULAR      */
-/* ------------------------- */
+/* ========================================================= */
+/* RESPONSIVE — CELULAR                                       */
+/* ========================================================= */
+
 @media (max-width: 600px) {
 
-    /* Texto general más grande */
-    body, select, button, .legend, #info-content {
-        font-size: 16px !important;
-    }
-
+    /* Encabezado */
     .top-bar {
         flex-direction: column;
         align-items: stretch;
         text-align: center;
+        height: auto;
         gap: 6px;
     }
 
@@ -257,29 +239,25 @@ body {
     .control-row {
         width: 100%;
         justify-content: space-between;
-        gap: 8px;
     }
 
-    .control-group {
-        flex: 1;
+    .control-group select {
+        font-size: 14px;
     }
 
-    .top-bar button {
-        align-self: center;
-        width: auto;
-    }
-
-    /* Layout principal: leyenda debajo del mapa */
+    /* Layout vertical */
     #content-row {
         flex-direction: column;
     }
 
     #map {
+        order: 1; /* Mapa arriba */
         width: 100%;
-        height: 55vh; /* más cuadrado en celular */
+        height: 55vh; /* Forma más cuadrada */
     }
 
     #legend-panel {
+        order: 2; /* Leyenda abajo */
         width: 100%;
         border-right: none;
         border-top: 1px solid #ccc;
@@ -287,13 +265,11 @@ body {
         max-height: 38vh;
     }
 
+    /* Texto más moderado */
     .legend {
+        font-size: 14px !important;
         max-height: 30vh;
         overflow-y: auto;
-    }
-
-    .legend-row {
-        margin-bottom: 6px;
     }
 
     .legend-color {
@@ -301,12 +277,40 @@ body {
         height: 14px;
     }
 
-    /* Paneles laterales ocupan toda la pantalla en cel */
+    /* Paneles ocupan toda la pantalla */
     #info-panel,
     #form-panel {
         width: 100% !important;
         max-width: none !important;
-        height: calc(100vh - 48px);
+        height: calc(100vh - 60px);
+        left: 0;
+    }
+}
+
+/* ========================================================= */
+/* PROTEGER COLORES CONTRA MODO OSCURO FORZADO                */
+/* ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+
+    body, 
+    #legend-panel,
+    .legend,
+    #info-panel,
+    #form-panel,
+    .top-bar {
+        background-color: #ffffff !important;
+        color: #111 !important;
+    }
+
+    .legend-color {
+        border-color: #444 !important;
+    }
+
+    #filters-panel,
+    .info-header,
+    .form-panel-header {
+        background: #f2f2f2 !important;
     }
 }
 
