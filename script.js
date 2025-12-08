@@ -48,16 +48,15 @@ function colorHexbin(valor, modo) {
 // Crear capa hexbin a partir de features filtradas
 function crearHexbin(features) {
 
-    // Siempre eliminar capa anterior si existe
+    // Siempre limpiar capa previa
     if (capaHexbin) {
         map.removeLayer(capaHexbin);
         capaHexbin = null;
     }
 
-    // Si no hay features → salir sin dibujar nada
     if (!features || features.length === 0) return;
 
-    // Convertir features a formato de puntos
+    // Convertir features a puntos
     const puntos = features.map(f => ({
         lat: f.geometry.coordinates[1],
         lng: f.geometry.coordinates[0],
@@ -66,7 +65,7 @@ function crearHexbin(features) {
 
     // Crear capa hexbin
     capaHexbin = L.hexbinLayer({
-        radius: 18,
+        radius: 20,
         opacity: 0.85,
         lng: d => d.lng,
         lat: d => d.lat,
@@ -75,56 +74,72 @@ function crearHexbin(features) {
             let valores;
 
             if (currentMode === "avg") {
-                valores = d
-                    .map(p => Number(p.properties?.avg_db))
-                    .filter(v => !isNaN(v));
+                valores = d.map(p => Number(p.properties?.avg_db)).filter(v => !isNaN(v));
             } else {
-                valores = d
-                    .map(p => Number(p.properties?.nivel_molestia))
-                    .filter(v => !isNaN(v));
+                valores = d.map(p => Number(p.properties?.nivel_molestia)).filter(v => !isNaN(v));
             }
 
             if (valores.length === 0) return 0;
 
-            const sum = valores.reduce((a, b) => a + b, 0);
-            return sum / valores.length;
+            return valores.reduce((a, b) => a + b, 0) / valores.length;
         }
     });
 
-    //---------------------------
-    // ESCALA DE COLOR REAL
-    //---------------------------
-    const escala = [];
+    // Escala de color REAL y única
+    let minVal = (currentMode === "avg") ? 20 : 0;
+    let maxVal = (currentMode === "avg") ? 120 : 10;
 
-    for (let i = 0; i <= 20; i++) {
-        const frac = i / 20;
-        if (currentMode === "avg") {
-            escala.push(interpolateColor(20 + frac * 100, 20, 120));
-        } else {
-            escala.push(interpolateColor(frac * 10, 0, 10));
-        }
-    }
-
-    capaHexbin.colorScale().range(escala);
+    // Resetear la escala ANTES de definirla (muy importante)
+    capaHexbin.colorScale(d3.scaleLinear());
+    
+    capaHexbin.colorScale()
+        .domain([minVal, maxVal])
+        .range([
+            interpolateColor(minVal, minVal, maxVal),
+            interpolateColor(maxVal, minVal, maxVal)
+        ]);
 
     // Asignar datos
     capaHexbin.data(puntos);
 
+    // Labels siempre visibles
+    capaHexbin.on("render", () => {
+        if (capaHexbin._labelLayer) map.removeLayer(capaHexbin._labelLayer);
+        const labelLayer = L.layerGroup();
+        capaHexbin._labelLayer = labelLayer;
+
+        capaHexbin._bins.forEach(bin => {
+            const count = bin.data.length;
+
+            const latlng = map.layerPointToLatLng([bin.x, bin.y]);
+
+            L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "hexbin-label",
+                    html: `<span>${count}</span>`
+                }),
+                interactive: false
+            }).addTo(labelLayer);
+        });
+
+        if (hexbinActivo) labelLayer.addTo(map);
+    });
+    
     // Si está activado → dibujar
     if (hexbinActivo) capaHexbin.addTo(map);
 }
-
-
 
 // Activar/desactivar hexbin desde checkbox
 document.getElementById("hexbinToggle").addEventListener("change", (e) => {
     hexbinActivo = e.target.checked;
 
     if (hexbinActivo) {
+        map.removeLayer(capaRegistros);    // ocultar puntos
         const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
         crearHexbin(filtrados);
     } else {
         if (capaHexbin) map.removeLayer(capaHexbin);
+        dibujarRegistros(currentMode);    // volver a mostrar puntos
     }
 });
 
@@ -660,6 +675,7 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
 
 
 
