@@ -45,10 +45,9 @@ function colorHexbin(valor, modo) {
     }
 }
 
-// Crear capa hexbin a partir de features filtradas
 function crearHexbin(features) {
 
-    // 1. limpiar hexbin y labels previos
+    // limpiar hexbin y etiquetas previas
     if (capaHexbin) {
         map.removeLayer(capaHexbin);
         capaHexbin = null;
@@ -60,53 +59,69 @@ function crearHexbin(features) {
 
     if (!features || features.length === 0) return;
 
-    // 2. convertir features → puntos
+    // convertir features → puntos
     const puntos = features.map(f => ({
         lat: f.geometry.coordinates[1],
         lng: f.geometry.coordinates[0],
-        properties: f.properties
+        properties: f.properties || {}   // ← seguridad extra
     }));
 
-    // 3. crear capa hexbin
+    // rango de valores
+    let minVal = currentMode === "avg" ? 20 : 0;
+    let maxVal = currentMode === "avg" ? 120 : 10;
+
+    // crear la capa hexbin
     capaHexbin = L.hexbinLayer({
         radius: 22,
         opacity: 0.85,
         lng: d => d.lng,
         lat: d => d.lat,
 
-        // valor usado para colores
+        // función robusta que evita errores
         value: d => {
-            let vals = [];
+            if (!Array.isArray(d)) return 0;
 
-            if (currentMode === "avg") {
-                vals = d.map(p => Number(p.properties.avg_db)).filter(v => !isNaN(v));
-            } else {
-                vals = d.map(p => Number(p.properties.nivel_molestia)).filter(v => !isNaN(v));
-            }
+            let valores = d
+                .map(p => {
+                    const props = p.properties || {}; // blindaje
+                    return currentMode === "avg"
+                        ? Number(props.avg_db)
+                        : Number(props.nivel_molestia);
+                })
+                .filter(v => !isNaN(v));
 
-            if (vals.length === 0) return 0;
-            return vals.reduce((a, b) => a + b, 0) / vals.length;
+            if (valores.length === 0) return minVal;
+
+            return valores.reduce((a, b) => a + b, 0) / valores.length;
         }
     });
 
-    // 4. rango numérico real para escala
-    let minVal = currentMode === "avg" ? 20 : 0;
-    let maxVal = currentMode === "avg" ? 120 : 10;
-
-    // 5. escala NO de colores, sino numérica
+    // escala numérica interna (NO de colores)
     capaHexbin.colorScale(
         d3.scaleLinear().domain([minVal, maxVal]).range([minVal, maxVal])
     );
 
-    // 6. asignar datos
+    // asignar datos
     capaHexbin.data(puntos);
 
-    // 7. reemplazar render para aplicar TU color
-    capaHexbin.off("render"); // evita duplicación
+    // interceptamos el redraw para aplicar tu color real
+    const originalRedraw = capaHexbin.redraw.bind(capaHexbin);
 
+    capaHexbin.redraw = function () {
+        originalRedraw();
+
+        this._rootGroup.selectAll("path.hexbin")
+            .attr("fill", d => {
+                const val = this._value(d);
+                return interpolateColor(val, minVal, maxVal);
+            })
+            .attr("stroke", "#222")
+            .attr("stroke-width", 0.8);
+    };
+
+    // evento para colocar etiquetas de cantidad
     capaHexbin.on("render", () => {
 
-        // limpiar labels previos
         if (map._hexbinLabels) {
             map.removeLayer(map._hexbinLabels);
         }
@@ -114,11 +129,9 @@ function crearHexbin(features) {
         const labels = L.layerGroup();
         map._hexbinLabels = labels;
 
-        capaHexbin._bins.forEach(bin => {
-            const latlng = map.layerPointToLatLng([bin.x, bin.y]);
-
-            // etiqueta = conteo
+        (capaHexbin._bins || []).forEach(bin => {
             const count = bin.length;
+            const latlng = map.layerPointToLatLng([bin.x, bin.y]);
 
             L.marker(latlng, {
                 icon: L.divIcon({
@@ -132,20 +145,7 @@ function crearHexbin(features) {
         if (hexbinActivo) labels.addTo(map);
     });
 
-    // 8. aplicar color usando interpolateColor()
-    capaHexbin._valueColor = v => interpolateColor(v, minVal, maxVal);
-
-    const originalRedraw = capaHexbin.redraw.bind(capaHexbin);
-
-    capaHexbin.redraw = function () {
-        originalRedraw();
-
-        // aplicar color a cada hexágono
-        this._rootGroup.selectAll("path.hexbin")
-            .attr("fill", d => this._valueColor(this._value(d)));
-    };
-
-    // 9. agregar capa
+    // agregar capa
     if (hexbinActivo) capaHexbin.addTo(map);
 }
 
@@ -701,3 +701,4 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
