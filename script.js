@@ -527,8 +527,8 @@ fetch("data/registros.geojson")
 document.getElementById("colorMode").addEventListener("change", () => {
     currentMode = document.getElementById("colorMode").value;
     
-    // redibujar puntos (pero solo se verán si hexbin está apagado)
-    dibujarRegistros(currentMode);
+    // Redibujar solo la capa filtrada, NO todos los registros
+    actualizarCapaDePuntos();
     actualizarLeyenda(currentMode);
 
     if (hexbinActivo) actualizarHexbin();   // PARA QUE EL HEXBIN CAMBIE DE COLOR
@@ -892,4 +892,5 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
+
 
