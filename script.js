@@ -47,7 +47,7 @@ function colorHexbin(valor, modo) {
 
 function crearHexbin(features) {
 
-    // limpiar hexbin y etiquetas previas
+    // eliminar hexbin previo
     if (capaHexbin) {
         map.removeLayer(capaHexbin);
         capaHexbin = null;
@@ -59,35 +59,27 @@ function crearHexbin(features) {
 
     if (!features || features.length === 0) return;
 
-    // convertir features → puntos
     const puntos = features.map(f => ({
         lat: f.geometry.coordinates[1],
         lng: f.geometry.coordinates[0],
-        properties: f.properties || {}   // ← seguridad extra
+        properties: f.properties || {}
     }));
 
-    // rango de valores
     let minVal = currentMode === "avg" ? 20 : 0;
     let maxVal = currentMode === "avg" ? 120 : 10;
 
-    // crear la capa hexbin
     capaHexbin = L.hexbinLayer({
         radius: 22,
         opacity: 0.85,
         lng: d => d.lng,
         lat: d => d.lat,
 
-        // función robusta que evita errores
         value: d => {
-            if (!Array.isArray(d)) return 0;
-
-            let valores = d
-                .map(p => {
-                    const props = p.properties || {}; // blindaje
-                    return currentMode === "avg"
-                        ? Number(props.avg_db)
-                        : Number(props.nivel_molestia);
-                })
+            const valores = d
+                .map(p => currentMode === "avg"
+                    ? Number(p.properties?.avg_db)
+                    : Number(p.properties?.nivel_molestia)
+                )
                 .filter(v => !isNaN(v));
 
             if (valores.length === 0) return minVal;
@@ -96,32 +88,19 @@ function crearHexbin(features) {
         }
     });
 
-    // escala numérica interna (NO de colores)
-    capaHexbin.colorScale(
-        d3.scaleLinear().domain([minVal, maxVal]).range([minVal, maxVal])
-    );
-
-    // asignar datos
     capaHexbin.data(puntos);
 
-    // interceptamos el redraw para aplicar tu color real
-    const originalRedraw = capaHexbin.redraw.bind(capaHexbin);
-
-    capaHexbin.redraw = function () {
-        originalRedraw();
-
-        this._rootGroup.selectAll("path.hexbin")
-            .attr("fill", d => {
-                const val = this._value(d);
-                return interpolateColor(val, minVal, maxVal);
-            })
-            .attr("stroke", "#222")
-            .attr("stroke-width", 0.8);
-    };
-
-    // evento para colocar etiquetas de cantidad
     capaHexbin.on("render", () => {
 
+        // Pintar hexágonos con tu degradado
+        capaHexbin._rootGroup
+            .selectAll("path.hexbin")
+            .attr("fill", d => {
+                const val = capaHexbin._value(d);
+                return interpolateColor(val, minVal, maxVal);
+            });
+
+        // NUEVAS etiquetas
         if (map._hexbinLabels) {
             map.removeLayer(map._hexbinLabels);
         }
@@ -129,10 +108,9 @@ function crearHexbin(features) {
         const labels = L.layerGroup();
         map._hexbinLabels = labels;
 
-        (capaHexbin._bins || []).forEach(bin => {
-            const count = bin.length;
+        capaHexbin._bins.forEach(bin => {
             const latlng = map.layerPointToLatLng([bin.x, bin.y]);
-
+            const count = bin.length;
             L.marker(latlng, {
                 icon: L.divIcon({
                     className: "hexbin-label",
@@ -145,24 +123,27 @@ function crearHexbin(features) {
         if (hexbinActivo) labels.addTo(map);
     });
 
-    // agregar capa
     if (hexbinActivo) capaHexbin.addTo(map);
 }
-
     
 // Activar/desactivar hexbin desde checkbox
 document.getElementById("hexbinToggle").addEventListener("change", (e) => {
     hexbinActivo = e.target.checked;
 
     if (hexbinActivo) {
-        map.removeLayer(capaRegistros);    // ocultar puntos
+        map.removeLayer(capaRegistros);
         const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
         crearHexbin(filtrados);
     } else {
         if (capaHexbin) map.removeLayer(capaHexbin);
-        dibujarRegistros(currentMode);    // volver a mostrar puntos
+        if (map._hexbinLabels) {
+            map.removeLayer(map._hexbinLabels);
+            map._hexbinLabels = null;
+        }
+        dibujarRegistros(currentMode);
     }
 });
+
 
 // Actualizar hexbin cuando cambian los filtros
 function actualizarHexbin() {
@@ -701,4 +682,5 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
 
