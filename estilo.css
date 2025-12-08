@@ -1,103 +1,166 @@
-/* --------------------- GENERAL ----------------------- */
+/* ------------------------- */
+/* ESTILO GENERAL            */
+/* ------------------------- */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-}
-
-.top-bar {
+    height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+/* Barra superior */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 8px 16px;
     background-color: #f5f5f5;
     border-bottom: 1px solid #ddd;
-    gap: 8px;
-    text-align: center;
+    gap: 12px;
 }
 
 .top-bar h2 {
     margin: 0;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    flex-shrink: 0;
 }
 
-/* Controles en fila (PC) */
+/* Contenedor de selectores (fila) */
 .control-row {
     display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex: 1;
     justify-content: center;
-    gap: 20px;
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
+    margin: 0;
 }
 
 .control-group label {
-    font-size: 12px;
+    font-size: 13px;
+    margin-bottom: 2px;
 }
 
-select {
-    padding: 6px;
-    font-size: 15px;
+.control-group select {
+    padding: 6px 8px;
+    font-size: 14px;
+    height: 34px;
 }
 
-/* --------------------- MAPA ----------------------- */
-#map {
-    width: calc(100% - 260px);
-    height: calc(100vh - 110px);
-    margin-left: 260px;
+/* Botón Kobo */
+.top-bar button {
+    padding: 6px 12px;
+    border: none;
+    background-color: #1976d2;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    flex-shrink: 0;
 }
 
-/* ---------------- PANEL LATERAL PC ---------------- */
-#side-panel {
+.top-bar button:hover {
+    background-color: #145ca5;
+}
+
+/* ------------------------- */
+/* LAYOUT PRINCIPAL          */
+/* ------------------------- */
+#content-row {
+    flex: 1;
+    display: flex;
+    min-height: 0; /* para que el flexbox permita scroll interno */
+}
+
+/* Panel de leyenda / filtros (lateral en PC) */
+#legend-panel {
     width: 260px;
-    position: fixed;
-    left: 0;
-    top: 110px;
-    bottom: 0;
-    background: white;
     border-right: 1px solid #ccc;
-    padding: 10px;
+    padding: 10px 10px 10px 12px;
+    box-sizing: border-box;
+    background: #ffffff;
     overflow-y: auto;
 }
 
-.legend {
-    background: white;
-    padding: 10px;
-    border-radius: 6px;
-    box-shadow: 0px 0px 6px rgba(0,0,0,0.25);
-    margin-bottom: 20px;
+.legend-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
-/* --------------------- PANEL FORM ----------------------- */
-#form-panel, #info-panel {
+/* Mapa ocupa el resto del ancho */
+#map {
+    flex: 1;
+    height: 100%;
+    min-width: 0;
+    z-index: 1;
+}
+
+/* Panel Kobo */
+#form-panel {
     position: fixed;
+    top: 48px;
     right: 0;
-    top: 110px;
-    width: 30%;
-    max-width: 360px;
-    height: calc(100vh - 110px);
+    width: 35%;
+    max-width: 450px;
+    height: calc(100vh - 48px);
     background: white;
     border-left: 1px solid #ccc;
     display: none;
     flex-direction: column;
+    z-index: 1200;
 }
 
-#form-panel.open, #info-panel.open {
+#form-panel.open {
     display: flex;
 }
 
-.form-panel-header, .info-header {
+.form-panel-header {
     padding: 8px;
-    background: #eee;
+    background: #f0f0f0;
     border-bottom: 1px solid #ccc;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 #kobo-frame {
     flex: 1;
     border: none;
+}
+
+/* Panel de información */
+#info-panel {
+    position: fixed;
+    top: 48px;
+    right: 0;
+    width: 28%;
+    max-width: 350px;
+    height: calc(100vh - 48px);
+    background: white;
+    border-left: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    z-index: 1100;
+}
+
+#info-panel.open {
+    display: flex;
+}
+
+.info-header {
+    padding: 8px;
+    background: #eee;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #info-content {
@@ -106,54 +169,144 @@ select {
     font-size: 14px;
 }
 
-/* ---------------- RESPONSIVE CELULAR ---------------- */
+#info-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
 
-@media (max-width: 720px) {
+/* Leyenda */
+.legend {
+    background: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    line-height: 16px;
+    color: #333;
+    font-size: 13px;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
+    max-width: 100%;
+    margin-bottom: 16px;
+}
 
-    /* Controles en una fila */
-    .control-row {
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
+.legend-row,
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.legend-color {
+    width: 22px;
+    height: 12px;
+    margin-right: 6px;
+    border: 1px solid #aaa;
+}
+
+.legend-example {
+    margin-left: 28px;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: #555;
+    font-style: italic;
+}
+
+.legend-footnote {
+    display: block;
+    text-align: center;
+    margin-top: 14px;
+    font-style: italic;
+    font-size: 12px;
+    color: #555;
+}
+
+/* Filtros (placeholder) */
+#filters-panel h3 {
+    margin-top: 10px;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.filters-hint {
+    font-size: 12px;
+    color: #666;
+    margin-top: 0;
+}
+
+/* ------------------------- */
+/* RESPONSIVE – CELULAR      */
+/* ------------------------- */
+@media (max-width: 600px) {
+
+    /* Texto general más grande */
+    body, select, button, .legend, #info-content {
+        font-size: 16px !important;
     }
 
-    /* Panel lateral oculto */
-    #side-panel {
-        display: none;
+    .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        gap: 6px;
+    }
+
+    .top-bar h2 {
+        font-size: 16px;
+    }
+
+    .control-row {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .control-group {
+        flex: 1;
+    }
+
+    .top-bar button {
+        align-self: center;
+        width: auto;
+    }
+
+    /* Layout principal: leyenda debajo del mapa */
+    #content-row {
+        flex-direction: column;
     }
 
     #map {
         width: 100%;
-        margin-left: 0;
-        height: 60vh;
+        height: 55vh; /* más cuadrado en celular */
     }
 
-    /* Paneles amplios */
+    #legend-panel {
+        width: 100%;
+        border-right: none;
+        border-top: 1px solid #ccc;
+        padding-top: 8px;
+        max-height: 38vh;
+    }
+
+    .legend {
+        max-height: 30vh;
+        overflow-y: auto;
+    }
+
+    .legend-row {
+        margin-bottom: 6px;
+    }
+
+    .legend-color {
+        width: 28px;
+        height: 14px;
+    }
+
+    /* Paneles laterales ocupan toda la pantalla en cel */
     #info-panel,
     #form-panel {
-        width: 100%;
-        max-width: none;
-        top: 160px;
-        height: calc(100vh - 160px);
-    }
-
-    /* Leyenda debajo del mapa */
-    .legend {
-        position: static;
-        width: 100%;
-        max-width: none;
-        margin: 12px auto;
-        font-size: 15px;
-        overflow-y: auto;
-        max-height: 30vh;
-    }
-
-    /* Texto más grande */
-    body, select, button {
-        font-size: 16px;
-    }
-
-    .top-bar h2 {
-        font-size: 17px;
+        width: 100% !important;
+        max-width: none !important;
+        height: calc(100vh - 48px);
     }
 }
+
