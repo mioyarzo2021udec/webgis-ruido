@@ -771,18 +771,6 @@ document.getElementById("download-close").addEventListener("click", () => {
     limpiarArea();
 });
 
-.download-info-box {
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 10px 12px;
-    margin-bottom: 14px;
-    font-size: 13px;
-    color: #444;
-    line-height: 1.35;
-}
-
-
 // Activar herramientas de dibujo
 document.getElementById("draw-area-btn").addEventListener("click", () => {
     map.addControl(drawControl);
@@ -792,4 +780,3 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
-
