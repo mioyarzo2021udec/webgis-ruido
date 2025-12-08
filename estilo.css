@@ -3,7 +3,7 @@
 /* ========================================================= */
 :root {
     --header-height: 72px; /* se sobreescribe dinámicamente por JS */
-    color-scheme: light;   /* fuerza esquema claro */
+    color-scheme: light;   /* fuerza modo claro consistente */
 }
 
 /* ========================================================= */
@@ -26,10 +26,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 16px;
+    padding: 4px 12px;   /* reducido */
     background-color: #f5f5f5 !important;
     border-bottom: 1px solid #ddd;
-    gap: 12px;
+    gap: 6px;
     position: relative;
     z-index: 1000;
     height: var(--header-height);
@@ -43,7 +43,7 @@ body {
 
 .control-row {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: flex-end;
     flex-grow: 1;
     justify-content: center;
@@ -55,18 +55,20 @@ body {
 }
 
 .control-group label {
-    font-size: 13px;
-    margin-bottom: 2px;
+    font-size: 12px; /* reducido */
+    margin-bottom: 1px;
 }
 
 .control-group select {
-    padding: 6px 8px;
-    font-size: 14px;
-    height: 34px;
+    padding: 4px 6px; /* reducido */
+    font-size: 13px;
+    height: 28px; /* antes 34 */
+    border-radius: 4px;
 }
 
 .top-bar button {
-    padding: 6px 12px;
+    padding: 5px 10px;
+    font-size: 13px;
     border: none;
     background-color: #1976d2;
     color: white;
@@ -97,8 +99,15 @@ body {
 }
 
 /* ========================================================= */
-/* LEYENDA — ahora más compacta y proporcionada               */
+/* LEYENDA - Estilo general + recuadro                       */
 /* ========================================================= */
+
+.legend-title {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 15px;
+    font-weight: bold;
+}
 
 .legend {
     background: #ffffff !important;
@@ -106,23 +115,22 @@ body {
     border-radius: 6px;
     border: 1px solid #ccc;
     color: #333 !important;
-    font-size: 12px !important;
-    line-height: 1.25;
-    margin-bottom: 18px;
+    font-size: 12.6px !important; /* ligeramente mayor */
+    margin-bottom: 22px;
 }
 
+/* Títulos de bloques */
 .legend h4 {
-    margin-top: 4px;
-    margin-bottom: 6px;
-    font-size: 13px !important;
+    margin-top: 6px;      /* más separación */
+    margin-bottom: 8px;
+    font-size: 13.6px !important;
 }
 
+/* Categoría (cuadro color + texto) */
 .legend-row {
     display: flex;
     align-items: center;
-    margin-top: 0;
     margin-bottom: 3px;
-    font-size: 12px !important;
 }
 
 .legend-color {
@@ -132,45 +140,35 @@ body {
     margin-right: 6px;
 }
 
+/* Ejemplo en cursiva */
 .legend-example {
     margin-left: 28px;
     margin-top: 1px;
-    margin-bottom: 6px;
-    font-size: 11px !important;
-    font-style: italic;
+    margin-bottom: 10px; /* más aire */
+    font-size: 12px;
     color: #555;
+    font-style: italic;
 }
 
+/* Nota final */
 .legend-footnote {
     text-align: center;
-    margin-top: 14px;
-    font-size: 11px !important;
+    margin-top: 20px; /* más separación */
+    font-size: 12px;
     color: #555;
     font-style: italic;
 }
 
 /* ========================================================= */
-/* MAPA                                                       */
+/* PANEL FIJO DE INFO Y KOBO                                  */
 /* ========================================================= */
-#map {
-    flex: 1;
-    height: 100%;
-    min-width: 0;
-    z-index: 1;
-    background: #ddd;
-}
-
-/* ========================================================= */
-/* PANELES DE INFORMACIÓN Y KOBO                              */
-/* ========================================================= */
-
 #form-panel,
 #info-panel {
     position: fixed;
     top: var(--header-height);
     right: 0;
-    width: 32%;
-    max-width: 380px;
+    width: 22% !important;          /* más angosto */
+    max-width: 300px !important;    /* antes 340 */
     bottom: 0;
     background-color: #ffffff !important;
     border-left: 1px solid #ccc;
@@ -184,16 +182,6 @@ body {
     display: flex;
 }
 
-/* ——— PC: ajustar ancho del panel de información ——— */
-@media (min-width: 601px) {
-
-    #info-panel,
-    #form-panel {
-        width: 26% !important;
-        max-width: 340px !important;
-    }
-}
-
 .form-panel-header,
 .info-header {
     padding: 8px;
@@ -204,6 +192,12 @@ body {
     align-items: center;
 }
 
+#info-content {
+    padding: 12px;
+    overflow-y: auto;
+    font-size: 14px; /* NO SE CAMBIA */
+}
+
 #kobo-frame {
     flex-grow: 1;
     width: 100%;
@@ -211,24 +205,18 @@ body {
     border: none;
 }
 
-#info-content {
-    padding: 12px;
-    overflow-y: auto;
-    font-size: 13px;
-}
+/* ========================================================= */
+/* FILTROS Y RESUMEN — Recuadros                             */
+/* ========================================================= */
 
-/* ========================================================= */
-/* RECUADROS DE FILTROS Y RESUMEN                             */
-/* ========================================================= */
 .panel-box {
     border: 1px solid #ccc;
     border-radius: 6px;
     padding: 12px 14px;
-    margin-top: 18px;
+    margin-top: 22px;
     background: #ffffff;
 }
 
-/* Títulos internos */
 #filters-panel h3,
 #summary-panel h3 {
     margin-top: 0;
@@ -237,29 +225,22 @@ body {
     font-weight: bold;
 }
 
-/* ========================================================= */
-/* FILTROS                                                    */
-/* ========================================================= */
+/* FILTROS */
 .filter-section {
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     padding-bottom: 10px;
     border-bottom: 1px dashed #ccc;
 }
 
-.filter-section:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
 .filter-section h4 {
-    margin: 8px 0;
     font-size: 14px;
+    margin: 8px 0;
     font-weight: bold;
 }
 
 #filters-panel label {
-    display: block;
     font-size: 12px;
+    display: block;
     margin-top: 4px;
 }
 
@@ -275,10 +256,8 @@ body {
 #filters-panel input[type="checkbox"] {
     width: auto;
     margin-right: 6px;
-    transform: translateY(1px);
 }
 
-/* botones */
 .filter-btn {
     width: 100%;
     padding: 8px;
@@ -300,52 +279,45 @@ body {
 /* ========================================================= */
 
 #summary-list {
-    padding-left: 18px;
+    padding-left: 20px;
     margin: 0;
     font-size: 13px;
 }
 
 #summary-list li {
-    margin-bottom: 8px;
-    line-height: 1.35;
-}
-
-/* separaciones suaves entre bloques */
-#summary-list li + li {
-    margin-top: 4px;
+    margin-bottom: 8px; /* separación menor que antes */
+    line-height: 1.38;
 }
 
 /* ========================================================= */
-/* PC — corregir ancho excesivo de los selectores             */
+/* MAPA                                                      */
+/* ========================================================= */
+#map {
+    flex: 1;
+    height: 100%;
+    min-width: 0;
+    z-index: 1;
+}
+
+/* ========================================================= */
+/* PC — corregir ancho excesivo selectores                    */
 /* ========================================================= */
 @media (min-width: 601px) {
     .control-group {
-        width: 170px;
+        width: 160px;
         flex: none;
-    }
-
-    .control-row {
-        justify-content: center;
-        gap: 16px;
     }
 }
 
 /* ========================================================= */
-/* CELULAR — layout vertical                                  */
+/* CELULAR                                                    */
 /* ========================================================= */
 @media (max-width: 600px) {
 
     .top-bar {
         flex-direction: column;
         height: auto;
-        align-items: center;
-        text-align: center;
         gap: 8px;
-    }
-
-    .control-row {
-        width: 100%;
-        justify-content: space-between;
     }
 
     #content-row {
@@ -367,22 +339,22 @@ body {
     }
 
     .legend {
-        font-size: 13px !important;
+        font-size: 14px !important;
         max-height: 30vh;
         overflow-y: auto;
     }
 
     #form-panel,
     #info-panel {
-        left: 0;
-        right: 0;
         width: 100% !important;
         max-width: none !important;
+        left: 0;
+        right: 0;
     }
 }
 
 /* ========================================================= */
-/* FORZAR MODO CLARO                                           */
+/* MODO OSCURO (forzado a claro)                             */
 /* ========================================================= */
 @media (prefers-color-scheme: dark) {
     body,
