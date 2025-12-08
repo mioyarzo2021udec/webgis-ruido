@@ -89,8 +89,7 @@ function crearHexbin(features) {
     // Generar escala suave de colores
     const escala = [];
     for (let i = 0; i <= 10; i++) {
-        const v = i / 10;
-
+        const v = (i / 10);
         if (currentMode === "avg") {
             escala.push(interpolateColor(20 + v * 100, 20, 120));
         } else {
@@ -646,5 +645,6 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     dibujarRegistros(currentMode);
     actualizarResumen(registrosGeoJSON.features);
 });
+
 
 
