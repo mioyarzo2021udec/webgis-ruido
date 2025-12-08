@@ -414,7 +414,7 @@ body {
     top: var(--header-height);
     right: 0;
     width: 28% !important;
-    max-width: 360px !important;
+    max-width: 330px !important;
     bottom: 0;
     background-color: #ffffff !important;
     border-left: 1px solid #ccc;
@@ -457,3 +457,4 @@ body {
 .download-action:hover {
     background: #145ca5;
 }
+
