@@ -14,12 +14,12 @@ L.HexbinLayer = L.Layer.extend({
         this._radius = options.radius || 12;
         this._opacity = options.opacity || 0.7;
 
+        // Esta escala no define colores finales, solo valores
         this._colorScale = d3.scaleLinear()
             .domain([0, 1])
-            .range(["#ffffff", "#ff0000"]);
+            .range([0, 1]);
     },
 
-    // Getter/setter para colorScale
     colorScale: function (scale) {
         if (scale) {
             this._colorScale = scale;
@@ -50,7 +50,6 @@ L.HexbinLayer = L.Layer.extend({
         this._map = null;
     },
 
-    // Proyecta lat/lng → coordenadas de la capa SVG
     projectPoint: function (lat, lng) {
         return this._map.latLngToLayerPoint([lat, lng]);
     },
@@ -58,13 +57,11 @@ L.HexbinLayer = L.Layer.extend({
     redraw: function () {
         if (!this._map) return;
 
-        // 1) Convertir puntos a coordenadas proyectadas
         const projected = this._data.map(d => {
             const p = this.projectPoint(this._lat(d), this._lng(d));
             return { point: p, data: d };
         });
 
-        // 2) Generar bins hexagonales
         const hexbinGen = d3.hexbin()
             .radius(this._radius)
             .x(d => d.point.x)
@@ -72,13 +69,10 @@ L.HexbinLayer = L.Layer.extend({
 
         const bins = hexbinGen(projected);
 
-        // ←← ESTA LÍNEA ES LA CLAVE: expone los bins
         this._bins = bins;
 
-        const colorScale = this._colorScale;
         const valueFn = this._value;
 
-        // 3) Renderizar hexágonos
         const sel = this._rootGroup
             .selectAll("path.hexbin")
             .data(bins);
@@ -88,14 +82,10 @@ L.HexbinLayer = L.Layer.extend({
             .attr("class", "hexbin")
             .merge(sel)
             .attr("d", d => `M${d.x},${d.y}` + hexbinGen.hexagon())
-            .attr("fill", d => colorScale(valueFn(d)))
-            .attr("fill-opacity", this._opacity)
-            .attr("stroke", "#222")
-            .attr("stroke-width", 0.8);
+            .attr("fill-opacity", this._opacity);
 
         sel.exit().remove();
 
-        // Disparar evento para etiquetas
         this.fire("render");
     }
 });
