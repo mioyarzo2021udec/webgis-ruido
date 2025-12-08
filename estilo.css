@@ -2,8 +2,8 @@
 /* VARIABLES GLOBALES — control de altura del header         */
 /* ========================================================= */
 :root {
-    --header-height: 72px; /* valor se sobreescribe dinámicamente por JS */
-    color-scheme: light; /* evita forced-dark-mode */
+    --header-height: 72px; /* se sobreescribe dinámicamente por JS */
+    color-scheme: light;   /* fuerza esquema claro sin modo oscuro forzado raro */
 }
 
 /* ========================================================= */
@@ -98,7 +98,7 @@ body {
 
 .legend-title {
     margin-top: 0;
-    margin-bottom: 12px; /* más aire antes del primer bloque */
+    margin-bottom: 12px;
     font-size: 15px;
     font-weight: bold;
 }
@@ -172,11 +172,18 @@ body {
     margin-bottom: 20px;
 }
 
+/* Título dentro de la leyenda */
+.legend h4 {
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
 /* Espaciado entre categorías (color + texto) */
 .legend-row {
     display: flex;
     align-items: center;
-    margin-bottom: 6px; /* antes 4 → más aire */
+    margin-top: 0;
+    margin-bottom: 3px;
 }
 
 /* Cuadradito de color */
@@ -190,8 +197,8 @@ body {
 /* Ejemplo en cursiva debajo del valor */
 .legend-example {
     margin-left: 28px;
-    margin-top: 2px;
-    margin-bottom: 12px; /* antes 6 → demasiado pegado */
+    margin-top: 1px;
+    margin-bottom: 8px;
     font-size: 12px;
     color: #555;
     font-style: italic;
@@ -207,17 +214,94 @@ body {
 }
 
 /* ========================================================= */
-/* FILTROS                                                    */
+/* FILTROS Y RESUMEN EN RECUADROS                            */
 /* ========================================================= */
-#filters-panel h3 {
-    margin-top: 14px;
-    margin-bottom: 6px;
-    font-size: 14px;
+
+.panel-box {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: 22px;
+    background: #ffffff;
 }
 
-.filters-hint {
+#filters-panel h3,
+#summary-panel h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* Secciones dentro del panel de filtros */
+.filter-section {
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 10px;
+}
+
+.filter-section h4 {
+    margin: 8px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#filters-panel label {
+    display: block;
     font-size: 12px;
-    color: #666;
+    margin-top: 4px;
+}
+
+#filters-panel input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 2px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* checkboxes de fuentes: que el input no estire toda la fila */
+#filters-panel input[type="checkbox"] {
+    width: auto;
+    margin-right: 6px;
+    transform: translateY(1px);
+}
+
+.filter-btn {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.filter-btn.reset {
+    background: #777;
+}
+
+/* =============================== */
+/* PANEL DE RESUMEN DE FILTROS     */
+/* =============================== */
+
+#summary-list {
+    padding-left: 20px;
+    margin: 0;
+    font-size: 13px;
+}
+
+#summary-list li {
+    margin-bottom: 5px;
 }
 
 /* ========================================================= */
@@ -270,7 +354,7 @@ body {
         height: 55vh;
     }
 
-    /* Leyenda abajo del mapa */
+    /* Leyenda + filtros + resumen abajo del mapa */
     #legend-panel {
         order: 2;
         width: 100%;
@@ -304,7 +388,8 @@ body {
     .legend,
     .top-bar,
     #info-panel,
-    #form-panel {
+    #form-panel,
+    .panel-box {
         background-color: #ffffff !important;
         color: #111 !important;
     }
@@ -313,138 +398,3 @@ body {
         border-color: #444 !important;
     }
 }
-
-/* Ajuste fino de espaciados en la leyenda */
-
-/* 1) Reducir espacio arriba del título dentro del cuadro */
-.legend h4 {
-    margin-top: 4px;    /* antes 12px → ahora menos aire arriba */
-    margin-bottom: 8px; /* antes 12px → menos espacio con el primer color */
-}
-
-/* 2) Reducir espacio entre categoría y ejemplo */
-.legend-example {
-    margin-top: 1px;     /* antes 2px */
-    margin-bottom: 8px;  /* antes 12px → ahora más compacto */
-}
-
-/* 3) Reducir espacio entre ejemplo y la siguiente categoría */
-.legend-row {
-    margin-top: 0px;      /* asegura que no se agregue espacio extra */
-    margin-bottom: 3px;   /* antes 6px → más sutil */
-}
-
-/* =============================== */
-/* ESTILOS DEL PANEL DE FILTROS   */
-/* =============================== */
-
-#filters-panel {
-    margin-top: 20px;
-    border-top: 1px solid #ccc;
-    padding-top: 15px;
-}
-
-#filters-panel h3 {
-    margin-top: 0;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.filter-section {
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #ccc;
-}
-
-.filter-section h4 {
-    margin: 8px 0;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-#filters-panel label {
-    display: block;
-    font-size: 12px;
-    margin-top: 4px;
-}
-
-#filters-panel input {
-    width: 100%;
-    padding: 5px;
-    margin-top: 2px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.filter-btn {
-    width: 100%;
-    padding: 8px;
-    margin-top: 6px;
-    background: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.filter-btn.reset {
-    background: #777;
-}
-
-/* =============================== */
-/* PANEL DE RESUMEN DE FILTROS     */
-/* =============================== */
-
-#summary-panel {
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px solid #ccc;
-}
-
-#summary-panel h3 {
-    margin-bottom: 8px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-#summary-list {
-    padding-left: 20px;
-    margin: 0;
-    font-size: 13px;
-}
-
-#summary-list li {
-    margin-bottom: 5px;
-}
-
-/* ========================================================= */
-/* FORZAR ESTILO CLARO EN INPUTS, SELECTS Y CAMPOS NATIVOS   */
-/* ========================================================= */
-
-input,
-select,
-button,
-textarea {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 1px solid #ccc !important;
-    appearance: none;
-}
-
-input::placeholder {
-    color: #666;
-}
-
-select {
-    background-image: none;
-}
-
-input[type="time"],
-input[type="date"],
-input[type="number"] {
-    color-scheme: light !important; /* fuerza UI clara */
-}
-
-
-
