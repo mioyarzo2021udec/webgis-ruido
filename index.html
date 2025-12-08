@@ -22,16 +22,23 @@
     <!-- ========================================================= -->
 
     <header class="top-bar">
-        <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
-
+        <div>
+            <h2>WebGIS – Proyecto de Contaminación Acústica</h2>
+            <p class="header-subtext">
+                Plataforma implementada por la iniciativa de un registro ciudadano de eventos de ruido que puedan afectar a la comunidad. 
+                Las solicitudes de registro de eventos serán atendidas dentro de lo posible, agradecemos su comprensión.
+            </p>
+        </div>
+        
         <div class="control-row">
         
-            <!-- NUEVO CONTROL: Hexbin ON/OFF -->
-            <div class="control-group">
+            <!-- HEXBIN -->
+            <div class="control-group hexbin-group">
                 <label for="hexbinToggle">Hexbin:</label>
                 <input type="checkbox" id="hexbinToggle">
             </div>
-            
+
+            <!-- VISUALIZACIÓN -->
             <div class="control-group">
                 <label for="colorMode">Visualización temática por:</label>
                 <select id="colorMode">
@@ -39,7 +46,8 @@
                     <option value="molestia">Molestia</option>
                 </select>
             </div>
-
+            
+            <!-- MAPA BASE -->
             <div class="control-group">
                 <label for="basemapSelect">Mapa base:</label>
                 <select id="basemapSelect">
@@ -49,13 +57,20 @@
                     <option value="sat">Satélite ESRI</option>
                 </select>
             </div>
-
+        
         </div>
-
-        <button id="open-download-btn">Descarga de datos</button>
-
-        <button id="open-form-btn">Reportar evento de ruido</button>
+        
+        <button id="open-download-btn">
+            Descarga de datos
+            <span>(optimizado para PC)</span>
+        </button>
+        
+        <button id="open-form-btn">
+            Reportar evento de ruido
+            <span>(optimizado para celulares)</span>
+        </button>
     </header>
+
 
     <!-- ========================================================= -->
     <!-- LAYOUT PRINCIPAL -->
@@ -257,5 +272,6 @@
 
 </body>
 </html>
+
 
 
