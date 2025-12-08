@@ -45,47 +45,77 @@
         <div id="legend-content"></div>
 
         <!-- ==================== FILTROS ==================== -->
-        <section id="filters-panel">
+        <section id="filters-panel" class="panel-box">
             <h3>Filtros</h3>
 
             <!-- HORARIO -->
             <div class="filter-section">
                 <h4>Filtrar por hora</h4>
-                <label>Hora inicio:</label>
+                <label for="horaInicio">Hora inicio:</label>
                 <input type="time" id="horaInicio">
 
-                <label>Hora fin:</label>
+                <label for="horaFin">Hora fin:</label>
                 <input type="time" id="horaFin">
             </div>
 
             <!-- FECHA -->
             <div class="filter-section">
                 <h4>Filtrar por fecha</h4>
-                <label>Fecha inicio:</label>
+                <label for="fechaInicio">Fecha inicio:</label>
                 <input type="date" id="fechaInicio">
 
-                <label>Fecha fin:</label>
+                <label for="fechaFin">Fecha fin:</label>
                 <input type="date" id="fechaFin">
             </div>
 
             <!-- MOLESTIA -->
             <div class="filter-section">
                 <h4>Molestia percibida (0–10)</h4>
-                <label>Mínimo:</label>
+                <label for="molestiaMin">Mínimo:</label>
                 <input type="number" id="molestiaMin" min="0" max="10">
 
-                <label>Máximo:</label>
+                <label for="molestiaMax">Máximo:</label>
                 <input type="number" id="molestiaMax" min="0" max="10">
             </div>
 
             <!-- dB -->
             <div class="filter-section">
                 <h4>Nivel de ruido (dB)</h4>
-                <label>Mínimo:</label>
+                <label for="dbMin">Mínimo:</label>
                 <input type="number" id="dbMin">
 
-                <label>Máximo:</label>
+                <label for="dbMax">Máximo:</label>
                 <input type="number" id="dbMax">
+            </div>
+
+            <!-- FUENTES -->
+            <div class="filter-section">
+                <h4>Fuentes de ruido (selección múltiple)</h4>
+
+                <label>
+                    <input type="checkbox" name="fuenteFiltro" value="tr_nsito_vehicular">
+                    Tránsito vehicular
+                </label>
+                <label>
+                    <input type="checkbox" name="fuenteFiltro" value="m_sica">
+                    Música
+                </label>
+                <label>
+                    <input type="checkbox" name="fuenteFiltro" value="industria">
+                    Industria
+                </label>
+                <label>
+                    <input type="checkbox" name="fuenteFiltro" value="construcci_n">
+                    Construcción
+                </label>
+                <label>
+                    <input type="checkbox" name="fuenteFiltro" value="personas">
+                    Personas
+                </label>
+                <label>
+                    <input type="checkbox" name="fuenteFiltro" value="otro">
+                    Otro
+                </label>
             </div>
 
             <button id="aplicarFiltrosBtn" class="filter-btn">Aplicar filtros</button>
@@ -93,7 +123,7 @@
         </section>
 
         <!-- ============ PANEL DE RESUMEN ============ -->
-        <section id="summary-panel">
+        <section id="summary-panel" class="panel-box">
             <h3>Resumen de filtrados</h3>
             <ul id="summary-list">
                 <li>No hay filtros aplicados.</li>
@@ -126,4 +156,3 @@
 
 </body>
 </html>
-
