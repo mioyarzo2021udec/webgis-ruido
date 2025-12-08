@@ -470,25 +470,50 @@ function dibujarRegistros(modoColor) {
 
 function actualizarCapaDePuntos() {
 
-    // 1. Obtener los puntos filtrados
     const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
 
-    // 2. Si hexbin está activo → no mostramos puntos
+    // Si hexbin está activo → ocultar puntos
     if (hexbinActivo) {
         if (capaRegistros) map.removeLayer(capaRegistros);
         return;
     }
-    
-    // 3. Asegurar SIEMPRE que la capa de puntos esté en el mapa
+
+    // Si existe pero no está en el mapa, añadirlo
     if (capaRegistros && !map.hasLayer(capaRegistros)) {
         capaRegistros.addTo(map);
     }
-    
-    // 4. Mostrar puntos filtrados
-    capaRegistros.clearLayers();
-    capaRegistros.addData(filtrados);
 
-    // 5. Si había un punto seleccionado, volver a resaltarlo
+    // Recrear los puntos con los colores correspondientes al modo actual
+    capaRegistros.clearLayers();
+
+    filtrados.forEach(f => {
+        const p = f.properties;
+        const coords = f.geometry.coordinates;
+
+        const color = (currentMode === "avg")
+            ? interpolateColor(+p.avg_db, 20, 120)
+            : interpolateColor(+p.nivel_molestia, 0, 10);
+
+        const marker = L.circleMarker([coords[1], coords[0]], {
+            radius: 7,
+            color: "#333",
+            weight: 1.4,
+            fillColor: color,
+            fillOpacity: 1
+        });
+
+        marker.defaultOptions = { ...marker.options };
+
+        marker.on("click", () => {
+            resetHighlight();
+            selectedUUID = p._uuid;
+            showInfoPanel(p);
+            highlightSelected(selectedUUID);
+        });
+
+        capaRegistros.addLayer(marker);
+    });
+
     if (selectedUUID) highlightSelected(selectedUUID);
 }
 
@@ -892,5 +917,6 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
+
 
 
