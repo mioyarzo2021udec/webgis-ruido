@@ -458,3 +458,13 @@ body {
     background: #145ca5;
 }
 
+.download-info-box {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.35;
+}
