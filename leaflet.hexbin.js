@@ -1,5 +1,5 @@
 /*
- Leaflet Hexbin Layer
+ Leaflet Hexbin Layer - versión corregida y funcional
 */
 
 L.HexbinLayer = L.Layer.extend({
@@ -19,7 +19,7 @@ L.HexbinLayer = L.Layer.extend({
             .range(["#ffffff", "#ff0000"]);
     },
 
-    // Getter/setter
+    // Getter/setter para colorScale
     colorScale: function (scale) {
         if (scale) {
             this._colorScale = scale;
@@ -40,17 +40,17 @@ L.HexbinLayer = L.Layer.extend({
         this._container = L.svg().addTo(map);
         this._rootGroup = d3.select(this._container._rootGroup);
 
-        this._zoomEnd = map.on("zoomend", this.redraw, this);
-
+        map.on("zoomend", this.redraw, this);
         this.redraw();
     },
 
     onRemove: function (map) {
-        if (this._zoomEnd) map.off("zoomend", this.redraw, this);
+        map.off("zoomend", this.redraw, this);
         this._container.remove();
         this._map = null;
     },
 
+    // Proyecta lat/lng → coordenadas de la capa SVG
     projectPoint: function (lat, lng) {
         return this._map.latLngToLayerPoint([lat, lng]);
     },
@@ -58,7 +58,7 @@ L.HexbinLayer = L.Layer.extend({
     redraw: function () {
         if (!this._map) return;
 
-        // 1) Convertir a coordenadas proyectadas
+        // 1) Convertir puntos a coordenadas proyectadas
         const projected = this._data.map(d => {
             const p = this.projectPoint(this._lat(d), this._lng(d));
             return { point: p, data: d };
@@ -72,7 +72,7 @@ L.HexbinLayer = L.Layer.extend({
 
         const bins = hexbinGen(projected);
 
-        // Guardar bins → IMPORTANTE para labels
+        // ←← ESTA LÍNEA ES LA CLAVE: expone los bins
         this._bins = bins;
 
         const colorScale = this._colorScale;
@@ -90,12 +90,12 @@ L.HexbinLayer = L.Layer.extend({
             .attr("d", d => `M${d.x},${d.y}` + hexbinGen.hexagon())
             .attr("fill", d => colorScale(valueFn(d)))
             .attr("fill-opacity", this._opacity)
-            .attr("stroke", "#111")
+            .attr("stroke", "#222")
             .attr("stroke-width", 0.8);
 
         sel.exit().remove();
 
-        // Disparar evento de render
+        // Disparar evento para etiquetas
         this.fire("render");
     }
 });
