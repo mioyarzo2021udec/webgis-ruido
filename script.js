@@ -72,7 +72,7 @@ function crearHexbin(features) {
         radius: 22,
         opacity: 0.85,
         lng: d => d.lng,
-        lat: d => d.lat
+        lat: d => d.lat,
 
         // ← necesario para que el plugin calcule _value() internamente
         value: d => {
@@ -94,7 +94,7 @@ function crearHexbin(features) {
 
         const bins = capaHexbin._bins || [];
 
-        // Colorear hexágonos
+        // Pintar hexágonos según promedio real
         capaHexbin._rootGroup
             .selectAll("path.hexbin")
             .attr("fill", bin => {
@@ -700,6 +700,7 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     actualizarHexbin();
     
 });
+
 
 
 
