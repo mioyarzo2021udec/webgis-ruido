@@ -80,6 +80,18 @@ let currentMode = "avg";
 let selectedUUID = null;
 let selectedLayer = null;
 
+let filtros = {
+    horaInicio: null,
+    horaFin: null,
+    fechaInicio: null,
+    fechaFin: null,
+    molestiaMin: null,
+    molestiaMax: null,
+    dbMin: null,
+    dbMax: null
+};
+
+
 // ---------------------------------------------------
 // PANEL DE INFORMACIÓN
 // ---------------------------------------------------
@@ -361,3 +373,89 @@ document.getElementById("open-form-btn").addEventListener("click", () => {
 document.getElementById("close-form-btn").addEventListener("click", () => {
     document.getElementById("form-panel").classList.remove("open");
 });
+
+function pasaFiltros(p) {
+
+    // Hora
+    if (filtros.horaInicio || filtros.horaFin) {
+        if (p.fecha_hora) {
+            const hora = p.fecha_hora.split("T")[1].substring(0,5);
+
+            if (filtros.horaInicio && hora < filtros.horaInicio) return false;
+            if (filtros.horaFin && hora > filtros.horaFin) return false;
+        }
+    }
+
+    // Fecha
+    if (filtros.fechaInicio || filtros.fechaFin) {
+        if (p.fecha_hora) {
+            const fecha = p.fecha_hora.split("T")[0];
+
+            if (filtros.fechaInicio && fecha < filtros.fechaInicio) return false;
+            if (filtros.fechaFin && fecha > filtros.fechaFin) return false;
+        }
+    }
+
+    // Molestia
+    if (filtros.molestiaMin !== null && Number(p.nivel_molestia) < filtros.molestiaMin) return false;
+    if (filtros.molestiaMax !== null && Number(p.nivel_molestia) > filtros.molestiaMax) return false;
+
+    // dB
+    if (filtros.dbMin !== null && Number(p.avg_db) < filtros.dbMin) return false;
+    if (filtros.dbMax !== null && Number(p.avg_db) > filtros.dbMax) return false;
+
+    return true;
+}
+
+function aplicarFiltros() {
+
+    const filtrados = registrosGeoJSON.features.filter(feat =>
+        pasaFiltros(feat.properties)
+    );
+
+    capaRegistros.clearLayers();
+    capaRegistros.addData(filtrados);
+
+    // Si tenías un punto seleccionado, lo quitamos
+    resetHighlight();
+}
+
+document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
+
+    filtros.horaInicio = document.getElementById("horaInicio").value || null;
+    filtros.horaFin    = document.getElementById("horaFin").value || null;
+
+    filtros.fechaInicio = document.getElementById("fechaInicio").value || null;
+    filtros.fechaFin    = document.getElementById("fechaFin").value || null;
+
+    filtros.molestiaMin = document.getElementById("molestiaMin").value ? Number(document.getElementById("molestiaMin").value) : null;
+    filtros.molestiaMax = document.getElementById("molestiaMax").value ? Number(document.getElementById("molestiaMax").value) : null;
+
+    filtros.dbMin = document.getElementById("dbMin").value ? Number(document.getElementById("dbMin").value) : null;
+    filtros.dbMax = document.getElementById("dbMax").value ? Number(document.getElementById("dbMax").value) : null;
+
+    aplicarFiltros();
+});
+
+document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
+
+    // Reset objeto
+    filtros = {
+        horaInicio: null,
+        horaFin: null,
+        fechaInicio: null,
+        fechaFin: null,
+        molestiaMin: null,
+        molestiaMax: null,
+        dbMin: null,
+        dbMax: null
+    };
+
+    // Reset inputs
+    document.querySelectorAll("#filters-panel input").forEach(i => i.value = "");
+
+    // Dibujar todos los registros nuevamente
+    dibujarRegistros(currentMode);
+});
+
+
