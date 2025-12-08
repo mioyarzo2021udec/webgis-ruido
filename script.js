@@ -29,6 +29,84 @@ var map = L.map('map', {
     layers: [osm]
 });
 
+//-----------------------------------------------------
+// CONFIGURACIÓN DE HEXBIN
+//-----------------------------------------------------
+
+let capaHexbin = null;
+let hexbinActivo = false;
+
+// Escala de color usando tu misma función interpolateColor()
+function colorHexbin(valor, modo) {
+    if (modo === "avg") {
+        return interpolateColor(valor, 20, 120);
+    } else {
+        return interpolateColor(valor, 0, 10);
+    }
+}
+
+// Crear capa hexbin a partir de features filtradas
+function crearHexbin(features) {
+    if (!features || features.length === 0) return;
+
+    // Convertir registros a puntos para hexbin
+    const puntos = features.map(f => ({
+        lat: f.geometry.coordinates[1],
+        lng: f.geometry.coordinates[0],
+        properties: f.properties
+    }));
+
+    // Eliminar capa anterior si existe
+    if (capaHexbin) map.removeLayer(capaHexbin);
+
+    capaHexbin = L.hexbinLayer({
+        radius: 18,
+        opacity: 0.75,
+        lng: d => d.lng,
+        lat: d => d.lat,
+
+        // Valor que controla el color del hexágono
+        value: d => {
+            if (currentMode === "avg") {
+                const sum = d.reduce((a, p) => a + Number(p.properties.avg_db), 0);
+                return sum / d.length;
+            } else {
+                const sum = d.reduce((a, p) => a + Number(p.properties.nivel_molestia), 0);
+                return sum / d.length;
+            }
+        }
+    });
+
+    // Aplicar escala de colores usando tu misma función
+    capaHexbin.colorScale().range([
+        interpolateColor(20, 20, 120),
+        interpolateColor(120, 20, 120)
+    ]);
+
+    capaHexbin.data(puntos);
+
+    if (hexbinActivo) capaHexbin.addTo(map);
+}
+
+// Activar/desactivar hexbin desde checkbox
+document.getElementById("hexbinToggle").addEventListener("change", (e) => {
+    hexbinActivo = e.target.checked;
+
+    if (hexbinActivo) {
+        const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
+        crearHexbin(filtrados);
+    } else {
+        if (capaHexbin) map.removeLayer(capaHexbin);
+    }
+});
+
+// Actualizar hexbin cuando cambian los filtros
+function actualizarHexbin() {
+    if (!hexbinActivo) return;
+    const filtrados = registrosGeoJSON.features.filter(f => pasaFiltros(f.properties));
+    crearHexbin(filtrados);
+}
+
 // ---------------------------------------------------
 // ALTURA DEL HEADER
 // ---------------------------------------------------
@@ -518,6 +596,8 @@ document.getElementById("aplicarFiltrosBtn").addEventListener("click", () => {
 
     resetHighlight();
     actualizarResumen(filtrados);
+    actualizarHexbin();
+
 });
 
 // ---------------------------------------------------
@@ -549,3 +629,4 @@ document.getElementById("limpiarFiltrosBtn").addEventListener("click", () => {
     dibujarRegistros(currentMode);
     actualizarResumen(registrosGeoJSON.features);
 });
+
