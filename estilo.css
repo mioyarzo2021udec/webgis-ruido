@@ -1,79 +1,95 @@
+/* --------------------- GENERAL ----------------------- */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
 
-/* Barra superior */
 .top-bar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     padding: 8px 16px;
     background-color: #f5f5f5;
     border-bottom: 1px solid #ddd;
+    gap: 8px;
+    text-align: center;
 }
 
 .top-bar h2 {
     margin: 0;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Controles en fila (PC) */
+.control-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
-    margin: 0 10px;
 }
 
 .control-group label {
-    font-size: 13px;
+    font-size: 12px;
 }
 
-.control-group select {
-    padding: 6px 8px;
+select {
+    padding: 6px;
     font-size: 15px;
-    height: 34px; /* hace que ambos select tengan la misma altura */
 }
 
-/* Botón Kobo */
-.top-bar button {
-    padding: 6px 12px;
-    border: none;
-    background-color: #1976d2;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-}
-.top-bar button:hover {
-    background-color: #145ca5;
-}
-
-/* Área del mapa */
+/* --------------------- MAPA ----------------------- */
 #map {
-    width: 100%;
-    height: calc(100vh - 48px);
-    z-index: 1;
+    width: calc(100% - 260px);
+    height: calc(100vh - 110px);
+    margin-left: 260px;
 }
 
-/* Panel Kobo */
-#form-panel {
+/* ---------------- PANEL LATERAL PC ---------------- */
+#side-panel {
+    width: 260px;
     position: fixed;
-    top: 48px;
+    left: 0;
+    top: 110px;
+    bottom: 0;
+    background: white;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.legend {
+    background: white;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 6px rgba(0,0,0,0.25);
+    margin-bottom: 20px;
+}
+
+/* --------------------- PANEL FORM ----------------------- */
+#form-panel, #info-panel {
+    position: fixed;
     right: 0;
-    width: 35%;
-    max-width: 450px;
-    height: calc(100vh - 48px);
+    top: 110px;
+    width: 30%;
+    max-width: 360px;
+    height: calc(100vh - 110px);
     background: white;
     border-left: 1px solid #ccc;
     display: none;
     flex-direction: column;
-    z-index: 1200;
 }
-#form-panel.open { display: flex; }
 
-.form-panel-header {
+#form-panel.open, #info-panel.open {
+    display: flex;
+}
+
+.form-panel-header, .info-header {
     padding: 8px;
-    background: #f0f0f0;
+    background: #eee;
     border-bottom: 1px solid #ccc;
     display: flex;
     justify-content: space-between;
@@ -84,150 +100,60 @@ body {
     border: none;
 }
 
-/* Panel de información */
-#info-panel {
-    position: fixed;
-    top: 48px;
-    right: 0;
-    width: 28%;
-    max-width: 350px;
-    height: calc(100vh - 48px);
-    background: white;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1100;
-}
-
-#info-panel.open { display: flex; }
-
-.info-header {
-    padding: 8px;
-    background: #eee;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    justify-content: space-between;
-}
-
 #info-content {
     padding: 12px;
     overflow-y: auto;
     font-size: 14px;
 }
 
-#info-close {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-}
+/* ---------------- RESPONSIVE CELULAR ---------------- */
 
-/* Leyenda */
-.legend {
-    background: white;
-    padding: 10px 12px;
-    border-radius: 6px;
-    line-height: 16px;
-    color: #333;
-    font-size: 13px;
-    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
-    max-width: 240px;
-    margin-bottom: 20px; /* distancia del borde inferior */
-}
+@media (max-width: 720px) {
 
-.legend-row,
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4px;
-}
-
-.legend-color {
-    width: 22px;
-    height: 12px;
-    margin-right: 6px;
-    border: 1px solid #aaa;
-}
-
-.legend-example {
-    margin-left: 28px;
-    margin-bottom: 6px;
-    font-size: 12px;
-    color: #555;
-    font-style: italic;
-}
-
-.legend-footnote {
-    display: block;
-    text-align: center;
-    margin-top: 14px;
-    font-style: italic;
-    font-size: 12px;
-    color: #555;
-}
-
-/* Posición más cómoda de la leyenda */
-.leaflet-bottom.leaflet-left {
-    margin-bottom: 28px !important;
-    margin-left: 12px !important;
-}
-
-/* -------------------------------------------------- */
-/* ESTILOS ESPECÍFICOS PARA CELULARES */
-/* -------------------------------------------------- */
-@media (max-width: 600px) {
-
-    /* Texto general más grande */
-    body, select, button, .legend, #info-content {
-        font-size: 16px !important;
+    /* Controles en una fila */
+    .control-row {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
     }
 
-    /* Barra superior más alta y legible */
-    .top-bar h2 {
-        font-size: 16px !important;
+    /* Panel lateral oculto */
+    #side-panel {
+        display: none;
     }
 
-    .top-bar {
-        flex-direction: column;
-        gap: 8px;
-        padding: 10px;
-        text-align: center;
-    }
-
-    /* Mapa ocupa toda la pantalla */
     #map {
-        height: calc(100vh - 140px) !important;
+        width: 100%;
+        margin-left: 0;
+        height: 60vh;
     }
 
-    /* PANEL INFO: ocupa pantalla completa */
-    #info-panel {
-        width: 100% !important;
-        max-width: none !important;
-        height: calc(100vh - 48px);
-        font-size: 16px !important;
-    }
-
-    /* PANEL FORM: también ocupa la pantalla completa */
+    /* Paneles amplios */
+    #info-panel,
     #form-panel {
-        width: 100% !important;
-        max-width: none !important;
-        height: calc(100vh - 48px);
+        width: 100%;
+        max-width: none;
+        top: 160px;
+        height: calc(100vh - 160px);
     }
 
-    /* Leyenda mejor adaptada */
+    /* Leyenda debajo del mapa */
     .legend {
-        max-width: 90% !important;
-        font-size: 15px !important;
+        position: static;
+        width: 100%;
+        max-width: none;
+        margin: 12px auto;
+        font-size: 15px;
         overflow-y: auto;
-        max-height: 40vh;
+        max-height: 30vh;
     }
 
-    .legend-row {
-        margin-bottom: 8px;
+    /* Texto más grande */
+    body, select, button {
+        font-size: 16px;
     }
 
-    .legend-color {
-        width: 28px;
-        height: 14px;
+    .top-bar h2 {
+        font-size: 17px;
     }
 }
