@@ -1,9 +1,9 @@
 /* ========================================================= */
-/* VARIABLES GLOBALES                                        */
+/* VARIABLES GLOBALES — control de altura del header         */
 /* ========================================================= */
 :root {
-    --header-height: 72px; /* altura real aproximada del header */
-    color-scheme: only light; /* evitar que Android fuerce modo oscuro */
+    --header-height: 72px; /* valor se sobreescribe dinámicamente por JS */
+    color-scheme: only light; /* evita forced-dark-mode */
 }
 
 /* ========================================================= */
@@ -19,7 +19,9 @@ body {
     color: #111 !important;
 }
 
-/* Barra superior */
+/* ========================================================= */
+/* ENCABEZADO                                                 */
+/* ========================================================= */
 .top-bar {
     display: flex;
     align-items: center;
@@ -39,19 +41,17 @@ body {
     flex-shrink: 0;
 }
 
-/* Fila de controles */
 .control-row {
     display: flex;
     gap: 12px;
     align-items: flex-end;
-    justify-content: center;
     flex-grow: 1;
+    justify-content: center;
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
-    flex: 1;
 }
 
 .control-group label {
@@ -65,7 +65,6 @@ body {
     height: 34px;
 }
 
-/* Botón Kobo */
 .top-bar button {
     padding: 6px 12px;
     border: none;
@@ -73,7 +72,6 @@ body {
     color: white;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
 }
 
 .top-bar button:hover {
@@ -83,26 +81,23 @@ body {
 /* ========================================================= */
 /* LAYOUT PRINCIPAL                                           */
 /* ========================================================= */
-
 #content-row {
     flex: 1;
     display: flex;
     min-height: 0;
 }
 
-/* Panel lateral (solo PC) */
+/* Panel lateral (PC) */
 #legend-panel {
     width: 260px;
     border-right: 1px solid #ccc;
-    padding: 10px 10px 10px 12px;
+    padding: 10px 12px;
     background: #ffffff !important;
     overflow-y: auto;
-    box-sizing: border-box;
 }
 
 .legend-title {
     margin-top: 0;
-    margin-bottom: 8px;
     font-size: 15px;
     font-weight: bold;
 }
@@ -117,18 +112,18 @@ body {
 }
 
 /* ========================================================= */
-/* PANEL KOBO E INFO                                          */
+/* PANELES DE INFORMACIÓN Y KOBO                              */
 /* ========================================================= */
-
 #form-panel,
 #info-panel {
     position: fixed;
     top: var(--header-height);
     right: 0;
+    left: auto;
     width: 32%;
     max-width: 380px;
-    height: calc(100vh - var(--header-height));
-    background: #ffffff !important;
+    bottom: 0; /* esto reemplaza height calc(...) */
+    background-color: #ffffff !important;
     border-left: 1px solid #ccc;
     display: none;
     flex-direction: column;
@@ -150,6 +145,13 @@ body {
     align-items: center;
 }
 
+#kobo-frame {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 #info-content {
     padding: 12px;
     overflow-y: auto;
@@ -157,19 +159,16 @@ body {
 }
 
 /* ========================================================= */
-/* LEYENDA SIN SOMBRA (PC + CELULAR)                          */
+/* LEYENDA SIN SOMBRA, LIMPIA                                 */
 /* ========================================================= */
-
 .legend {
     background: #ffffff !important;
     padding: 10px 12px;
     border-radius: 6px;
-    line-height: 16px;
+    border: 1px solid #ccc;
     color: #333 !important;
     font-size: 13px;
-    max-width: 100%;
     margin-bottom: 16px;
-    border: 1px solid #ccc; /* reemplaza sombra */
 }
 
 .legend-row {
@@ -181,34 +180,30 @@ body {
 .legend-color {
     width: 22px;
     height: 12px;
-    margin-right: 6px;
     border: 1px solid #aaa;
+    margin-right: 6px;
 }
 
 .legend-example {
     margin-left: 28px;
-    margin-bottom: 6px;
     font-size: 12px;
     color: #555;
     font-style: italic;
 }
 
 .legend-footnote {
-    display: block;
     text-align: center;
     margin-top: 14px;
-    font-style: italic;
     font-size: 12px;
     color: #555;
+    font-style: italic;
 }
 
 /* ========================================================= */
-/* FILTROS (placeholder)                                      */
+/* FILTROS                                                    */
 /* ========================================================= */
-
 #filters-panel h3 {
     margin-top: 10px;
-    margin-bottom: 4px;
     font-size: 14px;
 }
 
@@ -218,22 +213,36 @@ body {
 }
 
 /* ========================================================= */
-/* RESPONSIVE — CELULAR                                       */
+/* PC — corregir ancho excesivo de los selectores             */
 /* ========================================================= */
+@media (min-width: 601px) {
+    .control-group {
+        width: 170px;
+        flex: none;
+    }
 
+    .control-row {
+        justify-content: center;
+        gap: 16px;
+    }
+}
+
+/* ========================================================= */
+/* CELULAR — layout vertical                                  */
+/* ========================================================= */
 @media (max-width: 600px) {
 
-    /* Encabezado */
+    /* Header */
     .top-bar {
         flex-direction: column;
-        align-items: stretch;
+        height: auto; /* permite que el JS detecte altura real */
+        align-items: center;
         text-align: center;
-        height: auto;
-        gap: 6px;
+        gap: 8px;
     }
 
     .top-bar h2 {
-        font-size: 16px;
+        font-size: 17px;
     }
 
     .control-row {
@@ -241,64 +250,53 @@ body {
         justify-content: space-between;
     }
 
-    .control-group select {
-        font-size: 14px;
-    }
-
-    /* Layout vertical */
+    /* Layout principal */
     #content-row {
         flex-direction: column;
     }
 
+    /* Mapa primero, más cuadrado */
     #map {
-        order: 1; /* Mapa arriba */
+        order: 1;
         width: 100%;
-        height: 55vh; /* Forma más cuadrada */
+        height: 55vh;
     }
 
+    /* Leyenda abajo del mapa */
     #legend-panel {
-        order: 2; /* Leyenda abajo */
+        order: 2;
         width: 100%;
         border-right: none;
         border-top: 1px solid #ccc;
-        padding-top: 8px;
         max-height: 38vh;
     }
 
-    /* Texto más moderado */
     .legend {
         font-size: 14px !important;
         max-height: 30vh;
         overflow-y: auto;
     }
 
-    .legend-color {
-        width: 28px;
-        height: 14px;
-    }
-
-    /* Paneles ocupan toda la pantalla */
-    #info-panel,
-    #form-panel {
+    /* Paneles a pantalla completa */
+    #form-panel,
+    #info-panel {
+        left: 0;
+        right: 0;
         width: 100% !important;
         max-width: none !important;
-        height: calc(100vh - 60px);
-        left: 0;
     }
 }
 
 /* ========================================================= */
-/* PROTEGER COLORES CONTRA MODO OSCURO FORZADO                */
+/* PROTECCIÓN CONTRA MODO OSCURO FORZADO                      */
 /* ========================================================= */
-
 @media (prefers-color-scheme: dark) {
-
-    body, 
+    body,
     #legend-panel,
     .legend,
+    .top-bar,
     #info-panel,
-    #form-panel,
-    .top-bar {
+    #form-panel {
         background-color: #ffffff !important;
         color: #111 !important;
     }
@@ -306,11 +304,6 @@ body {
     .legend-color {
         border-color: #444 !important;
     }
-
-    #filters-panel,
-    .info-header,
-    .form-panel-header {
-        background: #f2f2f2 !important;
-    }
 }
+
 
