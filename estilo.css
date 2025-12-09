@@ -643,12 +643,12 @@ input[type="checkbox"]:checked {
 
     /* AVG/Molestia */
     .control-group:nth-child(2) {
-        margin-left: -48px !important;
+        margin-left: -65px !important;
     }
 
     /* Mapa base */
     .control-group:nth-child(3) {
-        margin-left: -48px !important;
+        margin-left: -55px !important;
     }
 
     .control-group select {
@@ -674,6 +674,13 @@ input[type="checkbox"]:checked {
     }
 
     /* ---------- ORDEN CORRECTO DEL CONTENIDO ---------- */
+    #content-row {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        margin-top: 0 !important;
+    }
+
     #map {
         order: 4 !important;
         width: 100% !important;
@@ -687,11 +694,6 @@ input[type="checkbox"]:checked {
         width: 94% !important;
         margin: 0 auto !important;
         padding: 10px !important;
-    }
-
-    /* Evitar espacio fantasma arriba del mapa/panel */
-    #content-row {
-        margin-top: 0 !important;
     }
 
     /* Panel de registro a pantalla completa en móvil */
