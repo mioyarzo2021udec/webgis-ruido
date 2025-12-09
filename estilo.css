@@ -37,8 +37,8 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 6px 14px;
-    background-color: #582699;         /* morado principal */
-    border-bottom: 1px solid #3f1475;
+    background-color: #3f1378 !important;   /* nuevo morado */
+    border-bottom: 1px solid #2c0f5c;
     gap: 12px;
     position: relative;
     z-index: 1000;
@@ -105,20 +105,24 @@ body {
     cursor: pointer;
 }
 
+/* Checkbox azul al estar seleccionado */
+input[type="checkbox"]:checked {
+    accent-color: #4959de;
+}
+
 /* Botones principales del header */
 .top-bar button {
     padding: 7px 14px;
     font-size: 15px;
     border: none;
-    background-color: #3a4acf;   /* azul claro */
+    background-color: #4959de;  /* nuevo color */
     color: white;
     border-radius: 6px;
     cursor: pointer;
-    flex-shrink: 0;
 }
 
 .top-bar button:hover {
-    background-color: #323fab;   /* azul medio */
+    background-color: #323fab; 
 }
 
 /* Notas bajo los botones (optimizado para PC / celulares) */
@@ -193,6 +197,14 @@ body {
     color: #111;
 }
 
+#legend-content .legend-row {
+    margin-bottom: 6px;   /* antes 4px */
+}
+
+.legend-example {
+    margin-bottom: 12px; /* un poquito más */
+}
+
 /* Fila color + texto */
 .legend-row {
     display: flex;
@@ -247,6 +259,14 @@ body {
     font-size: 15px;
     font-weight: bold;
 }
+
+#filters-panel .panel-inner,
+#filters-panel input,
+#filters-panel label,
+#filters-panel h4 {
+    font-size: 13px !important;
+}
+
 
 /* Caja interna blanca para filtros y resumen */
 .panel-inner {
@@ -349,6 +369,18 @@ body {
     padding-top: 8px;
     padding-bottom: 8px;
 }
+
+/* Ajuste de ancho de inputs */
+#filters-panel input[type="time"],
+#filters-panel input[type="date"],
+#filters-panel input[type="number"] {
+    width: 5cm;              /* nuevo ancho exacto */
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;      /* centrado */
+    display: block;
+}
+
 
 /* ========================================================= */
 /* MAPA */
@@ -494,11 +526,10 @@ body {
     width: 100%;
     padding: 10px;
     margin-bottom: 12px;
-    background: #3a4acf;
+    background: #4959de;   /* nuevo color */
     color: white;
     border: none;
     border-radius: 6px;
-    cursor: pointer;
     font-size: 14px;
 }
 
@@ -617,3 +648,4 @@ button,
     border-bottom: 1px solid #3f1475 !important;
     color: white !important;
 }
+
