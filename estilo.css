@@ -574,146 +574,141 @@ input[type="checkbox"]:checked {
 }
 
 /* ========================================================= */
-/* PARCHE MÓVIL REFINADO — DISTRIBUCIÓN EXACTA */
+/*     PARCHE MÓVIL DEFINITIVO — NO AFECTA A PC              */
 /* ========================================================= */
 
 @media (max-width: 600px) {
 
     /* evitar scroll lateral */
     html, body {
-        width: 100%;
         overflow-x: hidden !important;
+        width: 100%;
     }
 
-    /* HEADER MUCHO MÁS COMPACTO */
+    /* --------------------------------------------------------- */
+    /* HEADER MUCHO MÁS COMPACTO                                */
+    /* --------------------------------------------------------- */
     .top-bar {
-        flex-direction: column;
+        flex-direction: column !important;
         align-items: center !important;
-        text-align: center;
-        padding: 6px 4px !important;
+        padding: 6px 6px !important;
         gap: 4px !important;
+        min-height: 0 !important;
     }
 
     .header-title-block {
-        max-width: 100%;
-        padding: 0;
-        margin: 0;
+        max-width: 92% !important;
+        text-align: center;
     }
 
     .top-bar h2 {
         font-size: 17px !important;
-        margin-bottom: 2px;
-        text-align: center;
+        margin: 0 0 2px 0 !important;
+        width: 100%;
     }
 
     .header-subtext {
         font-size: 11px !important;
-        line-height: 1.22;
-        width: 90%;
-        margin: 0 auto;
-        text-align: justify;
+        line-height: 1.23 !important;
+        width: 100% !important;
+        max-width: 92% !important;
+        margin: 0 auto !important;
+        text-align: justify !important;
     }
 
-    /* ========================================================= */
-    /* HEXBIN + VISUALIZACIÓN + MAPA BASE EN UNA FILA PERFECTA */
-    /* ========================================================= */
+    /* reduce espacio entre título / texto / controles */
+    .top-bar > *:not(button) {
+        margin-bottom: 2px !important;
+    }
+
+    /* --------------------------------------------------------- */
+    /*   FILA PERFECTA: HEXBIN + VISUALIZACIÓN + MAPA BASE      */
+    /* --------------------------------------------------------- */
 
     .control-row {
-        width: 95% !important;
-        margin: 4px auto 0 auto;
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
+        width: 96% !important;
+        margin: 0 auto !important;
+
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+
+        gap: 6px !important;
     }
 
-    /* HEXBIN */
+    /* HEXBIN — acercamos 3–4 mm al borde */
     .control-group:nth-child(1) {
-        flex: 0.8;  /* aumenta separación izquierda */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        flex: 0.55 !important;    /* más pequeño */
+        margin-left: -6px !important; /* lo acerca al borde */
+        align-items: center !important;
     }
 
     #hexbinToggle {
-        margin-left: 6px; /* lo alejamos del borde izquierdo */
+        margin-left: 2px !important;
     }
 
     /* VISUALIZACIÓN TEMÁTICA */
     .control-group:nth-child(2) {
-        flex: 1.5;
+        flex: 1.35 !important;
     }
 
     /* MAPA BASE */
     .control-group:nth-child(3) {
-        flex: 1.3;
-        margin-right: 8px;
+        flex: 1.15 !important;
+        margin-right: 4px !important;
     }
 
     .control-group select {
         width: 100% !important;
-        text-align: center;
-        padding: 4px;
-        font-size: 12.5px;
+        padding: 4px !important;
+        font-size: 12.3px !important;
     }
 
-    /* ========================================================= */
-    /* BOTONES: AHORA SÍ UNO AL LADO DEL OTRO */
-    /* ========================================================= */
+    /* --------------------------------------------------------- */
+    /* BOTONES — AHORA SI AL LADO Y FORZADO                     */
+    /* --------------------------------------------------------- */
 
     #open-download-btn,
     #open-form-btn {
         width: 48% !important;
         display: inline-block !important;
         margin-top: 6px !important;
-        padding: 6px 4px !important;
-        font-size: 12.5px !important;
+        padding: 7px 4px !important;
+        font-size: 12.7px !important;
     }
 
-    /* Fuerza explícitamente que estén en una misma fila */
+    /* Forzar que queden en la misma fila */
     .top-bar {
-        display: flex;
-        flex-wrap: wrap;
+        flex-wrap: wrap !important;
     }
 
-    #open-download-btn {
-        order: 10;
-        margin-right: 2%;
-    }
+    #open-download-btn { order: 50 !important; }
+    #open-form-btn { order: 51 !important; }
 
-    #open-form-btn {
-        order: 11;
-    }
-
-    /* notas más pequeñas */
-    .btn-note {
-        font-size: 10px !important;
-        margin-top: 1px;
-    }
-
-    /* ========================================================= */
-    /* MAPA MÁS GRANDE (8–8.5 cm en tu pantalla) */
-    /* ========================================================= */
+    /* --------------------------------------------------------- */
+    /* MAPA — AHORA SI DEBE VERSE                               */
+    /* --------------------------------------------------------- */
 
     #map {
-        height: 70vh !important; /* antes 55–60vh */
-        min-height: 330px !important;
+        width: 100% !important;
+        height: 65vh !important;  /* aumenta visualización del mapa */
+        min-height: 310px !important;
+        order: 1 !important;
     }
 
-    /* ========================================================= */
-    /* PANEL IZQUIERDO AJUSTADO */
-    /* ========================================================= */
-
+    /* --------------------------------------------------------- */
+    /* PANEL IZQUIERDO AJUSTADO                                 */
+    /* --------------------------------------------------------- */
     #legend-panel {
         width: 100% !important;
+        padding: 10px !important;
         max-height: none !important;
-        padding: 10px;
-        order: 2;
-        box-sizing: border-box;
+        order: 2 !important;
     }
 
     .panel-box,
     .panel-inner {
         width: 100% !important;
-        box-sizing: border-box;
+        box-sizing: border-box !important;
     }
 }
