@@ -456,6 +456,7 @@ function dibujarRegistros(modoColor) {
             });
 
             m.defaultOptions = { ...m.options };
+            m.feature = feature;
             return m;
         },
 
@@ -510,6 +511,8 @@ function actualizarCapaDePuntos() {
         });
 
         marker.defaultOptions = { ...marker.options };
+
+        marker.feature = f;
 
         marker.on("click", () => {
             resetHighlight();
@@ -924,3 +927,4 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
+
