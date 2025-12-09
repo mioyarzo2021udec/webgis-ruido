@@ -696,11 +696,14 @@ input[type="checkbox"]:checked {
         padding: 10px !important;
     }
 
-    /* Panel de registro a pantalla completa en móvil */
-    #form-panel {
-        width: 100% !important;
-        max-width: 100% !important;
-        left: 0 !important;
+    /* Paneles deslizables a la mitad del ancho en móvil */
+    #form-panel,
+    #info-panel,
+    #download-panel {
+        width: 50% !important;
+        max-width: 50% !important;
+        left: auto !important;
+        right: 0 !important;
+        border-left: 2px solid #ccc !important;
     }
 }
-
