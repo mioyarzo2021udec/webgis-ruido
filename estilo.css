@@ -1,14 +1,16 @@
 /* ========================================================= */
 /* VARIABLES GLOBALES */
 /* ========================================================= */
+
 :root {
-    --header-height: 72px;
-    color-scheme: light;
+    --header-height: 80px; /* margen dinámico */
+    color-scheme: light; 
 }
 
 /* ========================================================= */
 /* ESTILO GENERAL */
 /* ========================================================= */
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -19,27 +21,23 @@ body {
     color: #111 !important;
 }
 
+
 /* ========================================================= */
-/* ENCABEZADO */
+/* HEADER */
 /* ========================================================= */
+
 .top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 6px 14px;
-    background-color: #582699 !important;
+    background-color: #582699;
     border-bottom: 1px solid #3f1475;
-    gap: 10px;
+    gap: 12px;
     position: relative;
     z-index: 1000;
     min-height: var(--header-height);
-    color: white !important;
-}
-
-.header-title-block {
-    display: flex;
-    flex-direction: column;
-    max-width: 44%;
+    color: white;
 }
 
 .top-bar h2 {
@@ -47,43 +45,48 @@ body {
     font-size: 20px;
 }
 
-.header-subtext {
-    margin: 2px 0 0 0;
-    font-size: 12px;
-    line-height: 1.25;
-    color: #e3e3e3;
-}
 
 .control-row {
     display: flex;
-    gap: 10px;
-    align-items: flex-end;
-    flex-grow: 1;
+    gap: 14px;
     justify-content: center;
+    align-items: flex-end;
 }
 
+/* Grupo de controles */
 .control-group {
-    min-width: 120px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    min-width: 130px;
 }
 
 .control-group label {
     font-size: 12px;
     font-weight: bold;
-    margin-bottom: 2px;
-    color: white !important;
+    margin-bottom: 3px;
+    color: white;
 }
 
-.control-group select,
-.control-group input[type="checkbox"] {
-    font-size: 13px;
-}
-
-.top-bar button {
-    padding: 6px 12px;
+/* Selects — más grandes pero no tanto como botones */
+.control-group select {
+    height: 32px;
+    padding: 4px 8px;
     font-size: 14px;
+    border-radius: 5px;
+}
+
+/* Checkbox más grande (Hexbin y Fuentes) */
+.control-group input[type="checkbox"],
+#filters-panel input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Botones principales del header */
+.top-bar button {
+    padding: 7px 14px;
+    font-size: 15px;
     border: none;
     background-color: #3a4acf;
     color: white;
@@ -91,86 +94,186 @@ body {
     cursor: pointer;
 }
 
+.top-bar button:hover {
+    background-color: #323fab;
+}
+
+/* Notas (optimizado para PC / celulares) */
 .btn-note {
     display: block;
-    font-size: 10px;
+    font-size: 12px;
     font-style: italic;
     color: #e3e3e3;
     margin-top: 2px;
 }
 
-.top-bar button:hover {
-    background-color: #323fab;
-}
 
-/* ========================================================= */
-/* LAYOUT PRINCIPAL */
-/* ========================================================= */
-#content-row {
-    flex: 1;
-    display: flex;
-    min-height: 0;
-}
 
 /* ========================================================= */
 /* PANEL IZQUIERDO */
 /* ========================================================= */
+
 #legend-panel {
-    width: 260px;
+    width: 300px; /* antes 260px */
     border-right: 1px solid #ccc;
-    padding: 10px 12px;
-    background: #ffffff;
+    padding: 12px;
+    background: white;
     overflow-y: auto;
 }
+
+
 
 /* ========================================================= */
 /* LEYENDA */
 /* ========================================================= */
+
 .legend {
-    background: #2c3791 !important;
+    background: #2c3791;
     padding: 12px;
     border-radius: 6px;
     border: 1px solid #2c3791;
+    color: white;
     margin-bottom: 22px;
 }
 
 .legend-title {
-    color: white !important;
     margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: bold;
 }
 
+/* único recuadro blanco interno */
 #legend-content {
-    background: white !important;
-    padding: 10px 12px;
-    border-radius: 4px;
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
     border: 1px solid #ddd;
     color: #111;
-    font-size: 12.6px;
 }
 
-/* Elementos de leyenda */
+/* Items */
 .legend-row {
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .legend-color {
-    width: 22px;
+    width: 20px;
     height: 12px;
-    border: 1px solid #999;
-    margin-right: 6px;
+    border: 1px solid #888;
+    margin-right: 8px;
 }
 
-.legend-example,
-.legend-footnote {
+.legend-example {
+    margin-left: 28px;
+    margin-top: 3px;
+    margin-bottom: 12px;
     font-size: 12px;
     font-style: italic;
     color: #555;
 }
 
+
+
 /* ========================================================= */
-/* PANELES DERECHOS */
+/* FILTROS */
+/* ========================================================= */
+
+.panel-box {
+    background: #2c3791;
+    border-radius: 6px;
+    padding: 12px;
+    color: white;
+    margin-bottom: 22px;
+    border: 1px solid #2c3791;
+}
+
+.panel-box h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.panel-inner {
+    background: white;
+    color: #111;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* Secciones */
+.filter-section {
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.filter-section h4 {
+    font-size: 14px;
+    margin: 5px 0 8px 0;
+}
+
+/* Inputs */
+#filters-panel input {
+    width: 100%;
+    margin-top: 3px;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    font-size: 13px;
+}
+
+/* Checkboxes alineados PERFECTO */
+#filters-panel label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+/* Botones filtros */
+.filter-btn {
+    width: 100%;
+    padding: 9px;
+    background: #3a4acf;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+.filter-btn:hover {
+    background: #323fab;
+}
+
+.filter-btn.reset {
+    background: #777;
+}
+
+
+
+/* ========================================================= */
+/* RESUMEN DE FILTRADOS */
+/* ========================================================= */
+
+#summary-list {
+    font-size: 13px;
+    padding-left: 18px;
+}
+
+#summary-list li {
+    margin-bottom: 10px; /* más espaciado */
+    line-height: 1.45;
+}
+
+
+
+/* ========================================================= */
+/* PANELES DERECHA */
 /* ========================================================= */
 
 #info-panel,
@@ -180,192 +283,112 @@ body {
     top: var(--header-height);
     right: 0;
     height: calc(100vh - var(--header-height));
-    background: #ffffff;
+    background: white;
     border-left: 1px solid #ccc;
     display: none;
     flex-direction: column;
     overflow: hidden;
 }
 
-/* Tamaños correctos */
-#info-panel { width: 22%; max-width: 300px; z-index: 1300; }
-#download-panel { width: 28%; max-width: 330px; z-index: 1200; }
-#form-panel { width: 32%; max-width: 380px; z-index: 1100; }
+/* ANCHOS DIFERENCIADOS COMO ANTES */
+#info-panel { width: 22%; max-width: 300px; }
+#download-panel { width: 28%; max-width: 330px; }
+#form-panel { width: 32%; max-width: 380px; }
 
-#info-panel.open,
-#form-panel.open,
-#download-panel.open {
-    display: flex;
-}
-
-/* Headers */
+/* HEADER panel derecho */
 .info-header,
-.form-panel-header,
-.download-panel-header {
-    padding: 8px 12px;
+.download-panel-header,
+.form-panel-header {
     background: #323fab;
     color: white;
-    border-bottom: 1px solid #2c3791;
+    padding: 10px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid #2c3791;
 }
 
-/* Panel de descarga estilo antiguo */
-.download-panel-header {
-    background: #f0f0f0 !important;
-    color: #111 !important;
-    border-bottom: 1px solid #ccc;
+.info-header h3,
+.download-panel-header h3,
+.form-panel-header h3 {
+    margin: 0;
+    font-size: 15px;
 }
 
-#download-content {
-    padding: 12px;
+/* Cerrar */
+.info-header button,
+.download-panel-header button,
+.form-panel-header button {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Contenido */
+#info-content,
+#download-content,
+#kobo-frame {
+    padding: 14px;
     overflow-y: auto;
+}
+
+
+
+/* ========================================================= */
+/* DESCARGAR / EXPORTAR */
+/* ========================================================= */
+
+.download-info-box {
+    background: #fafafa;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    margin-bottom: 14px;
+}
+
+.download-action {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    background: #3a4acf;
+    border-radius: 6px;
+    border: none;
+    color: white;
     font-size: 14px;
 }
 
-/* ========================================================= */
-/* FORMULARIO DE KOBO */
-/* ========================================================= */
-#kobo-frame {
-    flex-grow: 1;
-    width: 100%;
-    border: none;
-    overflow-y: auto;
-}
-
-/* ========================================================= */
-/* FILTROS */
-/* ========================================================= */
-.panel-box {
-    background: #2c3791 !important;
-    color: white;
-    border-radius: 6px;
-    padding: 12px;
-    margin-top: 20px;
-    border: 1px solid #2c3791;
-}
-
-.panel-box h3 {
-    margin: 0 0 8px 0;
-}
-
-.panel-inner,
-#legend-content {
-    background: white !important;
-    color: #111;
-    border-radius: 4px;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
-}
-
-.filter-section {
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #ccc;
-}
-
-.filter-section h4 {
-    font-size: 13px;
-    margin: 6px 0;
-    font-weight: bold;
-}
-
-#filters-panel label {
-    display: block;
-    font-size: 12px;
-    margin: 4px 0 0;
-}
-
-#filters-panel input {
-    width: 100%;
-    padding: 5px;
-    margin-top: 2px;
-    font-size: 12.5px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-/* Botones filtros */
-.filter-btn {
-    width: 100%;
-    padding: 8px;
-    margin-top: 6px;
-    background: #3a4acf;
-    color: white;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-}
-
-.filter-btn.reset {
-    background: #777;
-}
-
-.filter-btn:hover:not(.reset) {
+.download-action:hover {
     background: #323fab;
 }
 
-/* ========================================================= */
-/* RESUMEN */
-/* ========================================================= */
-#summary-list {
-    font-size: 12.5px;
-    padding-left: 18px;
-}
-
-/* ========================================================= */
-/* PANEL DESCARGA */
-/* ========================================================= */
-.download-action {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    background: #1976d2;
-    color: white;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.download-action:hover {
-    background: #145ca5;
-}
-
-.download-info-box {
-    background: #fafafa !important;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    margin-bottom: 12px;
-}
 
 /* ========================================================= */
 /* MAPA */
 /* ========================================================= */
+
 #map {
     flex: 1;
     height: 100%;
     min-width: 0;
 }
 
+
 /* ========================================================= */
-/* RESPONSIVE */
+/* MÓVIL */
 /* ========================================================= */
+
 @media (max-width: 600px) {
     #legend-panel {
-        width: 100%;
+        width: 100%!important;
         max-height: 40vh;
-        border-right: none;
     }
 
     #info-panel,
-    #form-panel,
-    #download-panel {
-        width: 100% !important;
-        left: 0;
-        max-width: none !important;
+    #download-panel,
+    #form-panel {
+        width: 100%!important;
+        max-width: none!important;
     }
 }
