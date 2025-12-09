@@ -1,10 +1,10 @@
 /* ========================================================= */
-/* VARIABLES GLOBALES */
+/* VARIABLES GLOBALES — control de altura del header */
 /* ========================================================= */
 
 :root {
-    --header-height: 80px; /* margen dinámico */
-    color-scheme: light; 
+    --header-height: 80px; /* será actualizado dinámicamente por JS */
+    color-scheme: light;   /* forzar modo claro */
 }
 
 /* ========================================================= */
@@ -21,6 +21,12 @@ body {
     color: #111 !important;
 }
 
+/* Fila principal: panel izquierdo + mapa */
+#content-row {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
 
 /* ========================================================= */
 /* HEADER */
@@ -31,7 +37,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 6px 14px;
-    background-color: #582699;
+    background-color: #582699;         /* morado principal */
     border-bottom: 1px solid #3f1475;
     gap: 12px;
     position: relative;
@@ -40,20 +46,37 @@ body {
     color: white;
 }
 
+/* Bloque título + texto descriptivo */
+.header-title-block {
+    display: flex;
+    flex-direction: column;
+    max-width: 45%;
+}
+
 .top-bar h2 {
     margin: 0;
     font-size: 20px;
+    flex-shrink: 0;
+    color: white;
 }
 
+.header-subtext {
+    font-size: 13px;
+    line-height: 1.3;
+    margin: 4px 0 0 0;
+    color: #e6e6e6;
+}
 
+/* Contenedor de controles del header */
 .control-row {
     display: flex;
     gap: 14px;
-    justify-content: center;
     align-items: flex-end;
+    justify-content: center;
+    flex-grow: 1;
 }
 
-/* Grupo de controles */
+/* Grupo de controles (hexbin, modo color, base map) */
 .control-group {
     display: flex;
     flex-direction: column;
@@ -63,23 +86,22 @@ body {
 .control-group label {
     font-size: 12px;
     font-weight: bold;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     color: white;
 }
 
-/* Selects — más grandes pero no tanto como botones */
+/* Selects con buena altura/grosor */
 .control-group select {
-    height: 32px;
     padding: 4px 8px;
     font-size: 14px;
+    height: 32px;
     border-radius: 5px;
 }
 
-/* Checkbox más grande (Hexbin y Fuentes) */
-.control-group input[type="checkbox"],
-#filters-panel input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
+/* Checkbox hexbin un poco más grande */
+#hexbinToggle {
+    width: 20px;
+    height: 20px;
     cursor: pointer;
 }
 
@@ -88,47 +110,46 @@ body {
     padding: 7px 14px;
     font-size: 15px;
     border: none;
-    background-color: #3a4acf;
+    background-color: #3a4acf;   /* azul claro */
     color: white;
     border-radius: 6px;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .top-bar button:hover {
-    background-color: #323fab;
+    background-color: #323fab;   /* azul medio */
 }
 
-/* Notas (optimizado para PC / celulares) */
+/* Notas bajo los botones (optimizado para PC / celulares) */
 .btn-note {
     display: block;
     font-size: 12px;
     font-style: italic;
     color: #e3e3e3;
+    line-height: 1.2;
     margin-top: 2px;
 }
 
-
-
 /* ========================================================= */
-/* PANEL IZQUIERDO */
+/* PANEL LATERAL IZQUIERDO */
 /* ========================================================= */
 
 #legend-panel {
-    width: 300px; /* antes 260px */
+    width: 300px;                 /* un poco más ancho que 260px */
     border-right: 1px solid #ccc;
     padding: 12px;
-    background: white;
+    background: #ffffff !important;
     overflow-y: auto;
+    color: #111 !important;
 }
 
-
-
 /* ========================================================= */
-/* LEYENDA */
+/* LEYENDA (AZUL OSCURO EXTERIOR + BLANCO INTERIOR) */
 /* ========================================================= */
 
 .legend {
-    background: #2c3791;
+    background: #2c3791;          /* azul oscuro exterior */
     padding: 12px;
     border-radius: 6px;
     border: 1px solid #2c3791;
@@ -140,229 +161,194 @@ body {
     margin: 0 0 8px 0;
     font-size: 16px;
     font-weight: bold;
+    color: white;
 }
 
-/* único recuadro blanco interno */
+/* Recuadro blanco único INTERIOR de la leyenda */
 #legend-content {
-    background: white;
-    padding: 12px;
+    background: #ffffff;
+    color: #111;
     border-radius: 6px;
     border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 13px;
+}
+
+/* ------ MUY IMPORTANTE ------
+   El script genera otra <div class="legend"> dentro de #legend-content.
+   Aquí LA "APAGAMOS" para que NO se vea otro recuadro azul adentro.
+-------------------------------- */
+#legend-content .legend {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+}
+
+/* Título interno (Niveles de ruido / Molestia percibida) */
+#legend-content h4 {
+    margin: 4px 0 6px 0;
+    font-size: 13.5px;
     color: #111;
 }
 
-/* Items */
+/* Fila color + texto */
 .legend-row {
     display: flex;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
+    color: #111;
 }
 
 .legend-color {
     width: 20px;
     height: 12px;
-    border: 1px solid #888;
+    border: 1px solid #777;
     margin-right: 8px;
 }
 
+/* Ejemplo debajo de cada rango */
 .legend-example {
     margin-left: 28px;
-    margin-top: 3px;
-    margin-bottom: 12px;
+    margin-top: 1px;
+    margin-bottom: 8px;
     font-size: 12px;
-    font-style: italic;
     color: #555;
+    font-style: italic;
 }
 
-
+/* Nota final OMS / escala subjetiva */
+.legend-footnote {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #555;
+    font-style: italic;
+}
 
 /* ========================================================= */
-/* FILTROS */
+/* FILTROS Y RESUMEN — CAJAS AZULES CON INTERIOR BLANCO */
 /* ========================================================= */
 
 .panel-box {
-    background: #2c3791;
-    border-radius: 6px;
-    padding: 12px;
-    color: white;
-    margin-bottom: 22px;
     border: 1px solid #2c3791;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-top: 22px;
+    margin-bottom: 22px;
+    background: #2c3791;          /* azul oscuro exterior */
+    color: white;
 }
 
-.panel-box h3 {
+#filters-panel h3,
+#summary-panel h3 {
     margin: 0 0 8px 0;
     font-size: 15px;
     font-weight: bold;
 }
 
+/* Caja interna blanca para filtros y resumen */
 .panel-inner {
-    background: white;
+    background: #ffffff;
     color: #111;
-    padding: 12px;
     border-radius: 6px;
-    border: 1px solid #ddd;
+    padding: 10px 12px;
+    border: 1px solid #dddddd;
+    margin-top: 6px;
 }
 
-/* Secciones */
+/* ========================================================= */
+/* FILTROS */
+/* ========================================================= */
+
 .filter-section {
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     padding-bottom: 10px;
     border-bottom: 1px dashed #ccc;
 }
 
+.filter-section:last-child {
+    margin-bottom: 10px;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
 .filter-section h4 {
     font-size: 14px;
-    margin: 5px 0 8px 0;
+    margin: 6px 0 8px 0;
+    font-weight: bold;
 }
 
-/* Inputs */
+/* Inputs de filtros */
 #filters-panel input {
     width: 100%;
-    margin-top: 3px;
     padding: 6px;
-    border-radius: 4px;
-    border: 1px solid #bbb;
+    margin-top: 3px;
     font-size: 13px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
 }
 
-/* Checkboxes alineados PERFECTO */
+/* Checkboxes de fuentes con texto alineado y poco espacio entre líneas */
 #filters-panel label {
+    font-size: 13px;
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-top: 6px;
-    font-size: 13px;
+    margin-top: 4px;      /* un poco menos para no quedar tan separado */
 }
 
-/* Botones filtros */
+/* Tamaño checkbox fuentes (coincide con header) */
+#filters-panel input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Botones de filtros */
 .filter-btn {
     width: 100%;
     padding: 9px;
-    background: #3a4acf;
+    margin-top: 6px;
+    background: #3a4acf;  /* azul claro */
     color: white;
     border: none;
     border-radius: 4px;
-    font-size: 14px;
-    margin-top: 6px;
+    cursor: pointer;
+    font-size: 13.5px;
 }
 
-.filter-btn:hover {
-    background: #323fab;
+.filter-btn:hover:not(.reset) {
+    background: #323fab;  /* azul medio */
 }
 
 .filter-btn.reset {
     background: #777;
 }
 
-
-
 /* ========================================================= */
 /* RESUMEN DE FILTRADOS */
 /* ========================================================= */
 
 #summary-list {
-    font-size: 13px;
     padding-left: 18px;
-}
-
-#summary-list li {
-    margin-bottom: 10px; /* más espaciado */
-    line-height: 1.45;
-}
-
-
-
-/* ========================================================= */
-/* PANELES DERECHA */
-/* ========================================================= */
-
-#info-panel,
-#form-panel,
-#download-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    height: calc(100vh - var(--header-height));
-    background: white;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-/* ANCHOS DIFERENCIADOS COMO ANTES */
-#info-panel { width: 22%; max-width: 300px; }
-#download-panel { width: 28%; max-width: 330px; }
-#form-panel { width: 32%; max-width: 380px; }
-
-/* HEADER panel derecho */
-.info-header,
-.download-panel-header,
-.form-panel-header {
-    background: #323fab;
-    color: white;
-    padding: 10px 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #2c3791;
-}
-
-.info-header h3,
-.download-panel-header h3,
-.form-panel-header h3 {
     margin: 0;
-    font-size: 15px;
+    font-size: 13px;
+    color: #111;
 }
 
-/* Cerrar */
-.info-header button,
-.download-panel-header button,
-.form-panel-header button {
-    background: transparent;
-    border: none;
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
+/* Separación entre ítems del resumen (suave, no exagerado) */
+#summary-list li {
+    margin-bottom: 8px;
+    line-height: 1.42;
 }
 
-/* Contenido */
-#info-content,
-#download-content,
-#kobo-frame {
-    padding: 14px;
-    overflow-y: auto;
+/* Ajuste extra de padding dentro del panel de resumen */
+#summary-panel .panel-inner {
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
-
-
-
-/* ========================================================= */
-/* DESCARGAR / EXPORTAR */
-/* ========================================================= */
-
-.download-info-box {
-    background: #fafafa;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    margin-bottom: 14px;
-}
-
-.download-action {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 12px;
-    background: #3a4acf;
-    border-radius: 6px;
-    border: none;
-    color: white;
-    font-size: 14px;
-}
-
-.download-action:hover {
-    background: #323fab;
-}
-
 
 /* ========================================================= */
 /* MAPA */
@@ -372,23 +358,250 @@ body {
     flex: 1;
     height: 100%;
     min-width: 0;
+    z-index: 1;
 }
 
+/* ========================================================= */
+/* PANELES LATERALES DERECHA (INFO / FORM / DESCARGA) */
+/* ========================================================= */
+
+#info-panel,
+#form-panel,
+#download-panel {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    height: calc(100vh - var(--header-height));
+    background-color: #ffffff !important;
+    border-left: 1px solid #ccc;
+    display: none;             /* se muestran con .open */
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1100;
+}
+
+/* Anchos diferenciados como en la versión funcional original */
+#info-panel {
+    width: 22%;
+    max-width: 300px;
+    z-index: 1300 !important;
+}
+
+#download-panel {
+    width: 28%;
+    max-width: 330px;
+    z-index: 1200 !important;
+}
+
+#form-panel {
+    width: 32%;
+    max-width: 380px;
+    z-index: 1100 !important;
+}
+
+/* Mostrar panel cuando tiene la clase .open */
+#info-panel.open,
+#form-panel.open,
+#download-panel.open {
+    display: flex;
+}
+
+/* Encabezados de los paneles derecho */
+.info-header,
+.form-panel-header,
+.download-panel-header {
+    padding: 10px 12px;
+    background: #323fab;      /* azul medio */
+    color: white;
+    border-bottom: 1px solid #2c3791;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.info-header h3,
+.form-panel-header h3,
+.download-panel-header h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+/* Botones de cierre dentro de los encabezados */
+.info-header button,
+.form-panel-header button,
+.download-panel-header button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.info-header button:hover,
+.form-panel-header button:hover,
+.download-panel-header button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+/* Contenidos scrolleables */
+#info-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 16px;
+    padding-top: 18px;   /* separación extra del borde superior */
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+#download-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 12px;
+    font-size: 14px;
+}
+
+#kobo-frame {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
 
 /* ========================================================= */
-/* MÓVIL */
+/* PANEL DE DESCARGA (BOTONES AZUL CLARO) */
+/* ========================================================= */
+
+#download-panel.open {
+    display: flex;
+}
+
+/* Caja de información previa a la descarga */
+.download-info-box {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.35;
+}
+
+/* Botones de acción dentro de descarga */
+.download-action {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    background: #3a4acf;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.download-action:hover {
+    background: #323fab;
+}
+
+/* ========================================================= */
+/* HEXBIN LABEL */
+/* ========================================================= */
+
+.hexbin-label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #000;
+    text-shadow: 0 0 3px white;
+    pointer-events: none;
+}
+
+/* ========================================================= */
+/* PC (ajuste de ancho fijo de controles) */
+/* ========================================================= */
+
+@media (min-width: 601px) {
+    .control-group {
+        width: 160px;
+        flex: none;
+    }
+}
+
+/* ========================================================= */
+/* CELULAR */
 /* ========================================================= */
 
 @media (max-width: 600px) {
+
+    .top-bar {
+        flex-direction: column;
+        height: auto;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .header-title-block {
+        max-width: 100%;
+    }
+
+    #content-row {
+        flex-direction: column;
+    }
+
+    #map {
+        order: 1;
+        width: 100%;
+        height: 55vh;
+    }
+
     #legend-panel {
-        width: 100%!important;
+        order: 2;
+        width: 100% !important;
+        border-right: none;
+        border-top: 1px solid #ccc;
         max-height: 40vh;
     }
 
+    /* Paneles derechos ocupan ancho completo en móvil */
     #info-panel,
-    #download-panel,
-    #form-panel {
-        width: 100%!important;
-        max-width: none!important;
+    #form-panel,
+    #download-panel {
+        width: 100% !important;
+        max-width: none !important;
+        left: 0;
+        right: 0;
+        height: calc(100vh - var(--header-height));
+        overflow-y: auto;
     }
+}
+
+/* ========================================================= */
+/* MODO OSCURO (forzado a claro en la página) */
+/* ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+    body,
+    #legend-panel,
+    .legend,
+    .top-bar,
+    #info-panel,
+    #form-panel,
+    #download-panel,
+    .panel-box {
+        background-color: #ffffff !important;
+        color: #111 !important;
+    }
+
+    .legend-color {
+        border-color: #444 !important;
+    }
+}
+
+/* Transición suave en botones */
+button,
+.filter-btn,
+.download-action {
+    transition: background-color 0.18s ease;
 }
