@@ -698,8 +698,8 @@ input[type="checkbox"]:checked {
 
     /* Panel de información → mitad de pantalla */
     #info-panel {
-        width: 50% !important;
-        max-width: 50% !important;
+        width: 40% !important;
+        max-width: 40% !important;
         left: auto !important;
         right: 0 !important;
         z-index: 1200 !important;  /* debajo del panel de descarga */
@@ -722,3 +722,4 @@ input[type="checkbox"]:checked {
         z-index: 1300 !important;  /* arriba de todo */
     }
 }
+
