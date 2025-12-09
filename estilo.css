@@ -702,6 +702,7 @@ input[type="checkbox"]:checked {
         max-width: 50% !important;
         left: auto !important;
         right: 0 !important;
+        z-index: 1200 !important;  /* debajo del panel de descarga */
     }
 
     /* Panel de registro (Kobo) → ancho completo */
@@ -709,6 +710,7 @@ input[type="checkbox"]:checked {
         width: 100% !important;
         max-width: 100% !important;
         left: 0 !important;
+        z-index: 1100 !important;  /* el más atrás */
     }
 
     /* Panel de descarga → vuelve a su tamaño reducido (~30%) */
@@ -717,5 +719,6 @@ input[type="checkbox"]:checked {
         max-width: 30% !important;
         right: 0 !important;
         left: auto !important;
+        z-index: 1300 !important;  /* arriba de todo */
     }
 }
