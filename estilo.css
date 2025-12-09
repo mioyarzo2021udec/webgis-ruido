@@ -556,28 +556,25 @@ input[type="checkbox"]:checked {
 }
 
 /* ========================================================= */
-/* CORRECCIONES FINALES — PC + MÓVIL                         */
+/*   CORRECCIONES FINALES — PC                               */
 /* ========================================================= */
-
-/* ---------------- PC ---------------- */
 
 @media (min-width: 601px) {
 
-    /* Alinear mejor el trio Hexbin / AVG / Base map */
+    /* Mover el trío Hexbin / AVG / Mapa base a la derecha */
     .control-row {
         justify-content: flex-start !important;
         gap: 18px !important;
-        padding-left: 50px !important;   /* ← movimiento hacia la derecha */
+        padding-left: 55px !important; /* Más movimiento hacia la derecha */
     }
 
-    /* Texto ancho justificado */
+    /* Texto descr. más ancho */
     .header-subtext {
-        max-width: 420px !important;
-        margin-left: 0 !important;
+        max-width: 440px !important;
         text-align: justify !important;
     }
 
-    /* Evitar empuje innecesario en selects */
+    /* Selects alineados */
     #colorMode,
     #basemapSelect {
         margin-left: 0 !important;
@@ -585,97 +582,123 @@ input[type="checkbox"]:checked {
 }
 
 /* ========================================================= */
-/*                     AJUSTES PARA MÓVIL                    */
+/*   CORRECCIONES FINALES — MÓVIL                            */
 /* ========================================================= */
 
 @media (max-width: 600px) {
 
-    html, body { overflow-x: hidden !important; }
+    html, body {
+        overflow-x: hidden !important;
+        width: 100%;
+    }
 
-    /* ---- HEADER: 1 SOLA COLUMNA ---- */
+    /* ---------- HEADER ---------- */
     .top-bar {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
         width: 100% !important;
-        padding: 12px 6px !important;
-        gap: 10px !important;
+        padding: 10px 6px !important;
         text-align: center !important;
     }
 
-    /* Título y texto centrados */
     .header-title-block {
-        max-width: 92% !important;
+        max-width: 90% !important;
         text-align: center !important;
     }
 
     .header-subtext {
         font-size: 11px !important;
-        max-width: 92% !important;
+        max-width: 90% !important;
         margin: 0 auto !important;
         text-align: justify !important;
     }
 
-    /* ---- CONTROLES: fila horizontal ---- */
+    /* ---------- TRÍO DE CONTROLES ---------- */
     .control-row {
-        width: 95% !important;
+        width: 94% !important;
         display: flex !important;
+        flex-direction: row !important;
         justify-content: space-between !important;
         align-items: center !important;
         gap: 6px !important;
     }
 
-    .control-group { min-width: 0 !important; }
+    .control-group {
+        min-width: 0 !important;
+        flex-shrink: 1 !important;
+    }
 
-    /* Hexbin ajustado */
+    /* Hexbin */
     .control-group:nth-child(1) {
         flex: 0.45 !important;
-        margin-left: 6px !important; /* distancia ideal */
+        margin-left: 8px !important;  /* Ajustado a tu 0.75 cm */
         text-align: center !important;
     }
 
     /* Selects */
     .control-group select {
         max-width: 130px !important;
+        width: 100% !important;
         font-size: 12px !important;
     }
 
-    /* Centrar etiqueta "Mapa base" */
+    /* Centrar título Mapa Base */
     .control-group:nth-child(3) label {
-        width: 100% !important;
-        text-align: center !important;
-        display: block !important;
+        width: 100%;
+        text-align: center;
+        display: block;
     }
 
-    /* ---- BOTONES UNO AL LADO DEL OTRO ---- */
+    /* ---------- BOTONES AZULES ---------- */
+    .header-buttons {
+        width: 94% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        gap: 4px !important;
+        margin-top: 4px !important;
+    }
+
     #open-download-btn,
     #open-form-btn {
-        width: 46% !important;
+        flex: 1 1 auto !important;
+        width: 48% !important;
         padding: 7px 4px !important;
         font-size: 12px !important;
     }
 
-    #open-download-btn { margin-right: 2%; }
-    #open-form-btn     { margin-left: 2%; }
-
-    /* ---- MAPA SOLO DEBAJO DEL HEADER ---- */
+    /* ---------- MAPA ---------- */
     #content-row {
         flex-direction: column !important;
     }
 
     #map {
         width: 100% !important;
-        height: calc(100vh - 300px) !important;
-        min-height: 320px !important;
         display: block !important;
+        height: calc(100vh - 310px) !important; /* altura estable */
+        min-height: 300px !important;
+        margin-top: 6px !important;
         order: 1;
     }
 
-    /* ---- PANEL FIJO SIEMPRE DEBAJO DEL MAPA ---- */
+    /* ---------- PANEL FIJO BAJO EL MAPA ---------- */
     #legend-panel {
-        width: 100% !important;
         order: 2;
+        width: 94% !important;
+        margin: 0 auto !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+        max-height: calc(100vh - 350px) !important;
+        overflow-y: auto !important;
+    }
+
+    .panel-box,
+    .panel-inner {
+        width: 100% !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
     }
 }
-
