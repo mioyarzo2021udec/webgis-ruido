@@ -42,7 +42,7 @@ body {
     gap: 12px;
     position: relative;
     z-index: 1000;
-    min-height: var(--header-height);
+    height: var(--header-height); /* <- antes min-height: var(--header-height) */
     color: white;
 }
 
@@ -83,10 +83,10 @@ body {
     min-width: 130px;
 }
 
-/* Mover selects ligeramente a la derecha */
+/* Mover selects ligeramente a la derecha (solo PC, se corrige en media query) */
 #colorMode,
 #basemapSelect {
-    margin-left: 6px;   /* movimiento suave */
+    margin-left: 6px;
 }
 
 .control-group label {
@@ -592,21 +592,26 @@ input[type="checkbox"]:checked {
         width: 100%;
     }
 
-    /* ---------- HEADER ---------- */
+    /* ---------- HEADER (FLEX CON WRAP) ---------- */
     .top-bar {
         display: flex !important;
-        flex-direction: column !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
         align-items: center !important;
-        justify-content: flex-start !important;
+        justify-content: center !important;
         gap: 8px !important;
         width: 100% !important;
         padding: 10px 6px !important;
         text-align: center !important;
+        height: auto !important;                 /* evita “inflado” raro */
+        min-height: var(--header-height) !important;
     }
 
     .header-title-block {
+        flex: 1 0 100% !important;
         max-width: 90% !important;
         text-align: center !important;
+        order: 1;
     }
 
     .header-subtext {
@@ -618,12 +623,14 @@ input[type="checkbox"]:checked {
 
     /* ---------- CONTROLES ---------- */
     .control-row {
+        flex: 1 0 100% !important;
         width: 94% !important;
         display: flex !important;
         flex-direction: row !important;
         justify-content: space-between !important;
         align-items: center !important;
         gap: 6px !important;
+        order: 2;
     }
 
     .control-group {
@@ -631,15 +638,20 @@ input[type="checkbox"]:checked {
         flex-shrink: 1 !important;
     }
 
-    /* Hexbin — 0.6 cm desde borde izquierdo */
+    /* Hexbin — ~0.6 cm desde borde izquierdo (≈20 px) */
     .control-group:nth-child(1) {
-        margin-left: 23px !important;
+        margin-left: 20px !important;
         text-align: center !important;
     }
 
-    /* Mapa base — 1.25–1.6 cm desde borde derecho */
+    /* Visualización y Mapa base 2 mm más hacia la derecha (~6px) */
+    .control-group:nth-child(2) {
+        margin-right: 6px !important;
+    }
+
+    /* Mapa base — un poco más separado del borde derecho */
     .control-group:nth-child(3) {
-        margin-right: 28px !important;
+        margin-right: 34px !important;   /* antes 28px */
         text-align: center !important;
     }
 
@@ -655,22 +667,21 @@ input[type="checkbox"]:checked {
         display: block;
     }
 
-    /* ---------- BOTONES ---------- */
+    /* ---------- BOTONES EN UNA SOLA FILA ---------- */
     #open-download-btn,
     #open-form-btn {
-        width: 46% !important;
-        display: inline-block !important;
+        flex: 1 0 48% !important;      /* dos columnas */
+        max-width: 48% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
         font-size: 12px !important;
         padding: 7px 4px !important;
-        margin: 0 2% !important;
     }
 
-    /* Forzar que los botones estén siempre en la MISMA FILA */
-    .top-bar > #open-download-btn,
-    .top-bar > #open-form-btn {
-        margin: 0 2% !important;
-        display: inline-block !important;
-    }
+    #open-download-btn { order: 3; margin-right: 2% !important; }
+    #open-form-btn     { order: 4; margin-left: 2% !important; }
 
     /* ---------- MAPA ---------- */
     #content-row {
@@ -683,12 +694,12 @@ input[type="checkbox"]:checked {
         height: calc(100vh - 310px) !important;
         min-height: 300px !important;
         margin-top: 6px !important;
-        order: 1;
+        order: 5;
     }
 
     /* ---------- PANEL FIJO ---------- */
     #legend-panel {
-        order: 2;
+        order: 6;
         width: 94% !important;
         margin: 0 auto !important;
         padding: 10px !important;
