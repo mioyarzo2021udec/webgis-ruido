@@ -581,7 +581,7 @@ body {
 /* MODO OSCURO (forzado a claro en la página) */
 /* ========================================================= */
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) and (0) {
     body,
     #legend-panel,
     .legend,
@@ -604,4 +604,16 @@ button,
 .filter-btn,
 .download-action {
     transition: background-color 0.18s ease;
+}
+
+.panel-box {
+    background: #2c3791 !important;
+    border-color: #2c3791 !important;
+    color: white !important;
+}
+
+.top-bar {
+    background-color: #582699 !important;
+    border-bottom: 1px solid #3f1475 !important;
+    color: white !important;
 }
