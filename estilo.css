@@ -655,7 +655,7 @@ button,
 
 /* 1. Color del encabezado */
 .top-bar {
-    background-color: #3f1378 !important;
+    background-color: #310d5e !important;
     border-bottom: 1px solid #2c0f5c !important;
     color: white !important;
 }
@@ -679,4 +679,5 @@ input[type="checkbox"]:checked {
 .header-subtext {
     max-width: 13cm;   /* antes ~14cm */
 }
+
 
