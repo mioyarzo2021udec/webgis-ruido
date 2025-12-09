@@ -687,118 +687,132 @@ input[type="checkbox"]:checked {
     max-width: 13cm;   /* antes ~14cm */
 }
 
-/* ========================================================= */
-/* OPTIMIZACIÓN MÓVIL FINAL */
-/* ========================================================= */
 @media (max-width: 600px) {
 
     /* evitar scroll lateral */
     html, body {
+        width: 100%;
         overflow-x: hidden !important;
+        position: relative;
     }
 
-    /* centrar header completo */
+    /* HEADER — centrado y compacto */
     .top-bar {
-        text-align: center;
+        flex-direction: column;
         align-items: center !important;
-        justify-content: center !important;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 8px;
+        text-align: center;
+        width: 100%;
     }
 
     .header-title-block {
-        width: 100%;
+        max-width: 100%;
         text-align: center;
         align-items: center;
     }
 
     .header-subtext {
-        text-align: justify;
-        width: 90%;
-    }
-
-    /* ==============================
-       CONTROLES DEL HEADER — REORDENADOS
-       ============================== */
-
-    /* fila completa centrada */
-    .control-row {
-        width: 95%;
+        width: 92%;
         margin-left: auto;
         margin-right: auto;
-        display: flex;
+        text-align: justify;
+    }
+
+    /* ========================================================= */
+    /* CONTROLES: HEXBIN + VISUAL + MAPA BASE EN UNA SOLA FILA */
+    /* ========================================================= */
+
+    .control-row {
+        width: 95%;
         gap: 10px;
+        display: flex;
         justify-content: space-between;
+        margin-top: 4px;
     }
 
-    /* distribución propuesta: hexbin = 1cm aprox */
-    .control-group:nth-child(1) { 
-        flex: 0.8;              /* MÁS ancho para que no quede pegado */
-        margin-left: 5px;       /* separación del borde */
+    /* HEXBIN — debe tener 1cm aprox */
+    .control-group:nth-child(1) {
+        flex: 0.9;
+        margin-left: 6px;
     }
 
-    /* visualización temática (~2.5cm) */
-    .control-group:nth-child(2) { 
-        flex: 1.4;
+    /* VISUALIZACIÓN — 2.5 cm aprox */
+    .control-group:nth-child(2) {
+        flex: 1.6;
     }
 
-    /* mapa base (~2cm) */
-    .control-group:nth-child(3) { 
-        flex: 1.1;
-        margin-right: 5px;      /* evitar que pegue al borde derecho */
+    /* MAPA BASE — 2 cm aprox */
+    .control-group:nth-child(3) {
+        flex: 1.3;
+        margin-right: 6px;
     }
 
-    /* selects más compactos */
     .control-group select {
         width: 100%;
         padding: 4px;
         font-size: 13px;
+        text-align: center;
     }
 
-    /* ==============================
-       BOTONES DEL HEADER EN FILA
-       ============================== */
+    /* ========================================================= */
+    /* BOTONES: DESCARGA + REPORTAR AL LADO */
+    /* ========================================================= */
 
-    /* forzar que los ÚLTIMOS DOS botones queden en fila */
-    .top-bar button {
-        width: auto;
+    #open-download-btn,
+    #open-form-btn {
+        width: 48% !important;
         display: inline-block !important;
+        margin-top: 10px !important;
+        padding: 8px !important;
+        font-size: 13.5px !important;
     }
 
-    .top-bar button:nth-last-child(2),
-    .top-bar button:last-child {
-        width: 47%;
-        margin-top: 8px;
+    /* separación exacta entre ambos */
+    #open-download-btn { margin-right: 2%; }
+
+    /* notas debajo de cada botón más compactas */
+    .btn-note {
+        font-size: 11px !important;
     }
 
-    /* agrupar fila de botones */
-    .top-bar button:nth-last-child(2) {
-        margin-right: 2%;
-    }
-
-    /* ==============================
-       MAPA VISIBLE
-       ============================== */
+    /* ========================================================= */
+    /* MAPA VISIBLE Y CORRECTO EN MÓVIL */
+    /* ========================================================= */
 
     #map {
         order: 1 !important;
+        display: block !important;
         width: 100% !important;
         height: 60vh !important;
-        display: block !important;
+        min-height: 350px !important;
         position: relative !important;
+        z-index: 1 !important;
     }
 
-    /* ==============================
-       PANEL IZQUIERDO AJUSTADO
-       ============================== */
+    /* ========================================================= */
+    /* PANEL IZQUIERDO AJUSTADO */
+    /* ========================================================= */
 
     #legend-panel {
+        order: 2;
         width: 100% !important;
+        max-height: none !important;
         padding: 10px !important;
         box-sizing: border-box;
-        max-height: none;
     }
 
-    .panel-box, .panel-inner {
+    .panel-box,
+    .panel-inner {
         width: 100% !important;
         box-sizing: border-box !important;
+    }
+
+    /* evitar desbordes */
+    .legend,
+    .panel-box {
+        margin-left: 0;
+        margin-right: 0;
     }
 }
