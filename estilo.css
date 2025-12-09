@@ -1,10 +1,10 @@
 /* ========================================================= */
-/* VARIABLES GLOBALES */
+/* VARIABLES GLOBALES — control de altura del header */
 /* ========================================================= */
 
 :root {
-    --header-height: 90px;
-    color-scheme: light;
+    --header-height: 72px; /* se sobreescribe dinámicamente por JS */
+    color-scheme: light; /* fuerza modo claro consistente */
 }
 
 /* ========================================================= */
@@ -30,51 +30,47 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 6px 14px;
-    background-color: #8c75ff !important;
-    border-bottom: 1px solid #5f48db;
+    background-color: #582699 !important;
+    border-bottom: 1px solid #3f1475;
     gap: 10px;
-    color: white !important;
     position: relative;
     z-index: 1000;
     height: var(--header-height);
+    color: white !important;
 }
 
 .top-bar h2 {
     margin: 0;
     font-size: 20px;
-    font-weight: bold;
+    flex-shrink: 0;
     color: white !important;
 }
 
-/* Subtítulo bajo el título */
 .header-subtext {
     margin: 0;
     margin-top: 2px;
-    font-size: 11px;
-    color: #f5f5f5;
+    font-size: 12px;
+    line-height: 1.25;
+    max-width: 60%;
+    color: #e3e3e3;
 }
-
-/* --------------------------------------------------------- */
-/* CONTROLES DEL HEADER */
-/* --------------------------------------------------------- */
 
 .control-row {
     display: flex;
-    gap: 16px;
-    align-items: center;
+    gap: 10px;
+    align-items: flex-end;
     flex-grow: 1;
     justify-content: center;
 }
 
-/* Cada control */
 .control-group {
     display: flex;
     flex-direction: column;
-    color: white !important;
 }
 
 .control-group label {
     font-size: 12px;
+    font-weight: bold;
     margin-bottom: 1px;
     color: white !important;
 }
@@ -86,46 +82,22 @@ body {
     border-radius: 4px;
 }
 
-/* Checkbox HEXBIN */
-#hexbinToggle {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-}
-
-.control-group.hexbin-group label {
-    font-size: 13px;
-    font-weight: bold;
-}
-
-/* --------------------------------------------------------- */
-/* BOTONES DEL HEADER */
-/* --------------------------------------------------------- */
-
 .top-bar button {
-    padding: 8px 14px;
-    font-size: 13px;
+    padding: 7px 14px;
+    font-size: 14.5px;
     border: none;
-    background-color: #288efa;
+    background-color: #2c3791;
     color: white;
     border-radius: 6px;
     cursor: pointer;
-    text-align: center;
-    line-height: 1.2;
-}
-
-.top-bar button span {
-    display: block;
-    font-size: 10px;
-    opacity: 0.9;
 }
 
 .top-bar button:hover {
-    background-color: #1c6fd1;
+    background-color: #1d245f;
 }
 
 /* ========================================================= */
-/* LAYOUT */
+/* LAYOUT PRINCIPAL */
 /* ========================================================= */
 
 #content-row {
@@ -134,61 +106,251 @@ body {
     min-height: 0;
 }
 
-/* ========================================================= */
-/* PANEL LATERAL */
-/* ========================================================= */
+/* Panel lateral (PC) */
 
 #legend-panel {
     width: 260px;
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #1d245f;
     padding: 10px 12px;
-    background: #ffffff !important;
+    background: #2c3791 !important;
     overflow-y: auto;
+    color: white !important;
 }
 
 /* ========================================================= */
-/* LEYENDA / PANELES */
+/* LEYENDA */
 /* ========================================================= */
 
-.legend,
-.panel-box {
-    background: #3a6abd !important;
+.legend-title {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.legend {
+    background: #2c3791 !important;
     padding: 12px 14px;
     border-radius: 6px;
-    border: 1px solid #2f5697;
+    border: 1px solid #1d245f;
     color: white !important;
+    font-size: 12.6px !important;
     margin-bottom: 22px;
 }
 
-.legend h3,
-.legend h4,
-.panel-box h3,
-.panel-box h4 {
-    color: white !important;
-}
-
+.legend-example,
+.legend-footnote,
 .legend-row {
     color: white !important;
 }
 
-.legend-example {
-    color: #e8e8e8 !important;
+.legend-color {
+    width: 22px;
+    height: 12px;
+    border: 1px solid white !important;
+    margin-right: 6px;
 }
+
+
+/* Títulos de bloques */
+
+.legend h4 {
+    margin-top: 6px;
+    margin-bottom: 8px;
+    font-size: 13.6px !important;
+}
+
+/* Categoría (color + texto) */
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+
+/* Ejemplo */
+
+.legend-example {
+    margin-left: 28px;
+    margin-top: 1px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* Nota final */
 
 .legend-footnote {
-    color: #e8e8e8 !important;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    font-style: italic;
 }
 
-/* Mantener inputs normales */
+/* ========================================================= */
+/* PANELES LATERALES */
+/* ========================================================= */
+
+#info-panel {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    width: 22% !important;
+    max-width: 300px !important;
+    bottom: 0;
+    background-color: #ffffff !important;
+    border-left: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    z-index: 1100;
+}
+
+#form-panel {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    width: 32% !important;
+    max-width: 380px !important;
+    bottom: 0;
+    background-color: #ffffff !important;
+    border-left: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    z-index: 1100;
+}
+
+#download-panel {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    width: 28% !important;
+    max-width: 330px !important;
+    bottom: 0;
+    background-color: #ffffff !important;
+    border-left: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    z-index: 1100;
+}
+
+#form-panel.open,
+#info-panel.open {
+    display: flex;
+}
+
+.form-panel-header,
+.info-header {
+    padding: 8px;
+    background: #f0f0f0 !important;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#info-content {
+    padding: 12px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+
+#kobo-frame {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Orden de aparición de paneles */
+#info-panel { z-index: 1300 !important; }
+#download-panel { z-index: 1200 !important; }
+#form-panel { z-index: 1100 !important; }
+
+
+/* ========================================================= */
+/* FILTROS Y RESUMEN */
+/* ========================================================= */
+
+.panel-box {
+    border: 1px solid #1d245f;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: 22px;
+    background: #2c3791 !important;
+    color: white !important;
+}
+
+.panel-box h3,
+.panel-box h4,
+.legend h3,
+.legend h4 {
+    color: white !important;
+}
+
 #filters-panel input,
 #filters-panel select {
     background: white !important;
     color: black !important;
-    border: 1px solid #ccc;
 }
 
-.filter-section label {
-    color: white !important;
+
+#filters-panel h3,
+#summary-panel h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* FILTROS */
+
+.filter-section {
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.filter-section h4 {
+    font-size: 14px;
+    margin: 8px 0;
+    font-weight: bold;
+}
+
+#filters-panel label {
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+}
+
+#filters-panel input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 2px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#filters-panel input[type="checkbox"] {
+    width: auto;
+    margin-right: 6px;
+}
+
+.filter-btn {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.filter-btn.reset {
+    background: #777;
 }
 
 /* ========================================================= */
@@ -198,7 +360,12 @@ body {
 #summary-list {
     padding-left: 20px;
     margin: 0;
-    color: white !important;
+    font-size: 13px;
+}
+
+#summary-list li {
+    margin-bottom: 8px;
+    line-height: 1.38;
 }
 
 /* ========================================================= */
@@ -208,61 +375,19 @@ body {
 #map {
     flex: 1;
     height: 100%;
+    min-width: 0;
+    z-index: 1;
 }
 
 /* ========================================================= */
-/* PANEL DE DESCARGA */
+/* PC */
 /* ========================================================= */
 
-#download-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    width: 28%;
-    max-width: 330px;
-    bottom: 0;
-    background: #ffffff !important;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1200;
-}
-
-#download-panel.open {
-    display: flex;
-}
-
-.download-panel-header {
-    padding: 8px;
-    background: #8c75ff !important;
-    color: white !important;
-    border-bottom: 1px solid #5f48db;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.download-action {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    background: #288efa;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.download-info-box {
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 10px 12px;
-    margin-bottom: 14px;
-}
-
-.download-action:hover {
-    background: #1c6fd1;
+@media (min-width: 601px) {
+    .control-group {
+        width: 160px;
+        flex: none;
+    }
 }
 
 /* ========================================================= */
@@ -273,16 +398,116 @@ body {
     .top-bar {
         flex-direction: column;
         height: auto;
-        padding-bottom: 10px;
+        gap: 8px;
     }
 
-    .control-row {
+    #content-row {
         flex-direction: column;
-        gap: 6px;
+    }
+
+    #map {
+        order: 1;
+        width: 100%;
+        height: 55vh;
     }
 
     #legend-panel {
+        order: 2;
         width: 100%;
         border-right: none;
+        border-top: 1px solid #ccc;
+        max-height: 38vh;
     }
+
+    .legend {
+        font-size: 14px !important;
+        max-height: 30vh;
+        overflow-y: auto;
+    }
+
+    #form-panel,
+    #info-panel {
+        width: 100% !important;
+        max-width: none !important;
+        left: 0;
+        right: 0;
+    }
+}
+
+/* ========================================================= */
+/* MODO OSCURO (forzado a claro) */
+/* ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+    body,
+    #legend-panel,
+    .legend,
+    .top-bar,
+    #info-panel,
+    #form-panel,
+    .panel-box {
+        background-color: #ffffff !important;
+        color: #111 !important;
+    }
+
+    .legend-color {
+        border-color: #444 !important;
+    }
+}
+
+.hexbin-label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #000;
+    text-shadow: 0 0 3px white;
+    pointer-events: none;
+}
+
+/* PANEL DE DESCARGA */
+
+#download-panel.open {
+    display: flex;
+}
+
+.download-panel-header {
+    padding: 8px;
+    background: #582699 !important;
+    color: white !important;
+    border-bottom: 1px solid #3f1475;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#download-content {
+    padding: 12px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+
+.download-action {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #2c3791;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14.5px;
+}
+
+.download-action:hover {
+    background: #1d245f;
+}
+
+.download-info-box {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.35;
 }
