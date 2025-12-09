@@ -3,8 +3,8 @@
 /* ========================================================= */
 
 :root {
-    --header-height: 72px; /* se sobreescribe dinámicamente por JS */
-    color-scheme: light; /* fuerza modo claro consistente */
+    --header-height: 72px;
+    color-scheme: light;
 }
 
 /* ========================================================= */
@@ -32,7 +32,7 @@ body {
     padding: 6px 14px;
     background-color: #582699 !important;
     border-bottom: 1px solid #3f1475;
-    gap: 10px;
+    gap: 12px;
     position: relative;
     z-index: 1000;
     height: var(--header-height);
@@ -41,23 +41,22 @@ body {
 
 .top-bar h2 {
     margin: 0;
-    font-size: 20px;
-    flex-shrink: 0;
+    font-size: 21px;
     color: white !important;
 }
 
 .header-subtext {
     margin: 0;
-    margin-top: 2px;
-    font-size: 12px;
-    line-height: 1.25;
-    max-width: 60%;
+    margin-top: 3px;
+    font-size: 13px;
+    line-height: 1.3;
+    max-width: 480px; /* ≈10 cm */
     color: #e3e3e3;
 }
 
 .control-row {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: flex-end;
     flex-grow: 1;
     justify-content: center;
@@ -69,9 +68,9 @@ body {
 }
 
 .control-group label {
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: bold;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
     color: white !important;
 }
 
@@ -79,21 +78,28 @@ body {
     padding: 4px 6px;
     font-size: 13px;
     height: 28px;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 .top-bar button {
     padding: 7px 14px;
-    font-size: 14.5px;
+    font-size: 14.8px;
     border: none;
-    background-color: #2c3791;
+    background-color: #323fab;
     color: white;
     border-radius: 6px;
     cursor: pointer;
 }
 
 .top-bar button:hover {
-    background-color: #1d245f;
+    background-color: #242d7d;
+}
+
+/* Texto aclaratorio debajo del título */
+.top-bar .helper-italic {
+    color: #e3e3e3;
+    font-style: italic;
+    font-size: 12.4px;
 }
 
 /* ========================================================= */
@@ -106,15 +112,17 @@ body {
     min-height: 0;
 }
 
-/* Panel lateral (PC) */
+/* ========================================================= */
+/* PANEL IZQUIERDO (OSCURECIDO) */
+/* ========================================================= */
 
 #legend-panel {
     width: 260px;
     border-right: 1px solid #1d245f;
     padding: 10px 12px;
     background: #2c3791 !important;
-    overflow-y: auto;
     color: white !important;
+    overflow-y: auto;
 }
 
 /* ========================================================= */
@@ -124,8 +132,9 @@ body {
 .legend-title {
     margin-top: 0;
     margin-bottom: 12px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
+    color: white !important;
 }
 
 .legend {
@@ -134,13 +143,21 @@ body {
     border-radius: 6px;
     border: 1px solid #1d245f;
     color: white !important;
-    font-size: 12.6px !important;
+    font-size: 13px !important;
     margin-bottom: 22px;
 }
 
-.legend-example,
-.legend-footnote,
+.legend h4 {
+    margin-top: 6px;
+    margin-bottom: 8px;
+    font-size: 14px !important;
+    color: white !important;
+}
+
 .legend-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
     color: white !important;
 }
 
@@ -151,105 +168,55 @@ body {
     margin-right: 6px;
 }
 
-
-/* Títulos de bloques */
-
-.legend h4 {
-    margin-top: 6px;
-    margin-bottom: 8px;
-    font-size: 13.6px !important;
-}
-
-/* Categoría (color + texto) */
-
-.legend-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 3px;
-}
-
-
-/* Ejemplo */
-
-.legend-example {
-    margin-left: 28px;
-    margin-top: 1px;
-    margin-bottom: 10px;
-    font-size: 12px;
-    font-style: italic;
-}
-
-/* Nota final */
-
+.legend-example,
 .legend-footnote {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 12px;
+    color: #e3e3e3 !important;
     font-style: italic;
 }
 
 /* ========================================================= */
-/* PANELES LATERALES */
+/* PANEL INFO, FORM Y DESCARGA */
 /* ========================================================= */
 
-#info-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    width: 22% !important;
-    max-width: 300px !important;
-    bottom: 0;
-    background-color: #ffffff !important;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1100;
-}
-
-#form-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    width: 32% !important;
-    max-width: 380px !important;
-    bottom: 0;
-    background-color: #ffffff !important;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1100;
-}
-
+#info-panel,
+#form-panel,
 #download-panel {
     position: fixed;
     top: var(--header-height);
     right: 0;
-    width: 28% !important;
-    max-width: 330px !important;
-    bottom: 0;
     background-color: #ffffff !important;
     border-left: 1px solid #ccc;
     display: none;
     flex-direction: column;
-    z-index: 1100;
 }
 
+#info-panel { width: 22%; max-width: 300px; z-index: 1300; }
+#form-panel { width: 32%; max-width: 380px; z-index: 1100; }
+#download-panel { width: 28%; max-width: 330px; z-index: 1200; }
+
+#info-panel.open,
 #form-panel.open,
-#info-panel.open {
+#download-panel.open {
     display: flex;
 }
 
+/* CABECERA DE PANELES LATERALES */
 .form-panel-header,
-.info-header {
-    padding: 8px;
-    background: #f0f0f0 !important;
-    border-bottom: 1px solid #ccc;
+.info-header,
+.download-panel-header {
+    padding: 10px;
+    background: #582699 !important;
+    color: white !important;
+    border-bottom: 1px solid #3f1475;
+    font-size: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-#info-content {
+/* CONTENIDOS */
+#info-content,
+#download-content {
     padding: 12px;
     overflow-y: auto;
     font-size: 14px;
@@ -262,14 +229,37 @@ body {
     border: none;
 }
 
-/* Orden de aparición de paneles */
-#info-panel { z-index: 1300 !important; }
-#download-panel { z-index: 1200 !important; }
-#form-panel { z-index: 1100 !important; }
+/* BOTONES INTERNOS (DESCARGA, ÁREA, ETC.) */
+.download-action {
+    width: 100%;
+    padding: 9px;
+    margin-bottom: 10px;
+    background: #323fab;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14.8px;
+}
 
+.download-action:hover {
+    background: #242d7d;
+}
+
+/* CUADRO INFORMATIVO */
+.download-info-box {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.35;
+}
 
 /* ========================================================= */
-/* FILTROS Y RESUMEN */
+/* FILTROS + RESUMEN */
 /* ========================================================= */
 
 .panel-box {
@@ -282,28 +272,9 @@ body {
 }
 
 .panel-box h3,
-.panel-box h4,
-.legend h3,
-.legend h4 {
+.panel-box h4 {
     color: white !important;
 }
-
-#filters-panel input,
-#filters-panel select {
-    background: white !important;
-    color: black !important;
-}
-
-
-#filters-panel h3,
-#summary-panel h3 {
-    margin-top: 0;
-    margin-bottom: 8px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-/* FILTROS */
 
 .filter-section {
     margin-bottom: 16px;
@@ -312,60 +283,52 @@ body {
 }
 
 .filter-section h4 {
-    font-size: 14px;
     margin: 8px 0;
+    font-size: 14px;
     font-weight: bold;
+    color: white !important;
 }
 
-#filters-panel label {
-    font-size: 12px;
-    display: block;
-    margin-top: 4px;
+#filters-panel label,
+#summary-panel label {
+    color: white !important;
 }
 
-#filters-panel input {
+#filters-panel input,
+#filters-panel select {
     width: 100%;
     padding: 5px;
-    margin-top: 2px;
     font-size: 13px;
+    background: white !important;
+    color: black !important;
     border: 1px solid #ccc;
     border-radius: 4px;
-}
-
-#filters-panel input[type="checkbox"] {
-    width: auto;
-    margin-right: 6px;
 }
 
 .filter-btn {
     width: 100%;
     padding: 8px;
     margin-top: 6px;
-    background: #1976d2;
+    background: #323fab;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
+}
+
+.filter-btn:hover {
+    background: #242d7d;
 }
 
 .filter-btn.reset {
     background: #777;
 }
 
-/* ========================================================= */
-/* RESUMEN */
-/* ========================================================= */
-
 #summary-list {
     padding-left: 20px;
     margin: 0;
     font-size: 13px;
-}
-
-#summary-list li {
-    margin-bottom: 8px;
-    line-height: 1.38;
 }
 
 /* ========================================================= */
@@ -384,10 +347,7 @@ body {
 /* ========================================================= */
 
 @media (min-width: 601px) {
-    .control-group {
-        width: 160px;
-        flex: none;
-    }
+    .control-group { width: 160px; }
 }
 
 /* ========================================================= */
@@ -398,7 +358,7 @@ body {
     .top-bar {
         flex-direction: column;
         height: auto;
-        gap: 8px;
+        gap: 10px;
     }
 
     #content-row {
@@ -406,23 +366,14 @@ body {
     }
 
     #map {
-        order: 1;
-        width: 100%;
         height: 55vh;
     }
 
     #legend-panel {
-        order: 2;
         width: 100%;
         border-right: none;
-        border-top: 1px solid #ccc;
+        border-top: 1px solid #1d245f;
         max-height: 38vh;
-    }
-
-    .legend {
-        font-size: 14px !important;
-        max-height: 30vh;
-        overflow-y: auto;
     }
 
     #form-panel,
@@ -435,25 +386,8 @@ body {
 }
 
 /* ========================================================= */
-/* MODO OSCURO (forzado a claro) */
+/* HEXBIN LABEL */
 /* ========================================================= */
-
-@media (prefers-color-scheme: dark) {
-    body,
-    #legend-panel,
-    .legend,
-    .top-bar,
-    #info-panel,
-    #form-panel,
-    .panel-box {
-        background-color: #ffffff !important;
-        color: #111 !important;
-    }
-
-    .legend-color {
-        border-color: #444 !important;
-    }
-}
 
 .hexbin-label {
     font-size: 11px;
@@ -461,53 +395,4 @@ body {
     color: #000;
     text-shadow: 0 0 3px white;
     pointer-events: none;
-}
-
-/* PANEL DE DESCARGA */
-
-#download-panel.open {
-    display: flex;
-}
-
-.download-panel-header {
-    padding: 8px;
-    background: #582699 !important;
-    color: white !important;
-    border-bottom: 1px solid #3f1475;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#download-content {
-    padding: 12px;
-    overflow-y: auto;
-    font-size: 14px;
-}
-
-.download-action {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    background: #2c3791;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14.5px;
-}
-
-.download-action:hover {
-    background: #1d245f;
-}
-
-.download-info-box {
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 10px 12px;
-    margin-bottom: 14px;
-    font-size: 13px;
-    color: #444;
-    line-height: 1.35;
 }
