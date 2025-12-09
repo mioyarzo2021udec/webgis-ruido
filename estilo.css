@@ -616,7 +616,7 @@ input[type="checkbox"]:checked {
         text-align: justify !important;
     }
 
-    /* ---------- TRÍO DE CONTROLES ---------- */
+    /* ---------- CONTROLES ---------- */
     .control-row {
         width: 94% !important;
         display: flex !important;
@@ -631,43 +631,45 @@ input[type="checkbox"]:checked {
         flex-shrink: 1 !important;
     }
 
-    /* Hexbin */
+    /* Hexbin — 0.6 cm desde borde izquierdo */
     .control-group:nth-child(1) {
-        flex: 0.45 !important;
-        margin-left: 8px !important;  /* Ajustado a tu 0.75 cm */
+        margin-left: 23px !important;
         text-align: center !important;
     }
 
-    /* Selects */
+    /* Mapa base — 1.25–1.6 cm desde borde derecho */
+    .control-group:nth-child(3) {
+        margin-right: 28px !important;
+        text-align: center !important;
+    }
+
     .control-group select {
         max-width: 130px !important;
         width: 100% !important;
         font-size: 12px !important;
     }
 
-    /* Centrar título Mapa Base */
     .control-group:nth-child(3) label {
         width: 100%;
         text-align: center;
         display: block;
     }
 
-    /* ---------- BOTONES AZULES ---------- */
-    .header-buttons {
-        width: 94% !important;
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        gap: 4px !important;
-        margin-top: 4px !important;
-    }
-
+    /* ---------- BOTONES ---------- */
     #open-download-btn,
     #open-form-btn {
-        flex: 1 1 auto !important;
-        width: 48% !important;
-        padding: 7px 4px !important;
+        width: 46% !important;
+        display: inline-block !important;
         font-size: 12px !important;
+        padding: 7px 4px !important;
+        margin: 0 2% !important;
+    }
+
+    /* Forzar que los botones estén siempre en la MISMA FILA */
+    .top-bar > #open-download-btn,
+    .top-bar > #open-form-btn {
+        margin: 0 2% !important;
+        display: inline-block !important;
     }
 
     /* ---------- MAPA ---------- */
@@ -678,13 +680,13 @@ input[type="checkbox"]:checked {
     #map {
         width: 100% !important;
         display: block !important;
-        height: calc(100vh - 310px) !important; /* altura estable */
+        height: calc(100vh - 310px) !important;
         min-height: 300px !important;
         margin-top: 6px !important;
         order: 1;
     }
 
-    /* ---------- PANEL FIJO BAJO EL MAPA ---------- */
+    /* ---------- PANEL FIJO ---------- */
     #legend-panel {
         order: 2;
         width: 94% !important;
@@ -695,10 +697,17 @@ input[type="checkbox"]:checked {
         overflow-y: auto !important;
     }
 
-    .panel-box,
-    .panel-inner {
+    /* Cuadrados azules oscuros centrados */
+    #legend-panel .panel-box {
+        width: 94% !important;
+        margin: 10px auto !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Cuadrados blancos interiores sin desbordar */
+    #legend-panel .panel-inner {
         width: 100% !important;
-        padding-left: 10px !important;
-        padding-right: 10px !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
     }
 }
