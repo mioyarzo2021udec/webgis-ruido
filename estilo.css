@@ -3,8 +3,8 @@
 /* ========================================================= */
 
 :root {
-    --header-height: 72px; /* se sobreescribe dinámicamente por JS */
-    color-scheme: light; /* fuerza modo claro consistente */
+    --header-height: 72px;
+    color-scheme: light;
 }
 
 /* ========================================================= */
@@ -30,38 +30,35 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 6px 14px;
-    background-color: #582699 !important;   /* morado encabezado */
+    background-color: #582699 !important;
     border-bottom: 1px solid #3f1475;
     gap: 10px;
     position: relative;
     z-index: 1000;
-    height: var(--header-height);
+    min-height: var(--header-height);
     color: white !important;
 }
 
-/* Bloque de título + subtítulo (si lo usas) */
 .header-title-block {
     display: flex;
     flex-direction: column;
-    max-width: 34%;
+    max-width: 44%;
 }
 
 .top-bar h2 {
     margin: 0;
     font-size: 20px;
-    flex-shrink: 0;
     color: white !important;
 }
 
 .header-subtext {
-    margin: 2px 0 0 0;
+    margin-top: 2px;
     font-size: 12px;
     line-height: 1.25;
-    max-width: 100%;
     color: #e3e3e3;
 }
 
-/* Controles de hexbin / visualización / mapa base */
+/* Controles del header */
 
 .control-row {
     display: flex;
@@ -72,12 +69,14 @@ body {
 }
 
 .control-group {
+    min-width: 120px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
 .control-group label {
+    transform: translateY(2px);
     font-size: 12px;
     font-weight: bold;
     margin-bottom: 2px;
@@ -95,31 +94,27 @@ body {
     margin-top: 2px;
 }
 
-/* Botones principales del header */
+/* Botones principales */
 
 .top-bar button {
     padding: 6px 12px;
     font-size: 14px;
-    border: none;
-    background-color: #3a4acf;  /* azul claro */
+    background-color: #3a4acf;
     color: white;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
-    flex-shrink: 0;
 }
 
-/* Nota en paréntesis dentro de los botones */
 .btn-note {
     display: block;
-    font-size: 11px;
+    font-size: 10px;
     font-style: italic;
     color: #e3e3e3;
-    line-height: 1.1;
-    margin-top: 2px;
 }
 
 .top-bar button:hover {
-    background-color: #323fab;  /* azul medio */
+    background-color: #323fab;
 }
 
 /* ========================================================= */
@@ -132,32 +127,23 @@ body {
     min-height: 0;
 }
 
-/* Panel lateral (PC) */
+/* ========================================================= */
+/* PANEL IZQUIERDO — LEYENDA Y FILTROS */
+/* ========================================================= */
 
 #legend-panel {
     width: 260px;
     border-right: 1px solid #ccc;
     padding: 10px 12px;
-    background: #ffffff !important;   /* fondo general blanco */
+    background: #ffffff !important;
     overflow-y: auto;
     color: #111 !important;
 }
 
-/* ========================================================= */
-/* LEYENDA (CAJA AZUL OSCURA + INTERIOR BLANCO) */
-/* ========================================================= */
+/* Caja azul oscura */
 
-.legend-title {
-    margin-top: 0;
-    margin-bottom: 4px;
-    font-size: 15px;
-    font-weight: bold;
-    color: white;
-}
-
-/* Caja azul oscura exterior */
 .legend {
-    background: #2c3791 !important;        /* azul oscuro */
+    background: #2c3791 !important;
     padding: 10px 12px;
     border-radius: 6px;
     border: 1px solid #2c3791;
@@ -166,204 +152,55 @@ body {
     margin-bottom: 22px;
 }
 
-/* Caja interna blanca para el contenido de la leyenda */
+.legend-title {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
 #legend-content {
     margin-top: 6px;
     background: #ffffff;
-    color: #111 !important;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    border: 1px solid #dddddd;
     padding: 10px 12px;
+    color: #111;
 }
-
-/* Títulos de bloques dentro de la leyenda */
-
-#legend-content h4 {
-    margin-top: 6px;
-    margin-bottom: 8px;
-    font-size: 13.6px !important;
-}
-
-/* Categoría (color + texto) */
 
 .legend-row {
     display: flex;
     align-items: center;
     margin-bottom: 3px;
-    color: #111 !important;
 }
 
 .legend-color {
     width: 22px;
     height: 12px;
-    border: 1px solid #999 !important;
+    border: 1px solid #999;
     margin-right: 6px;
 }
 
-/* Ejemplo */
-
-.legend-example {
-    margin-left: 28px;
-    margin-top: 1px;
-    margin-bottom: 10px;
-    font-size: 12px;
-    color: #555;
-    font-style: italic;
-}
-
-/* Nota final */
-
-.legend-footnote {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 12px;
-    color: #555;
-    font-style: italic;
-}
-
 /* ========================================================= */
-/* PANELES LATERALES DERECHA (INFO / FORM / DESCARGA) */
+/* FILTROS Y RESUMEN */
 /* ========================================================= */
 
-#info-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    width: 22% !important;
-    max-width: 300px !important;
-    bottom: 0;
-    background-color: #ffffff !important;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1100;
-}
-
-#form-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    width: 32% !important;
-    max-width: 380px !important;
-    bottom: 0;
-    background-color: #ffffff !important;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1100;
-}
-
-#download-panel {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    width: 28% !important;
-    max-width: 330px !important;
-    bottom: 0;
-    background-color: #ffffff !important;
-    border-left: 1px solid #ccc;
-    display: none;
-    flex-direction: column;
-    z-index: 1100;
-}
-
-#form-panel.open,
-#info-panel.open {
-    display: flex;
-}
-
-/* Encabezados de estos paneles (mismo azul medio + letras blancas) */
-
-.form-panel-header,
-.info-header,
-.download-panel-header {
-    padding: 8px 10px;
-    background: #323fab !important;
-    color: white !important;
-    border-bottom: 1px solid #2c3791;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.form-panel-header h3,
-.info-header h3,
-.download-panel-header h3 {
-    margin: 0;
-    font-size: 15px;
-}
-
-/* Botones de cierre dentro de esos encabezados */
-
-.info-header button,
-.form-panel-header button,
-.download-panel-header button {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 2px 6px;
-}
-
-.info-header button:hover,
-.form-panel-header button:hover,
-.download-panel-header button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-}
-
-#info-content {
-    padding: 12px;
-    overflow-y: auto;
-    font-size: 14px;
-}
-
-#kobo-frame {
-    flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-/* Orden de aparición de paneles */
-#info-panel { z-index: 1300 !important; }
-#download-panel { z-index: 1200 !important; }
-#form-panel { z-index: 1100 !important; }
-
-/* ========================================================= */
-/* FILTROS Y RESUMEN — CAJAS AZULES CON INTERIOR BLANCO */
-/* ========================================================= */
-
-/* Caja azul oscura general */
 .panel-box {
     border: 1px solid #2c3791;
+    background: #2c3791 !important;
+    color: white;
     border-radius: 6px;
     padding: 10px 12px;
     margin-top: 22px;
-    background: #2c3791 !important;  /* azul oscuro */
-    color: white !important;
 }
 
-/* Títulos de Filtros y Resumen */
-#filters-panel h3,
-#summary-panel h3 {
-    margin-top: 0;
-    margin-bottom: 8px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-/* Caja interna blanca: envuelve el contenido real */
 .panel-inner {
     background: #ffffff;
-    color: #111 !important;
+    color: #111;
     border-radius: 4px;
     padding: 10px 12px;
-    border: 1px solid #dddddd;
+    border: 1px solid #ddd;
+    margin-top: 8px;
 }
-
-/* FILTROS */
 
 .filter-section {
     margin-bottom: 16px;
@@ -371,48 +208,14 @@ body {
     border-bottom: 1px dashed #ccc;
 }
 
-.filter-section h4 {
-    font-size: 14px;
-    margin: 8px 0;
-    font-weight: bold;
-}
-
-#filters-panel label {
-    font-size: 12px;
-    display: block;
-    margin-top: 4px;
-}
-
-#filters-panel input {
-    width: 100%;
-    padding: 5px;
-    margin-top: 2px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-#filters-panel input[type="checkbox"] {
-    width: auto;
-    margin-right: 6px;
-}
-
-.filter-buttons {
-    margin-top: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
 .filter-btn {
     width: 100%;
     padding: 8px;
-    background: #3a4acf;      /* azul claro */
+    background: #3a4acf;
     color: white;
-    border: none;
     border-radius: 4px;
+    border: none;
     cursor: pointer;
-    font-size: 13px;
 }
 
 .filter-btn.reset {
@@ -420,23 +223,58 @@ body {
 }
 
 .filter-btn:hover:not(.reset) {
-    background: #323fab;       /* azul medio */
+    background: #323fab;
 }
 
 /* ========================================================= */
-/* RESUMEN */
+/* PANEL DERECHO — UNIFICADO Y CORREGIDO */
 /* ========================================================= */
 
-#summary-list {
-    padding-left: 18px;
-    margin: 0;
-    font-size: 13px;
-    color: #111;
+#info-panel,
+#form-panel,
+#download-panel {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    width: 30%;
+    max-width: 380px;
+    height: calc(100vh - var(--header-height));
+    background: white;
+    border-left: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1100;
 }
 
-#summary-list li {
-    margin-bottom: 8px;
-    line-height: 1.38;
+/* Mostrar panel */
+#info-panel.open,
+#form-panel.open,
+#download-panel.open {
+    display: flex;
+}
+
+/* Header del panel */
+
+.info-header,
+.form-panel-header,
+.download-panel-header {
+    padding: 10px 12px;
+    background: #323fab;
+    border-bottom: 1px solid #2c3791;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+#info-content,
+#download-content,
+#kobo-frame {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 12px;
 }
 
 /* ========================================================= */
@@ -445,20 +283,8 @@ body {
 
 #map {
     flex: 1;
-    height: 100%;
     min-width: 0;
-    z-index: 1;
-}
-
-/* ========================================================= */
-/* PC */
-/* ========================================================= */
-
-@media (min-width: 601px) {
-    .control-group {
-        width: 160px;
-        flex: none;
-    }
+    height: 100%;
 }
 
 /* ========================================================= */
@@ -468,9 +294,8 @@ body {
 @media (max-width: 600px) {
     .top-bar {
         flex-direction: column;
-        height: auto;
-        gap: 8px;
         align-items: flex-start;
+        gap: 8px;
     }
 
     #content-row {
@@ -478,101 +303,33 @@ body {
     }
 
     #map {
-        order: 1;
-        width: 100%;
         height: 55vh;
     }
 
     #legend-panel {
-        order: 2;
         width: 100%;
         border-right: none;
         border-top: 1px solid #ccc;
         max-height: 38vh;
     }
 
-    .legend {
-        font-size: 14px !important;
-        max-height: none;
-        overflow-y: visible;
-    }
-
-    #form-panel,
     #info-panel,
+    #form-panel,
     #download-panel {
         width: 100% !important;
         max-width: none !important;
         left: 0;
         right: 0;
+        overflow-y: auto;
     }
 }
 
 /* ========================================================= */
-/* MODO OSCURO (forzado a claro pero respetando colores) */
+/* TRANSICIONES */
 /* ========================================================= */
 
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #ffffff !important;
-        color: #111 !important;
-    }
-
-    #legend-panel {
-        background-color: #ffffff !important;
-    }
-
-    .legend-color {
-        border-color: #444 !important;
-    }
-}
-
-.hexbin-label {
-    font-size: 11px;
-    font-weight: bold;
-    color: #000;
-    text-shadow: 0 0 3px white;
-    pointer-events: none;
-}
-
-/* ========================================================= */
-/* PANEL DE DESCARGA (BOTONES AZUL CLARO) */
-/* ========================================================= */
-
-#download-panel.open {
-    display: flex;
-}
-
-#download-content {
-    padding: 12px;
-    overflow-y: auto;
-    font-size: 14px;
-}
-
-/* Botones internos del panel de descarga */
-
+button,
+.filter-btn,
 .download-action {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    background: #3a4acf;       /* azul claro */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.download-action:hover {
-    background: #323fab;       /* azul medio */
-}
-
-.download-info-box {
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 10px 12px;
-    margin-bottom: 14px;
-    font-size: 13px;
-    color: #444;
-    line-height: 1.35;
+    transition: background-color 0.18s ease;
 }
