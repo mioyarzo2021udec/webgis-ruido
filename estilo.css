@@ -643,9 +643,28 @@ button,
     color: white !important;
 }
 
+/* ============================
+   AJUSTES FINALES SOLICITADOS
+   ============================ */
+
+/* 1. Color del encabezado */
 .top-bar {
-    background-color: #582699 !important;
-    border-bottom: 1px solid #3f1475 !important;
+    background-color: #3f1378 !important;
+    border-bottom: 1px solid #2c0f5c !important;
     color: white !important;
 }
 
+/* 2. Checkbox Hexbin con color de los botones */
+#hexbinToggle:checked,
+input[type="checkbox"]:checked {
+    accent-color: #4959de !important;
+}
+
+/* 3. Ajustar distancias entre controles del header */
+.control-group {
+    margin-right: -4px; /* acerca los selects hacia el hexbin */
+}
+
+.control-row {
+    gap: 24px; /* más separación respecto a los botones */
+}
