@@ -605,7 +605,7 @@ input[type="checkbox"]:checked {
     }
 
     .header-title-block {
-        max-width: 100% !important;   /* ← antes 90%, ahora usa TODA la pantalla */
+        max-width: 100% !important;
         padding: 0 12px !important;
         order: 1;
     }
@@ -633,7 +633,7 @@ input[type="checkbox"]:checked {
 
     /* Hexbin */
     .control-group:nth-child(1) {
-        margin-left: -32px !important;       /* ← movimiento de 0.85 cm hacia la izquierda */
+        margin-left: -32px !important;
         text-align: center !important;
     }
 
@@ -643,12 +643,12 @@ input[type="checkbox"]:checked {
 
     /* AVG/Molestia */
     .control-group:nth-child(2) {
-        margin-left: -38px !important;       /* ← movimiento de 0.75 cm hacia la izquierda */
+        margin-left: -48px !important;
     }
 
     /* Mapa base */
     .control-group:nth-child(3) {
-        margin-left: -38px !important;       /* ← movimiento igual al anterior */
+        margin-left: -48px !important;
     }
 
     .control-group select {
@@ -675,21 +675,29 @@ input[type="checkbox"]:checked {
 
     /* ---------- ORDEN CORRECTO DEL CONTENIDO ---------- */
     #map {
-        order: 4 !important;                 /* mapa inmediatamente bajo el header */
+        order: 4 !important;
         width: 100% !important;
+        height: 55vh !important;
         min-height: 300px !important;
         margin-top: 6px !important;
     }
 
     #legend-panel {
-        order: 5 !important;                 /* panel fijo AHORA SÍ va debajo del mapa */
+        order: 5 !important;
         width: 94% !important;
         margin: 0 auto !important;
         padding: 10px !important;
     }
-    
-    #content-row {
-    margin-top: 0 !important;
-}
 
+    /* Evitar espacio fantasma arriba del mapa/panel */
+    #content-row {
+        margin-top: 0 !important;
+    }
+
+    /* Panel de registro a pantalla completa en móvil */
+    #form-panel {
+        width: 100% !important;
+        max-width: 100% !important;
+        left: 0 !important;
+    }
 }
