@@ -582,7 +582,7 @@ input[type="checkbox"]:checked {
 }
 
 /* ========================================================= */
-/*   CORRECCIONES FINALES — MÓVIL                            */
+/*  CORRECCIONES FINALES — MÓVIL (VERSIÓN AJUSTADA)          */
 /* ========================================================= */
 
 @media (max-width: 600px) {
@@ -592,48 +592,61 @@ input[type="checkbox"]:checked {
         width: 100%;
     }
 
-    /* HEADER */
+    /* ---------- HEADER MÁS ANCHO Y BAJO ---------- */
     .top-bar {
-        display: flex !important;
-        flex-wrap: wrap !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: flex-start !important;
         text-align: center !important;
-        padding: 12px 6px !important;
-        height: auto !important;
+        width: 100% !important;
+        padding: 10px 10px !important;
         gap: 10px !important;
     }
 
     .header-title-block {
-        width: 90% !important;
+        max-width: 100% !important;   /* ← antes 90%, ahora usa TODA la pantalla */
+        padding: 0 12px !important;
+        order: 1;
+    }
+
+    .header-title-block h2 {
+        font-size: 20px !important;
+        line-height: 1.2 !important;
     }
 
     .header-subtext {
-        font-size: 11px !important;
-        width: 100% !important;
+        font-size: 12px !important;
         text-align: justify !important;
+        margin: 0 auto !important;
+        max-width: 95% !important;
     }
 
-    /* CONTROLES */
+    /* ---------- CONTROLES (TRÍO) ---------- */
     .control-row {
-        width: 94% !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        gap: 6px !important;
+        order: 2;
+        width: 100% !important;
+        justify-content: space-around !important;
+        padding: 0 10px !important;
+        margin-top: 4px;
     }
 
+    /* Hexbin */
     .control-group:nth-child(1) {
-        margin-left: 20px !important;
+        margin-left: -32px !important;       /* ← movimiento de 0.85 cm hacia la izquierda */
+        text-align: center !important;
     }
 
+    #hexbinToggle {
+        margin: 0 auto !important;
+    }
+
+    /* AVG/Molestia */
     .control-group:nth-child(2) {
-        margin-right: 6px !important;
+        margin-left: -28px !important;       /* ← movimiento de 0.75 cm hacia la izquierda */
     }
 
+    /* Mapa base */
     .control-group:nth-child(3) {
-        margin-right: 34px !important;
+        margin-left: -28px !important;       /* ← movimiento igual al anterior */
     }
 
     .control-group select {
@@ -641,13 +654,13 @@ input[type="checkbox"]:checked {
         font-size: 12px !important;
     }
 
-    /* BOTONES EN UNA SOLA FILA */
+    /* ---------- BOTONES EN UNA SOLA FILA ---------- */
     .top-buttons {
+        order: 3;
         display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-evenly !important;
+        gap: 8px !important;
         width: 100% !important;
-        gap: 6px !important;
+        justify-content: center !important;
     }
 
     .top-buttons button {
@@ -655,35 +668,21 @@ input[type="checkbox"]:checked {
         max-width: 45% !important;
         padding: 7px 4px !important;
         font-size: 12px !important;
+        text-align: center !important;
     }
 
-    /* MAPA */
-    #content-row {
-        flex-direction: column !important;
-    }
-
+    /* ---------- ORDEN CORRECTO DEL CONTENIDO ---------- */
     #map {
+        order: 4 !important;                 /* mapa inmediatamente bajo el header */
         width: 100% !important;
         min-height: 300px !important;
         margin-top: 6px !important;
     }
 
-    /* PANEL FIJO */
     #legend-panel {
+        order: 5 !important;                 /* panel fijo AHORA SÍ va debajo del mapa */
         width: 94% !important;
         margin: 0 auto !important;
         padding: 10px !important;
-        box-sizing: border-box !important;
-    }
-
-    .panel-box {
-        width: 94% !important;
-        margin: 10px auto !important;
-    }
-
-    .panel-inner {
-        width: 100% !important;
-        padding: 10px !important;
-        box-sizing: border-box !important;
     }
 }
