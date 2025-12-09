@@ -567,7 +567,7 @@ input[type="checkbox"]:checked {
     .control-row {
         justify-content: flex-start !important;
         gap: 18px !important;
-        padding-left: 34px !important;   /* ← movimiento hacia la derecha */
+        padding-left: 50px !important;   /* ← movimiento hacia la derecha */
     }
 
     /* Texto ancho justificado */
@@ -678,3 +678,4 @@ input[type="checkbox"]:checked {
         order: 2;
     }
 }
+
