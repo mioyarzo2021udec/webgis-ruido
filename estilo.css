@@ -696,14 +696,13 @@ input[type="checkbox"]:checked {
         padding: 10px !important;
     }
 
-    /* Paneles deslizables a la mitad del ancho en móvil */
-    #form-panel,
-    #info-panel,
-    #download-panel {
-        width: 50% !important;
+    /* ---------- PANEL DE INFORMACIÓN A MEDIA PANTALLA (SOLO MÓVIL) ---------- */
+    #info-panel {
+        width: 50% !important;        /* La mitad del ancho */
         max-width: 50% !important;
-        left: auto !important;
-        right: 0 !important;
-        border-left: 2px solid #ccc !important;
+        left: auto !important;        /* No queremos que se centre */
+        right: 0 !important;          /* Que aparezca desde la derecha */
+        border-left: 2px solid #ccc;  /* Mantener separación visual */
     }
 }
+
