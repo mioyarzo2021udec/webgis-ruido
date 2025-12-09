@@ -83,6 +83,12 @@ body {
     min-width: 130px;
 }
 
+/* Mover selects ligeramente a la derecha */
+#colorMode,
+#basemapSelect {
+    margin-left: 6px;   /* movimiento suave */
+}
+
 .control-group label {
     font-size: 12px;
     font-weight: bold;
@@ -666,5 +672,11 @@ input[type="checkbox"]:checked {
 }
 
 .control-row {
-    gap: 24px; /* más separación respecto a los botones */
+    gap: 18px; /* más separación respecto a los botones */
 }
+
+/* 4. Reducir ancho del texto descriptivo del header */
+.header-subtext {
+    max-width: 13cm;   /* antes ~14cm */
+}
+
