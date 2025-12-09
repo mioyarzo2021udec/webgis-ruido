@@ -592,160 +592,98 @@ input[type="checkbox"]:checked {
         width: 100%;
     }
 
-    /* ---------- HEADER (FLEX CON WRAP) ---------- */
+    /* HEADER */
     .top-bar {
         display: flex !important;
-        flex-direction: row !important;
         flex-wrap: wrap !important;
+        flex-direction: column !important;
         align-items: center !important;
-        justify-content: center !important;
-        gap: 8px !important;
-        width: 100% !important;
-        padding: 10px 6px !important;
+        justify-content: flex-start !important;
         text-align: center !important;
-        height: auto !important;                 /* evita “inflado” raro */
-        min-height: var(--header-height) !important;
+        padding: 12px 6px !important;
+        height: auto !important;
+        gap: 10px !important;
     }
 
     .header-title-block {
-        flex: 1 0 100% !important;
-        max-width: 90% !important;
-        text-align: center !important;
-        order: 1;
+        width: 90% !important;
     }
 
     .header-subtext {
         font-size: 11px !important;
-        max-width: 90% !important;
-        margin: 0 auto !important;
+        width: 100% !important;
         text-align: justify !important;
     }
 
-    /* ---------- CONTROLES ---------- */
+    /* CONTROLES */
     .control-row {
-        flex: 1 0 100% !important;
         width: 94% !important;
         display: flex !important;
-        flex-direction: row !important;
         justify-content: space-between !important;
         align-items: center !important;
         gap: 6px !important;
-        order: 2;
     }
 
-    .control-group {
-        min-width: 0 !important;
-        flex-shrink: 1 !important;
-    }
-
-    /* Hexbin — ~0.6 cm desde borde izquierdo (≈20 px) */
     .control-group:nth-child(1) {
         margin-left: 20px !important;
-        text-align: center !important;
     }
 
-    /* Visualización y Mapa base 2 mm más hacia la derecha (~6px) */
     .control-group:nth-child(2) {
         margin-right: 6px !important;
     }
 
-    /* Mapa base — un poco más separado del borde derecho */
     .control-group:nth-child(3) {
-        margin-right: 34px !important;   /* antes 28px */
-        text-align: center !important;
+        margin-right: 34px !important;
     }
 
     .control-group select {
         max-width: 130px !important;
-        width: 100% !important;
         font-size: 12px !important;
     }
 
-    .control-group:nth-child(3) label {
-        width: 100%;
-        text-align: center;
-        display: block;
-    }
-
-    /* ---------- BOTONES EN UNA SOLA FILA ---------- */
-    #open-download-btn,
-    #open-form-btn {
-        flex: 1 0 48% !important;      /* dos columnas */
-        max-width: 48% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 12px !important;
-        padding: 7px 4px !important;
-    }
-
-    #open-download-btn { order: 3; margin-right: 2% !important; }
-    #open-form-btn     { order: 4; margin-left: 2% !important; }
-
-    /* Contenedor que fuerza fila doble en móvil */
+    /* BOTONES EN UNA SOLA FILA */
     .top-buttons {
-        display: flex;
-        gap: 6px;
-        width: 100%;
-        justify-content: center;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-evenly !important;
+        width: 100% !important;
+        gap: 6px !important;
     }
 
-    /* BOTONES — versión móvil */
-    @media (max-width: 600px) {
-        .top-buttons {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-evenly !important;
-            width: 100% !important;
-            order: 3;
-        }
-
-        .top-buttons button {
-            flex: 0 0 45% !important;
-            max-width: 45% !important;
-            font-size: 12px !important;
-            padding: 7px 4px !important;
-        }
+    .top-buttons button {
+        flex: 0 0 45% !important;
+        max-width: 45% !important;
+        padding: 7px 4px !important;
+        font-size: 12px !important;
     }
 
-    /* ---------- MAPA ---------- */
+    /* MAPA */
     #content-row {
         flex-direction: column !important;
     }
 
     #map {
         width: 100% !important;
-        display: block !important;
-        height: calc(100vh - 310px) !important;
         min-height: 300px !important;
         margin-top: 6px !important;
-        order: 5;
     }
 
-    /* ---------- PANEL FIJO ---------- */
+    /* PANEL FIJO */
     #legend-panel {
-        order: 6;
         width: 94% !important;
         margin: 0 auto !important;
         padding: 10px !important;
         box-sizing: border-box !important;
-        max-height: calc(100vh - 350px) !important;
-        overflow-y: auto !important;
     }
 
-    /* Cuadrados azules oscuros centrados */
-    #legend-panel .panel-box {
+    .panel-box {
         width: 94% !important;
         margin: 10px auto !important;
-        box-sizing: border-box !important;
     }
 
-    /* Cuadrados blancos interiores sin desbordar */
-    #legend-panel .panel-inner {
+    .panel-inner {
         width: 100% !important;
         padding: 10px !important;
         box-sizing: border-box !important;
     }
 }
-
