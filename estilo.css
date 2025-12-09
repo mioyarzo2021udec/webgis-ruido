@@ -567,7 +567,7 @@ input[type="checkbox"]:checked {
     .control-row {
         justify-content: flex-start !important;
         gap: 18px !important;
-        padding-left: 24px !important;   /* ← movimiento hacia la derecha */
+        padding-left: 34px !important;   /* ← movimiento hacia la derecha */
     }
 
     /* Texto ancho justificado */
@@ -588,82 +588,93 @@ input[type="checkbox"]:checked {
 /*                     AJUSTES PARA MÓVIL                    */
 /* ========================================================= */
 
-/* ---------------- MÓVIL ---------------- */
-
 @media (max-width: 600px) {
 
-    html, body {
-        overflow-x: hidden !important;
+    html, body { overflow-x: hidden !important; }
+
+    /* ---- HEADER: 1 SOLA COLUMNA ---- */
+    .top-bar {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        padding: 12px 6px !important;
+        gap: 10px !important;
+        text-align: center !important;
     }
 
-    /* Títulos */
+    /* Título y texto centrados */
     .header-title-block {
-        grid-column: 1 / span 2;
-        text-align: center !important;
         max-width: 92% !important;
+        text-align: center !important;
     }
 
     .header-subtext {
         font-size: 11px !important;
         max-width: 92% !important;
-        text-align: justify !important;
         margin: 0 auto !important;
+        text-align: justify !important;
     }
 
-    /* Control row */
+    /* ---- CONTROLES: fila horizontal ---- */
     .control-row {
-        grid-column: 1 / span 2;
+        width: 95% !important;
         display: flex !important;
         justify-content: space-between !important;
-        width: 95% !important;
+        align-items: center !important;
         gap: 6px !important;
     }
 
     .control-group { min-width: 0 !important; }
 
-    /* Hexbin más cerca del borde (0.75 cm aprox) */
+    /* Hexbin ajustado */
     .control-group:nth-child(1) {
         flex: 0.45 !important;
-        margin-left: 4px !important;
+        margin-left: 6px !important; /* distancia ideal */
         text-align: center !important;
     }
 
-    /* Selects más cortos */
+    /* Selects */
     .control-group select {
         max-width: 130px !important;
-        width: 100% !important;
         font-size: 12px !important;
     }
 
-    /* Centrar etiqueta de MAPA BASE */
+    /* Centrar etiqueta "Mapa base" */
     .control-group:nth-child(3) label {
-        text-align: center !important;
         width: 100% !important;
+        text-align: center !important;
         display: block !important;
     }
 
-    /* Botones más cerca entre sí */
+    /* ---- BOTONES UNO AL LADO DEL OTRO ---- */
     #open-download-btn,
     #open-form-btn {
-        grid-row: 3;
-        width: 88% !important;
-        max-width: 220px !important;
+        width: 46% !important;
         padding: 7px 4px !important;
         font-size: 12px !important;
-        margin-left: 2px !important;
-        margin-right: 2px !important;
     }
 
-    #open-download-btn { grid-column: 1; }
-    #open-form-btn     { grid-column: 2; }
+    #open-download-btn { margin-right: 2%; }
+    #open-form-btn     { margin-left: 2%; }
 
-    /* ============== MAPA — ÚNICA REGLA OFICIAL ============== */
+    /* ---- MAPA SOLO DEBAJO DEL HEADER ---- */
+    #content-row {
+        flex-direction: column !important;
+    }
+
     #map {
-        grid-column: 1 / span 2;
         width: 100% !important;
-        height: calc(100vh - 260px) !important;
+        height: calc(100vh - 300px) !important;
         min-height: 320px !important;
         display: block !important;
-        margin-top: 8px !important;
+        order: 1;
+    }
+
+    /* ---- PANEL FIJO SIEMPRE DEBAJO DEL MAPA ---- */
+    #legend-panel {
+        width: 100% !important;
+        order: 2;
     }
 }
