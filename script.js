@@ -282,6 +282,9 @@ document.getElementById("hexbinToggle").addEventListener("change", (e) => {
         }
         
         actualizarCapaDePuntos();
+
+        reapplySelectionStyle();
+
     }
 });
 
@@ -337,6 +340,27 @@ let capaRegistros = null;
 let currentMode = "avg";
 let selectedUUID = null;
 let selectedLayer = null;
+
+function reapplySelectionStyle() {
+    if (!selectedUUID || !capaRegistros) return;
+
+    capaRegistros.eachLayer(l => {
+        if (l.feature && l.feature.properties._uuid === selectedUUID) {
+
+            selectedLayer = l;
+
+            l.setStyle({
+                radius: 10,
+                color: "#ad8c00",
+                weight: 3,
+                fillColor: "#ffe040",
+                fillOpacity: 1
+            });
+
+            l.bringToFront();
+        }
+    });
+}
 
 let filtros = {
     horaInicio: null,
@@ -397,25 +421,8 @@ function restoreOriginalStyle(l) {
 // ---------------------------------------------------
 
 function highlightSelected(uuid) {
-    if (!capaRegistros) return;
-
-    capaRegistros.eachLayer(l => {
-        if (l.feature.properties._uuid === uuid) {
-
-            if (!l.defaultOptions)
-                l.defaultOptions = { ...l.options };
-
-            l.setStyle({
-                radius: 10,
-                color: "#ad8c00",
-                weight: 3,
-                fillColor: "#ffe040",
-                fillOpacity: 1
-            });
-
-            selectedLayer = l;
-        }
-    });
+    selectedUUID = uuid;
+    reapplySelectionStyle();
 }
 
 // ---------------------------------------------------
@@ -514,7 +521,7 @@ function actualizarCapaDePuntos() {
         capaRegistros.addLayer(marker);
     });
 
-    if (selectedUUID) highlightSelected(selectedUUID);
+    reapplySelectionStyle();
 }
 
 
@@ -558,7 +565,7 @@ document.getElementById("colorMode").addEventListener("change", () => {
 
     if (hexbinActivo) actualizarHexbin();   // PARA QUE EL HEXBIN CAMBIE DE COLOR
     
-    if (selectedUUID) highlightSelected(selectedUUID);
+    reapplySelectionStyle();
 });
 
 document.getElementById("basemapSelect").addEventListener("change", () => {
@@ -572,7 +579,7 @@ document.getElementById("basemapSelect").addEventListener("change", () => {
     capaRegistros.addTo(map);
     }
 
-    if (selectedUUID) highlightSelected(selectedUUID);
+    reapplySelectionStyle();
 });
 
 // ---------------------------------------------------
@@ -917,4 +924,3 @@ document.getElementById("draw-area-btn").addEventListener("click", () => {
 document.getElementById("clear-area-btn").addEventListener("click", () => {
     limpiarArea();
 });
-
