@@ -680,4 +680,88 @@ input[type="checkbox"]:checked {
     max-width: 13cm;   /* antes ~14cm */
 }
 
+/* ========================================================= */
+/* OPTIMIZACIÓN MÓVIL (MAX-WIDTH: 600PX) */
+/* ========================================================= */
 
+@media (max-width: 600px) {
+
+    /* Eliminar scroll lateral y franja blanca */
+    body, html {
+        width: 100%;
+        overflow-x: hidden !important;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        width: 100%;
+        padding: 10px 10px;
+        box-sizing: border-box;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Centrado del título */
+    .top-bar h2 {
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Texto centrado pero justificado */
+    .header-subtext {
+        text-align: justify;
+        width: 100%;
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* FILA FLEX con hexbin + colorMode + baseMap */
+    .control-row {
+        flex-wrap: nowrap;
+        width: 100%;
+        justify-content: center;
+        gap: 8px; /* evita que se apreten demasiado */
+        margin-top: 10px;
+    }
+
+    .control-group {
+        min-width: 95px;
+        flex: 1;
+        margin: 0;
+        align-items: center;
+    }
+
+    /* Alinear y compactar selectores */
+    .control-group select {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Botones abajo, en la misma fila */
+    #open-download-btn,
+    #open-form-btn {
+        width: 48%;
+        margin-top: 10px;
+    }
+
+    /* Fila de botones */
+    .top-bar {
+        gap: 6px;
+    }
+
+    /* Leyenda y panel izquierdo pasan abajo del mapa */
+    #legend-panel {
+        order: 2;
+        width: 100% !important;
+        max-height: none;
+        border-right: none;
+        border-top: 1px solid #ccc;
+    }
+
+    #map {
+        order: 1;
+        width: 100%;
+        height: 60vh;
+    }
+}
