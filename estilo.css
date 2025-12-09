@@ -683,6 +683,32 @@ input[type="checkbox"]:checked {
     #open-download-btn { order: 3; margin-right: 2% !important; }
     #open-form-btn     { order: 4; margin-left: 2% !important; }
 
+    /* Contenedor que fuerza fila doble en móvil */
+    .top-buttons {
+        display: flex;
+        gap: 6px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* BOTONES — versión móvil */
+    @media (max-width: 600px) {
+        .top-buttons {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-evenly !important;
+            width: 100% !important;
+            order: 3;
+        }
+
+        .top-buttons button {
+            flex: 0 0 45% !important;
+            max-width: 45% !important;
+            font-size: 12px !important;
+            padding: 7px 4px !important;
+        }
+    }
+
     /* ---------- MAPA ---------- */
     #content-row {
         flex-direction: column !important;
@@ -722,3 +748,4 @@ input[type="checkbox"]:checked {
         box-sizing: border-box !important;
     }
 }
+
