@@ -556,34 +556,39 @@ input[type="checkbox"]:checked {
 }
 
 /* ========================================================= */
-/*                     AJUSTES PARA PC                       */
+/* CORRECCIONES FINALES — PC + MÓVIL                         */
 /* ========================================================= */
+
+/* ---------------- PC ---------------- */
 
 @media (min-width: 601px) {
 
-    /* Texto bajo el título más ancho */
+    /* Alinear mejor el trio Hexbin / AVG / Base map */
+    .control-row {
+        justify-content: flex-start !important;
+        gap: 18px !important;
+        padding-left: 24px !important;   /* ← movimiento hacia la derecha */
+    }
+
+    /* Texto ancho justificado */
     .header-subtext {
         max-width: 420px !important;
         margin-left: 0 !important;
         text-align: justify !important;
     }
 
-    /* Selectores alineados con Hexbin */
+    /* Evitar empuje innecesario en selects */
     #colorMode,
     #basemapSelect {
         margin-left: 0 !important;
     }
-
-    .control-row {
-        justify-content: flex-start !important;
-        gap: 18px !important;
-    }
 }
-
 
 /* ========================================================= */
 /*                     AJUSTES PARA MÓVIL                    */
 /* ========================================================= */
+
+/* ---------------- MÓVIL ---------------- */
 
 @media (max-width: 600px) {
 
@@ -591,18 +596,7 @@ input[type="checkbox"]:checked {
         overflow-x: hidden !important;
     }
 
-    /* ---------- HEADER COMO GRID ---------- */
-    .top-bar {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto auto;
-        width: 100% !important;
-        padding: 10px 6px !important;
-        row-gap: 8px !important;
-        justify-items: center !important;
-    }
-
-    /* ---------- TÍTULO ---------- */
+    /* Títulos */
     .header-title-block {
         grid-column: 1 / span 2;
         text-align: center !important;
@@ -616,7 +610,7 @@ input[type="checkbox"]:checked {
         margin: 0 auto !important;
     }
 
-    /* ---------- CONTROLES ---------- */
+    /* Control row */
     .control-row {
         grid-column: 1 / span 2;
         display: flex !important;
@@ -627,10 +621,10 @@ input[type="checkbox"]:checked {
 
     .control-group { min-width: 0 !important; }
 
-    /* Hexbin centrado */
+    /* Hexbin más cerca del borde (0.75 cm aprox) */
     .control-group:nth-child(1) {
         flex: 0.45 !important;
-        margin-left: 8px !important; /* 7–8 mm desde borde, como pediste */
+        margin-left: 4px !important;
         text-align: center !important;
     }
 
@@ -641,18 +635,14 @@ input[type="checkbox"]:checked {
         font-size: 12px !important;
     }
 
-    /* Visualización temática */
-    .control-group:nth-child(2) {
-        flex: 1.2 !important;
+    /* Centrar etiqueta de MAPA BASE */
+    .control-group:nth-child(3) label {
+        text-align: center !important;
+        width: 100% !important;
+        display: block !important;
     }
 
-    /* Mapa base */
-    .control-group:nth-child(3) {
-        flex: 1.2 !important;
-        margin-right: 4px !important;
-    }
-
-    /* ---------- BOTONES ---------- */
+    /* Botones más cerca entre sí */
     #open-download-btn,
     #open-form-btn {
         grid-row: 3;
@@ -660,31 +650,20 @@ input[type="checkbox"]:checked {
         max-width: 220px !important;
         padding: 7px 4px !important;
         font-size: 12px !important;
+        margin-left: 2px !important;
+        margin-right: 2px !important;
     }
 
     #open-download-btn { grid-column: 1; }
     #open-form-btn     { grid-column: 2; }
 
-    /* ---------- MAPA (GARANTIZADO) ---------- */
+    /* ============== MAPA — ÚNICA REGLA OFICIAL ============== */
     #map {
         grid-column: 1 / span 2;
-        display: block !important;
         width: 100% !important;
-        height: calc(100vh - 300px) !important;
+        height: calc(100vh - 260px) !important;
         min-height: 320px !important;
-        margin-top: 6px !important;
-    }
-
-    /* Panel debajo en móvil */
-    #legend-panel {
-        grid-column: 1 / span 2;
-        width: 100% !important;
-        padding: 10px !important;
-    }
-
-    .panel-box,
-    .panel-inner {
-        width: 100% !important;
-        box-sizing: border-box !important;
+        display: block !important;
+        margin-top: 8px !important;
     }
 }
