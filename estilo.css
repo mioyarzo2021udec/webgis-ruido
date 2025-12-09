@@ -42,7 +42,7 @@ body {
     gap: 12px;
     position: relative;
     z-index: 1000;
-    height: var(--header-height); /* <- antes min-height: var(--header-height) */
+    height: var(--header-height);
     color: white;
 }
 
@@ -600,6 +600,8 @@ input[type="checkbox"]:checked {
         width: 100% !important;
         padding: 10px 10px !important;
         gap: 10px !important;
+        height: auto !important;
+        min-height: auto !important;
     }
 
     .header-title-block {
@@ -641,12 +643,12 @@ input[type="checkbox"]:checked {
 
     /* AVG/Molestia */
     .control-group:nth-child(2) {
-        margin-left: -28px !important;       /* ← movimiento de 0.75 cm hacia la izquierda */
+        margin-left: -38px !important;       /* ← movimiento de 0.75 cm hacia la izquierda */
     }
 
     /* Mapa base */
     .control-group:nth-child(3) {
-        margin-left: -28px !important;       /* ← movimiento igual al anterior */
+        margin-left: -38px !important;       /* ← movimiento igual al anterior */
     }
 
     .control-group select {
@@ -685,4 +687,9 @@ input[type="checkbox"]:checked {
         margin: 0 auto !important;
         padding: 10px !important;
     }
+    
+    #content-row {
+    margin-top: 0 !important;
+}
+
 }
